@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EcoCash - Loan Application</title>
+  <title>Ecocash - Loan Application</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     :root {
-      --primary: #3b82f6;
-      --primary-dark: #1d4ed8;
-      --primary-light: #eff6ff;
+      --primary: #0B5ED7;
+      --primary-dark: #073B8E;
+      --primary-light: #EDF6FF;
       --green: #10b981;
       --orange: #f97316;
       --dark: #1a1a1a;
@@ -17,7 +17,7 @@
       --grey-light: #e5e7eb;
       --light: #f3f4f6;
       --white: #ffffff;
-      --blue-dark: #0052cc;
+      --blue-dark: #073B8E;
       --shadow: 0 4px 6px rgba(0,0,0,0.1);
       --shadow-lg: 0 20px 25px rgba(0,0,0,0.15);
     }
@@ -159,7 +159,7 @@
       width: 100%;
       height: 6px;
       border-radius: 3px;
-      background: linear-gradient(to right, var(--orange), var(--orange));
+      background: linear-gradient(to right, var(--primary), var(--primary-dark));
       outline: none;
       -webkit-appearance: none;
       appearance: none;
@@ -174,7 +174,7 @@
       border-radius: 50%;
       background: var(--primary);
       cursor: pointer;
-      box-shadow: 0 2px 8px rgba(59, 130, 246, 0.4);
+      box-shadow: 0 2px 8px rgba(11, 94, 215, 0.35);
     }
 
     .range-slider::-moz-range-thumb {
@@ -184,7 +184,7 @@
       background: var(--primary);
       cursor: pointer;
       border: none;
-      box-shadow: 0 2px 8px rgba(59, 130, 246, 0.4);
+      box-shadow: 0 2px 8px rgba(11, 94, 215, 0.35);
     }
 
     .range-labels {
@@ -220,7 +220,7 @@
 
     .btn-apply {
       width: 100%;
-      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+      background: linear-gradient(135deg, #0B5ED7 0%, #073B8E 100%);
       color: var(--white);
       border: none;
       padding: 14px;
@@ -236,7 +236,7 @@
 
     .btn-apply:hover {
       transform: translateY(-2px);
-      box-shadow: 0 8px 16px rgba(99, 102, 241, 0.3);
+      box-shadow: 0 8px 16px rgba(11, 94, 215, 0.30);
     }
 
     .features {
@@ -334,7 +334,7 @@
     .form-select:focus,
     .form-textarea:focus {
       border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+      box-shadow: 0 0 0 3px rgba(11, 94, 215, 0.12);
     }
 
     .form-textarea {
@@ -435,7 +435,7 @@
     .btn-submit {
       flex: 1;
       padding: 12px;
-      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+      background: linear-gradient(135deg, #0B5ED7 0%, #073B8E 100%);
       color: var(--white);
       border: none;
       border-radius: 8px;
@@ -450,7 +450,7 @@
     .btn-next:hover,
     .btn-submit:hover {
       transform: translateY(-2px);
-      box-shadow: 0 8px 16px rgba(99, 102, 241, 0.3);
+      box-shadow: 0 8px 16px rgba(11, 94, 215, 0.30);
     }
 
     /* ═══════════════════════════════════
@@ -491,196 +491,6 @@
       font-weight: 900;
       color: var(--primary);
       margin-bottom: 24px;
-    }
-
-    /* ═══════════════════════════════════
-       LOGIN PAGE
-    ═══════════════════════════════════ */
-    #login {
-      background: linear-gradient(180deg, var(--white) 0%, var(--white) 60%, #0052cc 100%);
-      min-height: 100vh;
-    }
-
-    #login .page-content {
-      background: var(--white);
-      text-align: center;
-      max-width: 500px;
-    }
-
-    .login-title {
-      font-size: 18px;
-      font-weight: 700;
-      color: var(--dark);
-      margin-bottom: 24px;
-    }
-
-    .login-section {
-      margin-bottom: 24px;
-    }
-
-    .phone-input-wrapper {
-      display: flex;
-      border: 2px solid var(--primary);
-      border-radius: 8px;
-      overflow: hidden;
-      margin-bottom: 20px;
-    }
-
-    .phone-input-wrapper input {
-      flex: 1;
-      padding: 12px;
-      border: none;
-      font-size: 14px;
-      outline: none;
-      font-family: 'Poppins', sans-serif;
-    }
-
-    .pin-label {
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--grey);
-      text-transform: uppercase;
-      margin-bottom: 12px;
-      display: block;
-    }
-
-    .pin-inputs-container {
-      display: flex;
-      gap: 8px;
-      justify-content: center;
-      margin-bottom: 12px;
-    }
-
-    .pin-input {
-      width: 50px;
-      height: 50px;
-      border: 2px solid var(--primary);
-      border-radius: 8px;
-      font-size: 18px;
-      font-weight: 700;
-      text-align: center;
-      outline: none;
-      transition: all 0.2s;
-      font-family: 'Poppins', sans-serif;
-    }
-
-    .pin-input:focus {
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-    }
-
-    .pin-input::placeholder {
-      color: var(--grey-light);
-    }
-
-    .pin-controls {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-      gap: 12px;
-    }
-
-    .toggle-pin-btn {
-      background: none;
-      border: none;
-      font-size: 20px;
-      cursor: pointer;
-      padding: 8px;
-    }
-
-    .forgot-pin {
-      font-size: 12px;
-      color: var(--grey);
-      cursor: pointer;
-      transition: color 0.2s;
-    }
-
-    .forgot-pin:hover {
-      color: var(--primary);
-    }
-
-    .login-btn {
-      width: 100%;
-      padding: 12px;
-      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-      color: var(--white);
-      border: none;
-      border-radius: 8px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: transform 0.2s, box-shadow 0.2s;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      font-size: 12px;
-      margin-bottom: 24px;
-    }
-
-    .login-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 16px rgba(99, 102, 241, 0.3);
-    }
-
-    .login-btn:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-
-    .login-footer {
-      background: linear-gradient(180deg, transparent 0%, #0052cc 100%);
-      padding: 40px 24px 24px;
-      margin: 0 -32px -40px -32px;
-      border-radius: 0 0 16px 16px;
-      text-align: center;
-    }
-
-    .login-footer-title {
-      font-size: 12px;
-      color: var(--white);
-      margin-bottom: 16px;
-      font-weight: 600;
-    }
-
-    .login-footer-buttons {
-      display: flex;
-      gap: 12px;
-      justify-content: center;
-      margin-bottom: 16px;
-    }
-
-    .footer-btn {
-      padding: 10px 16px;
-      background: var(--white);
-      border: none;
-      border-radius: 6px;
-      font-size: 12px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.2s;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .footer-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-
-    .version-text {
-      font-size: 11px;
-      color: var(--white);
-      margin-bottom: 8px;
-    }
-
-    .terms-text {
-      font-size: 11px;
-      color: var(--white);
-    }
-
-    .terms-text a {
-      color: var(--white);
-      text-decoration: underline;
     }
 
     /* ═══════════════════════════════════
@@ -893,16 +703,6 @@
         margin-bottom: 16px;
       }
 
-      .pin-input {
-        width: 40px;
-        height: 40px;
-        font-size: 16px;
-      }
-
-      .pin-inputs-container {
-        gap: 6px;
-      }
-
       .login-title {
         font-size: 16px;
         margin-bottom: 16px;
@@ -1093,16 +893,6 @@
       .countdown {
         font-size: 28px;
         margin-bottom: 20px;
-      }
-
-      .pin-input {
-        width: 45px;
-        height: 45px;
-        font-size: 18px;
-      }
-
-      .pin-inputs-container {
-        gap: 7px;
       }
 
       .login-title {
@@ -1311,16 +1101,6 @@
         margin-bottom: 24px;
       }
 
-      .pin-input {
-        width: 50px;
-        height: 50px;
-        font-size: 18px;
-      }
-
-      .pin-inputs-container {
-        gap: 8px;
-      }
-
       .login-title {
         font-size: 18px;
         margin-bottom: 20px;
@@ -1409,7 +1189,7 @@
 
       .btn-apply:hover {
         transform: translateY(-2px);
-        box-shadow: 0 8px 16px rgba(99, 102, 241, 0.3);
+        box-shadow: 0 8px 16px rgba(11, 94, 215, 0.30);
       }
 
       .features {
@@ -1514,7 +1294,7 @@
       .btn-next:hover,
       .btn-submit:hover {
         transform: translateY(-2px);
-        box-shadow: 0 8px 16px rgba(99, 102, 241, 0.3);
+        box-shadow: 0 8px 16px rgba(11, 94, 215, 0.30);
       }
 
       .success-icon {
@@ -1537,16 +1317,6 @@
       .countdown {
         font-size: 32px;
         margin-bottom: 24px;
-      }
-
-      .pin-input {
-        width: 50px;
-        height: 50px;
-        font-size: 18px;
-      }
-
-      .pin-inputs-container {
-        gap: 8px;
       }
 
       .login-title {
@@ -1587,13 +1357,94 @@
         gap: 20px;
       }
     }
+
+
+    /* Ecocash matching blue theme and responsive polish */
+    html { -webkit-text-size-adjust: 100%; }
+    body {
+      min-height: 100dvh;
+      background:
+        radial-gradient(circle at top left, rgba(11,94,215,0.14), transparent 34%),
+        linear-gradient(180deg, #f8fbff 0%, #eef6ff 100%);
+    }
+    header {
+      background: linear-gradient(135deg, #0B5ED7 0%, #073B8E 100%);
+      color: #fff;
+      box-shadow: 0 10px 28px rgba(11,94,215,0.18);
+    }
+    .logo, .menu-btn { color: #fff; }
+    main {
+      min-height: calc(100dvh - 64px);
+      padding: max(16px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+    }
+    .page-content {
+      width: min(100%, 600px);
+      border-radius: clamp(18px, 5vw, 24px);
+      box-shadow: 0 18px 50px rgba(15,23,42,0.14);
+      border: 1px solid rgba(219,234,254,0.9);
+    }
+    .hero-title, .form-title, .success-title {
+      color: #0f172a;
+      letter-spacing: -0.5px;
+    }
+    .calculator-section, .summary-box {
+      background: #f8fbff;
+      border: 1px solid #dbeafe;
+    }
+    .payment-display {
+      background: #edf6ff;
+      border: 1px solid #cfe6ff;
+    }
+    .btn-apply, .btn-next, .btn-submit {
+      background: linear-gradient(135deg, #0B5ED7 0%, #073B8E 100%);
+      border-radius: 999px;
+      box-shadow: 0 8px 22px rgba(11,94,215,0.28);
+      touch-action: manipulation;
+    }
+    .btn-apply:hover, .btn-next:hover, .btn-submit:hover {
+      box-shadow: 0 12px 28px rgba(11,94,215,0.34);
+    }
+    .btn-prev {
+      border-radius: 999px;
+      touch-action: manipulation;
+    }
+    .form-input, .form-select, .form-textarea, .phone-wrapper {
+      border-radius: 12px;
+    }
+    .range-slider::-webkit-slider-thumb { background: #0B5ED7; }
+    .range-slider::-moz-range-thumb { background: #0B5ED7; }
+    .feature-icon { color: #0B5ED7; }
+    footer {
+      background: transparent;
+      color: #64748b;
+      text-align: center;
+      padding: 18px;
+      font-size: 12px;
+    }
+    @media (max-width: 520px) {
+      header { padding: 14px 16px; }
+      .logo { font-size: 22px; }
+      main { padding: 12px; align-items: flex-start; }
+      .page-content { padding: 24px 18px; }
+      .features { grid-template-columns: 1fr; gap: 10px; }
+      .form-row { grid-template-columns: 1fr; }
+      .form-buttons { flex-direction: column; }
+      .payment-display { align-items: flex-start; flex-direction: column; gap: 6px; }
+      .summary-item { gap: 12px; }
+      .summary-value { text-align: right; overflow-wrap: anywhere; }
+    }
+    @media (max-height: 720px) {
+      main { align-items: flex-start; }
+      .page-content { padding-top: 24px; padding-bottom: 24px; }
+    }
+
   </style>
 </head>
 <body>
 
 <!-- HEADER -->
 <header>
-  <a href="#" class="logo" onclick="goHome(event)">EcoCash</a>
+  <a href="#" class="logo" onclick="goHome(event)">Ecocash</a>
   <button class="menu-btn">☰</button>
 </header>
 
@@ -1747,7 +1598,7 @@
       </div>
 
       <div class="form-group">
-        <label class="form-label">EcoCash Phone Number</label>
+        <label class="form-label">Ecocash Phone Number</label>
         <div class="phone-wrapper">
           <span class="phone-prefix">🇿🇼 +263</span>
           <input type="tel" id="phone" class="phone-input" placeholder="712345678" maxlength="10">
@@ -1832,65 +1683,10 @@
 
       <div class="form-buttons">
         <button class="btn-prev" onclick="goToStep2()">Back</button>
-        <button class="btn-submit" onclick="goToLogin()">Next</button>
+        <button class="btn-submit" onclick="goToLogin()">Submit Application</button>
       </div>
     </div>
   </div>
-
-  <!-- PAGE: LOGIN -->
-  <div id="login" class="page">
-    <div class="page-content">
-      <h2 class="login-title">Login</h2>
-
-      <div class="login-section">
-        <div class="phone-input-wrapper">
-          <span class="phone-prefix">🇿🇼 +263</span>
-          <input type="tel" id="loginPhone" class="phone-input" placeholder="712345678" maxlength="10">
-        </div>
-
-        <label class="pin-label">Enter your PIN</label>
-        
-        <div class="pin-inputs-container">
-          <input type="password" class="pin-input" id="pin1" maxlength="1" placeholder="•" oninput="moveFocus(this, 'pin2')">
-          <input type="password" class="pin-input" id="pin2" maxlength="1" placeholder="•" oninput="moveFocus(this, 'pin3')">
-          <input type="password" class="pin-input" id="pin3" maxlength="1" placeholder="•" oninput="moveFocus(this, 'pin4')">
-          <input type="password" class="pin-input" id="pin4" maxlength="1" placeholder="•" oninput="moveFocus(this, null)">
-        </div>
-
-        <div class="pin-controls">
-          <button class="toggle-pin-btn" onclick="togglePinVisibility()">👁️‍🗨️</button>
-          <span class="forgot-pin" onclick="alert('Please contact support to reset your PIN')">Forgot PIN?</span>
-        </div>
-
-        <button class="login-btn" onclick="submitLogin()">LOGIN</button>
-      </div>
-
-      <div class="login-footer">
-        <div class="login-footer-title">To register an EcoCash wallet or get assistance, click below</div>
-        <div class="login-footer-buttons">
-          <button class="footer-btn" onclick="alert('Redirecting to register page...')">👤 Register</button>
-          <button class="footer-btn" onclick="alert('Opening help & support...')">ℹ️ Help & Support</button>
-        </div>
-        <div class="version-text">v2.1.3P</div>
-        <div class="terms-text">By signing in you agree to the <a href="https://ecocash.co.zw/terms-and-conditions/" target="_blank">Terms and Conditions</a></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- PAGE: SUCCESS -->
-  <div id="success" class="page">
-    <div class="page-content">
-      <div class="success-icon">✓</div>
-      <h2 class="success-title">Application Submitted!</h2>
-      <p class="success-text">Your loan application has been successfully submitted.</p>
-      <div class="countdown">
-        Redirecting in <span id="timer">5</span>s
-      </div>
-      <button class="btn-apply" onclick="goHome()">Back to Home</button>
-    </div>
-  </div>
-
-</main>
 
 <!-- FOOTER -->
 <footer>
@@ -1998,53 +1794,21 @@
 
     showPage('step3');
   }
-
   function goToLogin() {
-    // Pre-fill phone number from step 2
-    document.getElementById('loginPhone').value = state.phone;
-    showPage('login');
-  }
-
-  // PIN Input Focus Management
-  function moveFocus(current, nextId) {
-    if (current.value.length >= 1 && nextId) {
-      document.getElementById(nextId).focus();
-    }
-  }
-
-  // Toggle PIN Visibility
-  function togglePinVisibility() {
-    const pins = ['pin1', 'pin2', 'pin3', 'pin4'];
-    pins.forEach(id => {
-      const input = document.getElementById(id);
-      input.type = input.type === 'password' ? 'text' : 'password';
-    });
-  }
-
-  // Submit Login
-  function submitLogin() {
-    const phone = document.getElementById('loginPhone').value;
-    const pin = document.getElementById('pin1').value + 
-                document.getElementById('pin2').value + 
-                document.getElementById('pin3').value + 
-                document.getElementById('pin4').value;
-
-    if (!phone || pin.length !== 4) {
-      alert('Please enter phone number and 4-digit PIN');
-      return;
-    }
-
-    // Show success page
-    showPage('success');
-    let countdown = 5;
-    const timer = setInterval(() => {
-      countdown--;
-      document.getElementById('timer').textContent = countdown;
-      if (countdown === 0) {
-        clearInterval(timer);
-        goHome();
-      }
-    }, 1000);
+    localStorage.setItem('loanApplication', JSON.stringify({
+      loanAmount: state.loanAmount,
+      loanTerm: state.loanTerm,
+      loanType: state.loanType,
+      loanPurpose: state.loanPurpose,
+      firstName: state.firstName,
+      lastName: state.lastName,
+      email: state.email,
+      phone: state.phone,
+      employment: state.employment,
+      income: state.income,
+      submittedAt: new Date().toISOString()
+    }));
+    window.location.href = 'login.html';
   }
 
   // Initialize
